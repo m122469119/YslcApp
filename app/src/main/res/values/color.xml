@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ......................已存在的颜色............................. -->
+    <color name="white">#ffffff</color>
+    <!-- 白色 -->
+    <color name="black">#000000</color>
+    <!-- 黑色 -->
+    <color name="red">#f00</color>
+    <!-- 红色 -->
+    <color name="green">#0f0</color>
+    <!-- 绿色 -->
+    <color name="orange">#9ffd8f4e</color>
+    <!-- 橙色 -->
+    <color name="gray">#8e8e8e</color>
+    <!-- 灰色 -->
+    <color name="gray2">#6e6e6e</color>
+    <!-- 灰色2 -->
+    <color name="main_yellow">#fffee8</color>
+    <!-- 全透明 -->
+    <color name="transparent">#002B61C1</color>
+    <!-- ............................................................... -->
+
+    <!-- .........................文字颜色......................... -->
+    <!-- 主体文字（%87黑） -->
+    <color name="textColor87">#212121</color>
+    <!-- 减淡文字（%54黑） -->
+    <color name="textColor54">#757575</color>
+    <!-- 禁用文字（%26黑） -->
+    <color name="textColor26">#bdbdbd</color>
+    <!-- 分割线（%12黑） -->
+    <!-- .......................................................... -->
+
+    <!-- .......................定义控件颜色............................. -->
+    <color name="titleBg">#3983f4</color>
+    <!--titlebar背景颜色-->
+    <color name="statuBg">#2e74df</color>
+    <!--状态栏背景颜色-->
+    <color name="greyTrans">#372e2e2e</color>
+    <!-- 灰色半透明  -->
+    <color name="greyTrans2">#9f2e2e2e</color>
+    <!-- 灰色半透明3  -->
+    <color name="greyTrans3">#af2e2e2e</color>
+    <!-- 灰色半透明  -->
+    <color name="line">#eee</color>
+    <!-- 线条颜色 -->
+    <color name="mainGrayColor">#f1f1f1</color>
+    <!-- 灰色大背景 -->
+    <color name="greenInfo">#108101</color>
+    <!-- 大盘信息绿色字体 -->
+    <color name="redInfo">#d70000</color>
+    <!-- 大盘信息绿色字体 -->
+    <color name="buttomWhite">#f9f9f9</color>
+    <!-- 底部淡灰色 -->
+    <color name="selectorWhite">#f5f5f5</color>
+    <!-- 底部淡灰色 -->
+    <!-- ............................................................ -->
+
+    <!-- K线图颜色定义 -->
+    <color name="stocyUp">#ff0000</color>
+    <color name="stocyDown">#00ff00</color>
+    <color name="stocyM5">#0000FF</color>
+    <color name="stocyM10">#FF00FF</color>
+    <color name="stocyM20">#00FF00</color>
+    <!-- 分时图颜色定义 -->
+    <color name="stocyH">#0000ff</color>
+    <color name="stocyHAvg">#FFD700</color>
+    <color name="stocyHCharts">#62d0f9</color>
+
+
+    <!-- .....................自定义下拉刷新控件的颜色.....................-->
+    <color name="refreshViewColor1">#62d0f9</color>
+    <color name="refreshViewColor2">#FF00FF</color>
+    <color name="refreshViewColor3">#FFC0CB</color>
+</resources>

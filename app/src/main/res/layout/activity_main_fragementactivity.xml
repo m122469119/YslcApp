@@ -1,0 +1,101 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/include_toolbar" />
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawerlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/titlebarSize">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/fragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/radioGroup" />
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/selectbarSize"
+                android:layout_alignParentBottom="true"
+                android:checkedButton="@+id/information"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/information"
+                    style="@style/indexOptionBarBtn"
+                    android:drawableTop="@drawable/index_tab_infor_btn_img_selector"
+                    android:text="@string/information" />
+
+                <RadioButton
+                    android:id="@+id/mainVedio"
+                    style="@style/indexOptionBarBtn"
+                    android:drawableTop="@drawable/index_tab_vedio_btn_img_selector"
+                    android:text="@string/vedio" />
+
+                <RadioButton
+                    android:id="@+id/starZone"
+                    style="@style/indexOptionBarBtn"
+                    android:drawableTop="@drawable/index_tab_star_btn_img_selector"
+                    android:text="@string/star" />
+
+                <RadioButton
+                    android:id="@+id/mainMy"
+                    style="@style/indexOptionBarBtn"
+                    android:drawableTop="@drawable/index_tab_my_btn_img_selector"
+                    android:text="@string/my" />
+            </RadioGroup>
+
+            <View
+                style="@style/line_h_style"
+                android:layout_width="match_parent"
+                android:layout_height="5dip"
+                android:layout_above="@id/radioGroup"
+                android:background="@drawable/line_shard_top" />
+        </RelativeLayout>
+
+        <RadioGroup
+            android:id="@+id/radioGroups"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/white"
+            android:checkedButton="@+id/news"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/magazine"
+                style="@style/slidingText.slidingLeftBtn"
+                android:drawableLeft="@drawable/sliding_star"
+                android:text="@string/interactive" />
+
+            <RadioButton
+                android:id="@+id/interactives"
+                style="@style/slidingText.slidingLeftBtn"
+                android:drawableLeft="@drawable/sliding_new"
+                android:text="@string/interactives" />
+
+            <RadioButton
+                android:id="@+id/stockMarket"
+                style="@style/slidingText.slidingLeftBtn"
+                android:drawableLeft="@drawable/sliding_interactive"
+                android:text="@string/stockMarket" />
+
+            <RadioButton
+                android:id="@+id/radio"
+                style="@style/slidingText.slidingLeftBtn"
+                android:drawableLeft="@drawable/sliding_pay"
+                android:text="@string/pay" />
+
+        </RadioGroup>
+    </android.support.v4.widget.DrawerLayout>
+</merge>

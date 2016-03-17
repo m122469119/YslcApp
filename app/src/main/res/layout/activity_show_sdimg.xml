@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/include_toolbar" />
+
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/titlebarSize"
+        android:background="@color/black"
+        android:horizontalSpacing="1dip"
+        android:numColumns="3"
+        android:padding="1dip"
+        android:verticalSpacing="2dip" />
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/greyTrans2"
+        android:padding="15dip">
+
+        <TextView
+            android:id="@+id/albumTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:paddingLeft="4dip"
+            android:text="最近照片"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="10dip"
+            android:layout_height="10dip"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="16dip"
+            android:contentDescription="@null"
+            android:src="@drawable/text_indicator" />
+
+    </LinearLayout>
+
+
+</merge>

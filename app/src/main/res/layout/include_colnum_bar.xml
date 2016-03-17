@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/colnumbarSize"
+    android:background="@color/buttomWhite">
+
+    <ImageView
+        android:id="@+id/rightBtn"
+        android:layout_width="35dip"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@null"
+        android:src="@drawable/right_btn_pressed" />
+
+    <com.yslc.view.ColumnHorizontalScrollView
+        android:id="@+id/columnView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@id/rightBtn">
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" />
+    </com.yslc.view.ColumnHorizontalScrollView>
+
+</RelativeLayout>

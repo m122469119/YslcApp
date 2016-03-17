@@ -1,0 +1,216 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ......................... 主题 ..................... -->
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:background">@null</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorPrimary">@color/titleBg</item>
+        <item name="colorPrimaryDark">@color/statuBg</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="drawerArrowStyle">@style/AppTheme.DrawerArrowToggle</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@style/activityAnimation</item>
+    </style>
+
+    <style name="AppTheme.DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/white</item>
+    </style>
+    <!-- .............................................................. -->
+
+    <!-- activity切换 animation 样式 -->
+    <style name="activityAnimation" mce_bogus="1" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_right_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_left_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_right_out</item>
+    </style>
+
+    <!-- ..........................Dialog样式.......................... -->
+    <style name="Dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:backgroundDimAmount">0.7</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <!-- 弹出框动画样式 -->
+    <style name="AnimBottom" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/push_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/push_bottom_out</item>
+    </style>
+
+    <!-- 分享弹出框文字样式 -->
+    <style name="shareTextStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:padding">10dip</item>
+        <item name="android:drawablePadding">8dip</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="AnimStart" parent="@android:style/Animation">
+        <item name="android:windowExitAnimation">@anim/push_bottom_in</item>
+        <item name="android:windowEnterAnimation">@anim/push_bottom_out</item>
+    </style>
+    <!-- .............................................................. -->
+
+
+    <!-- ...........................线条样式........................... -->
+    <style name="line_h_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dip</item>
+        <item name="android:background">@color/line</item>
+    </style>
+
+    <style name="line_h_width15_style" parent="line_h_style">
+        <item name="android:layout_height">15dip</item>
+        <item name="android:background">@color/selectorWhite</item>
+    </style>
+
+    <style name="line_v_style">
+        <item name="android:layout_width">1dip</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/line</item>
+    </style>
+    <!-- ............................................................... -->
+
+
+    <!-- 加载状态Button样式 -->
+    <style name="loadBtnStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:src">@drawable/progress</item>
+    </style>
+
+    <!-- .........................侧滑菜单系列样式..................... -->
+    <style name="slidingText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/index_tab_text_selector</item>
+        <item name="android:background">@drawable/index_tab_btn_bg_selector</item>
+    </style>
+
+    <style name="slidingText.slidingLeftBtn">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawablePadding">20dip</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingTop">15dip</item>
+        <item name="android:paddingBottom">15dip</item>
+        <item name="android:button">@null</item>
+        <item name="android:paddingLeft">40dip</item>
+    </style>
+    <!-- ............................................................. -->
+
+
+    <!-- 首页选项栏按钮样式 -->
+    <style name="indexOptionBarBtn">
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/index_tab_btn_bg_selector</item>
+        <item name="android:gravity">center_horizontal|bottom</item>
+        <item name="android:textColor">@color/index_tab_text_selector</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:button">@null</item>
+        <item name="android:padding">2dip</item>
+    </style>
+
+    <!-- 文字样式 -->
+    <style name="textStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/textColor54</item>
+    </style>
+
+    <!-- ListView文字样式 -->
+    <style name="listViewTextStyle" parent="textStyle">
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <!-- 设置WebView页字体大小样式 -->
+    <style name="setTextSizeStyle">
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:minHeight">50dip</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/index_tab_text_selector</item>
+        <item name="android:padding">15dip</item>
+        <item name="android:gravity">center</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <!-- 输入框父布局样式 -->
+    <style name="editLinearStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dip</item>
+        <item name="android:layout_marginTop">20dip</item>
+        <item name="android:layout_marginLeft">10dip</item>
+        <item name="android:layout_marginRight">10dip</item>
+        <item name="android:background">@drawable/edittext_selector</item>
+    </style>
+
+    <!-- 输入框左边图片样式 -->
+    <style name="editLeftImgStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:padding">10dip</item>
+    </style>
+
+    <!-- 输入框样式 -->
+    <style name="editStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">@color/textColor87</item>
+        <item name="android:paddingLeft">10dip</item>
+        <item name="android:paddingRight">10dip</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawablePadding">10dip</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <!-- 按钮样式 -->
+    <style name="btnStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">45dip</item>
+        <item name="android:layout_marginTop">20dip</item>
+        <item name="android:layout_marginLeft">10dip</item>
+        <item name="android:layout_marginRight">10dip</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">10dip</item>
+        <item name="android:paddingBottom">10dip</item>
+        <item name="android:background">@drawable/btn_selector</item>
+    </style>
+
+    <!-- 条型样式 -->
+    <style name="barTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/listview_selector</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/textColor87</item>
+        <item name="android:drawablePadding">10dip</item>
+        <item name="android:padding">12dip</item>
+        <item name="android:layout_marginTop">15dip</item>
+        <item name="android:drawableRight">@drawable/icon_right_litter</item>
+    </style>
+
+</resources>

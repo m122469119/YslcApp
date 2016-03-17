@@ -1,0 +1,124 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/top2"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/stocyMinTopHeight"
+    android:background="@color/white"
+    android:gravity="center_vertical">
+
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="----"
+            android:textColor="@color/red"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/stocyAs1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/now"
+            android:text="---"
+            android:textColor="@color/red"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/stocyAs2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/now"
+            android:text="---"
+            android:textColor="@color/red"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/stocyAs1"
+            android:text="金额"
+            android:textColor="@color/textColor54"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/priseNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/stocyAs2"
+            android:text="----亿"
+            android:textColor="@color/stocyHAvg"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textInfo1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="上涨家数"
+            android:textColor="@color/textColor54"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/riseCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="----"
+            android:textColor="@color/stocyUp"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textInfo1"
+            android:text="平盘家数"
+            android:textColor="@color/textColor54"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/balanceCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/textInfo1"
+            android:text="----"
+            android:textColor="@color/textColor54"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/balanceCount"
+            android:text="下跌家数"
+            android:textColor="@color/textColor54"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/downCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/balanceCount"
+            android:text="----"
+            android:textColor="@color/stocyDown"
+            android:textSize="16sp" />
+    </RelativeLayout>
+</LinearLayout>

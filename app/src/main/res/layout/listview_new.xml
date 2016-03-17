@@ -1,0 +1,11 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/refreshable_view"
+        layout="@layout/include_listview" />
+
+    <include layout="@layout/include_loading" />
+
+</RelativeLayout>

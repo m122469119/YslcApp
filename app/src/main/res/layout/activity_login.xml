@@ -1,0 +1,109 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainGrayColor">
+
+    <LinearLayout
+        android:id="@+id/closeKey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/include_toolbar" />
+
+        <RelativeLayout
+            style="@style/editLinearStyle"
+            android:descendantFocusability="afterDescendants">
+
+            <ImageView
+                android:id="@+id/img1"
+                style="@style/editLeftImgStyle"
+                android:contentDescription="@null"
+                android:src="@drawable/login_account" />
+
+            <View
+                style="@style/line_v_style"
+                android:layout_marginBottom="7dip"
+                android:layout_marginTop="7dip"
+                android:layout_toRightOf="@id/img1" />
+
+            <EditText
+                android:id="@+id/inputUsername"
+                style="@style/editStyle"
+                android:layout_toLeftOf="@+id/clearUser"
+                android:layout_toRightOf="@id/img1"
+                android:hint="@string/inputPhone"
+                android:maxLength="15" />
+
+            <ImageView
+                android:id="@+id/clearUser"
+                style="@style/editLeftImgStyle"
+                android:layout_alignParentRight="true"
+                android:contentDescription="@null"
+                android:src="@drawable/icon_delete"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/editLinearStyle">
+
+            <ImageView
+                android:id="@+id/img2"
+                style="@style/editLeftImgStyle"
+                android:contentDescription="@null"
+                android:src="@drawable/login_pass" />
+
+            <View
+                style="@style/line_v_style"
+                android:layout_marginBottom="7dip"
+                android:layout_marginTop="7dip"
+                android:layout_toRightOf="@id/img2" />
+
+            <EditText
+                android:id="@+id/inputPassword"
+                style="@style/editStyle"
+                android:layout_toLeftOf="@+id/clearPass"
+                android:layout_toRightOf="@id/img2"
+                android:hint="@string/inputPassword"
+                android:inputType="textPassword"
+                android:maxLength="15" />
+
+            <ImageView
+                android:id="@+id/clearPass"
+                style="@style/editLeftImgStyle"
+                android:layout_alignParentRight="true"
+                android:contentDescription="@null"
+                android:src="@drawable/icon_delete"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/loginBtn"
+            style="@style/btnStyle"
+            android:enabled="false"
+            android:text="@string/login" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dip">
+
+            <TextView
+                android:id="@+id/rememberPass"
+                style="@style/textStyle"
+                android:padding="10dip"
+                android:text="@string/rememberPass"
+                android:textColor="@color/gray_to_blue" />
+
+            <TextView
+                android:id="@+id/register"
+                style="@style/textStyle"
+                android:layout_alignParentRight="true"
+                android:padding="10dip"
+                android:text="@string/register"
+                android:textColor="@color/gray_to_blue" />
+        </RelativeLayout>
+
+    </LinearLayout>
+</ScrollView>

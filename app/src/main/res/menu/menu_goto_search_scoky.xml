@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:osc="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/icon_search"
+        android:title="@string/search"
+        android:visible="true"
+        osc:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_turnscreen"
+        android:icon="@drawable/turn_screen"
+        android:title="@string/turnScreen"
+        android:visible="true"
+        osc:showAsAction="always" />
+
+</menu>

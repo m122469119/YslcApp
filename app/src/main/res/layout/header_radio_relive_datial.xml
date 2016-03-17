@@ -1,0 +1,114 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="10dip">
+
+    <RelativeLayout
+        android:id="@+id/layout1"
+        android:layout_width="match_parent"
+        android:layout_height="120dip"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/radioHostImg"
+            android:layout_width="75dip"
+            android:layout_height="75dip"
+            android:layout_marginBottom="5dip"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:layout_marginTop="10dip"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/radioHostName"
+            style="@style/textStyle"
+            android:layout_width="120dip"
+            android:layout_below="@id/radioHostImg"
+            android:gravity="center_horizontal"
+            android:textSize="14sp" />
+
+        <View
+            style="@style/line_v_style"
+            android:layout_toRightOf="@id/radioHostImg" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/radioHostName"
+            android:gravity="left|center_vertical"
+            android:padding="20dip">
+
+            <TextView
+                android:id="@+id/radioNames"
+                style="@style/textStyle"
+                android:layout_marginBottom="15dip"
+                android:textColor="@color/textColor87"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/radioDates"
+                style="@style/textStyle"
+                android:layout_below="@id/radioNames"
+                android:lineSpacingExtra="3dip"
+                android:textSize="14sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <View style="@style/line_h_style" />
+
+    <View
+        style="@style/line_h_style"
+        android:layout_height="15dip"
+        android:background="@color/buttomWhite" />
+
+    <View
+        style="@style/line_h_style"
+        android:layout_marginBottom="10dip" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="18dip"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:contentDescription="@null"
+        android:src="@drawable/new_date" />
+
+    <include
+        android:id="@+id/newRadio"
+        layout="@layout/item_radio_relive_play_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View style="@style/line_h_style" />
+
+    <View
+        style="@style/line_h_style"
+        android:layout_height="15dip"
+        android:background="@color/buttomWhite" />
+
+    <View
+        style="@style/line_h_style"
+        android:layout_marginBottom="10dip" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="18dip"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:contentDescription="@null"
+        android:src="@drawable/old_date" />
+
+    <TextView
+        android:id="@+id/listIsEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:gravity="center_horizontal"
+        android:text="@string/showReliveInfo"
+        android:textColor="@color/textColor54"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+</LinearLayout>

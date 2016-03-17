@@ -1,0 +1,13 @@
+<resources>
+
+    <!--
+         Customize dimensions originally defined in res/values/dimens.xml (such as
+         screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
+    -->
+    <dimen name="listview_padding">15dip</dimen>
+
+    <!-- 股市行情提示信息布局高度 -->
+    <dimen name="stocyTopHeight">50dip</dimen>
+    <dimen name="stocyMinTopHeight">48dip</dimen>
+
+</resources>

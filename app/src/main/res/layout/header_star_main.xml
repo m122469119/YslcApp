@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="match_parent"
+        android:layout_height="180dip"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:src="@drawable/users_bg" />
+
+    <RelativeLayout
+        android:id="@+id/starInfoLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="100dip"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/titlebarSize"
+        android:gravity="center_vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/starImg"
+            android:layout_width="58dip"
+            android:layout_height="58dip"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/starName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/starImg"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dip"
+            android:textColor="@color/textColor87"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="match_parent"
+        android:layout_height="35dip"
+        android:layout_below="@id/img"
+        android:background="@drawable/segment_radio_white_middle"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dip"
+        android:text="@string/starInfo"
+        android:textColor="@color/textColor87"
+        android:textSize="15sp" />
+
+</RelativeLayout>

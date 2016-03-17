@@ -1,0 +1,137 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainGrayColor">
+
+    <LinearLayout
+        android:id="@+id/closeKey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context="${relativePackage}.${activityClass}">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/include_toolbar" />
+
+        <RelativeLayout style="@style/editLinearStyle">
+
+            <ImageView
+                android:id="@+id/img1"
+                style="@style/editLeftImgStyle"
+                android:contentDescription="@null"
+                android:src="@drawable/login_account" />
+
+            <View
+                style="@style/line_v_style"
+                android:layout_marginBottom="7dip"
+                android:layout_marginTop="7dip"
+                android:layout_toRightOf="@id/img1" />
+
+            <EditText
+                android:id="@+id/inputPhone"
+                style="@style/editStyle"
+                android:layout_toLeftOf="@+id/getCode"
+                android:layout_toRightOf="@id/img1"
+                android:hint="@string/inputPhone"
+                android:inputType="phone"
+                android:maxLength="11" />
+
+            <Button
+                android:id="@+id/getCode"
+                style="@style/btnStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="7dip"
+                android:layout_marginTop="7dip"
+                android:minWidth="90dip"
+                android:padding="0dip"
+                android:text="@string/getCode"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/editLinearStyle">
+
+            <ImageView
+                android:id="@+id/img2"
+                style="@style/editLeftImgStyle"
+                android:contentDescription="@null"
+                android:src="@drawable/icon_code" />
+
+            <View
+                style="@style/line_v_style"
+                android:layout_marginBottom="7dip"
+                android:layout_marginTop="7dip"
+                android:layout_toRightOf="@id/img2" />
+
+            <EditText
+                android:id="@+id/inputCode"
+                style="@style/editStyle"
+                android:layout_toRightOf="@id/img2"
+                android:hint="@string/inputCode"
+                android:inputType="number"
+                android:maxLength="4" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/editLinearStyle">
+
+            <ImageView
+                android:id="@+id/img3"
+                style="@style/editLeftImgStyle"
+                android:contentDescription="@null"
+                android:src="@drawable/login_pass" />
+
+            <View
+                style="@style/line_v_style"
+                android:layout_marginBottom="7dip"
+                android:layout_marginTop="7dip"
+                android:layout_toRightOf="@id/img3" />
+
+            <EditText
+                android:id="@+id/inputPasswordOne"
+                style="@style/editStyle"
+                android:layout_toRightOf="@id/img3"
+                android:hint="@string/inputPass1"
+                android:inputType="textPassword"
+                android:maxLength="15" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/editLinearStyle">
+
+            <ImageView
+                android:id="@+id/img4"
+                style="@style/editLeftImgStyle"
+                android:contentDescription="@null"
+                android:src="@drawable/login_pass" />
+
+            <View
+                style="@style/line_v_style"
+                android:layout_marginBottom="7dip"
+                android:layout_marginTop="7dip"
+                android:layout_toRightOf="@id/img4" />
+
+            <EditText
+                android:id="@+id/inputPasswordTwo"
+                style="@style/editStyle"
+                android:layout_toRightOf="@id/img4"
+                android:hint="@string/inputPass2"
+                android:inputType="textPassword"
+                android:maxLength="15" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/registerBtn"
+            style="@style/btnStyle"
+            android:enabled="false"
+            android:text="@string/registers" />
+
+        <Button
+            android:id="@+id/fastLogin"
+            style="@style/btnStyle"
+            android:text="@string/fastLogin" />
+    </LinearLayout>
+
+</ScrollView>

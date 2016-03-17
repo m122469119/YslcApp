@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/titlebarSize"
+    android:background="@color/buttomWhite">
+
+    <View
+        style="@style/line_h_style"
+        android:background="@drawable/line_shard_bottom" />
+
+    <Button
+        android:id="@+id/send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dip"
+        android:background="@drawable/comment_box_selector"
+        android:contentDescription="@null"
+        android:gravity="center"
+        android:minWidth="60dip"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:text="@string/readComment"
+        android:textColor="@color/titleBg"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="7dip"
+        android:layout_marginLeft="7dip"
+        android:layout_marginTop="7dip"
+        android:layout_toLeftOf="@id/send"
+        android:background="@drawable/comment_box_selector"
+        android:drawableLeft="@drawable/post"
+        android:drawablePadding="5dip"
+        android:gravity="center_vertical"
+        android:hint="@string/writePost"
+        android:inputType="text"
+        android:maxLength="500"
+        android:paddingBottom="5dip"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:paddingTop="5dip"
+        android:textColor="@color/textColor87"
+        android:textSize="16sp" />
+
+</RelativeLayout>

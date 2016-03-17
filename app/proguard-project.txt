@@ -1,0 +1,78 @@
+# To enable ProGuard in your project, edit project.properties
+# to define the proguard.config property as described in that file.
+#
+# Add project specific ProGuard rules here.
+# By default, the flags in this file are appended to flags specified
+# in ${sdk.dir}/tools/proguard/proguard-android.txt
+# You can edit the include path and order by changing the ProGuard
+# include property in project.properties.
+#
+# For more details, see
+#   http://developer.android.com/guide/developing/tools/proguard.html
+
+# Add any project specific keep options here:
+
+# If your project uses WebView with JS, uncomment the following
+# and specify the fully qualified class name to the JavaScript interface
+# class:
+#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+#   public *;
+#}
+
+#support-v4包
+-libraryjars libs/android-support-v4.jar
+-dontwarn android.support.v4.**
+-keep class android.support.v4.** { *; }
+
+#图片异步加载组件universal-image-loader配置
+-keep class com.nostra13.universalimageloader.** { *; }
+   
+#异步Http请求android-async-http-1.4.3.jar配置
+-keep class com.loopj.android.http.** { *; }
+
+ #不混淆org.apache.http.legacy.jar（android 6.0没有该jar包，需要手动导入，避免混淆）
+ -dontwarn android.net.compatibility.**
+ -dontwarn android.net.http.**
+ -dontwarn com.android.internal.http.multipart.**
+ -dontwarn org.apache.commons.**
+ -dontwarn org.apache.http.**
+ -keep class android.net.compatibility.**{*;}
+ -keep class android.net.http.**{*;}
+ -keep class com.android.internal.http.multipart.**{*;}
+ -keep class org.apache.commons.**{*;}
+ -keep class org.apache.http.**{*;}    
+
+#自定义控件及组件不要打包混淆
+#四大组件不能混淆
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application {*;}
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.app.backup.BackupAgentHelper
+-keep public class * extends android.preference.Preference
+#自定义控件不要混淆
+-keep public class * extends android.view.View {*;}
+
+#数据模型不要混淆
+-keepnames class * implements java.io.Serializable
+-keepclassmembers class * implements java.io.Serializable {*;}
+
+#adapter也不能混淆
+-keep public class * extends android.widget.Adapter {*;}
+
+-dontwarn com.google.gson.**
+-keep class com.google.gson.** { *;}
+
+#ShareSDK不能混淆
+-keep class cn.sharesdk.**{*;}
+-keep class com.sina.**{*;}
+-keep class **.R$* {*;}
+-keep class **.R{*;}
+-dontwarn cn.sharesdk.**
+-dontwarn **.R$*
+
+#JPush SDK不能混淆
+-dontwarn cn.jpush.**
+-keep class cn.jpush.** { *; }
+

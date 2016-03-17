@@ -1,0 +1,102 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:src="@drawable/vedio_bg" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="true"
+        android:fitsSystemWindows="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/backBtn"
+                android:layout_width="@dimen/titlebarSize"
+                android:layout_height="@dimen/titlebarSize"
+                android:contentDescription="@null"
+                android:padding="13dip"
+                android:src="@drawable/rollback" />
+
+            <TextView
+                android:id="@+id/titleText"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/titlebarSize"
+                android:layout_toRightOf="@id/backBtn"
+                android:gravity="center_vertical"
+                android:text="@string/interactive"
+                android:textColor="@color/white"
+                android:textSize="@dimen/titleSize" />
+
+            <ImageButton
+                android:id="@+id/refreshBtn"
+                android:layout_width="@dimen/titlebarSize"
+                android:layout_height="@dimen/titlebarSize"
+                android:layout_alignParentRight="true"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:cropToPadding="true"
+                android:enabled="false"
+                android:padding="0dip"
+                android:src="@drawable/icon_refresh" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/starImg"
+            android:layout_width="70dip"
+            android:layout_height="70dip"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="60dip"
+            android:layout_marginLeft="13dip"
+            android:contentDescription="@null" />
+
+        <RelativeLayout
+            android:id="@+id/layout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/greyTrans2"
+            android:padding="8dip">
+
+            <TextView
+                android:id="@+id/text_time"
+                android:layout_width="wrap_content"
+                android:layout_height="28dip"
+                android:layout_marginLeft="20dip"
+                android:gravity="bottom"
+                android:textColor="@color/white"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/text_info"
+                android:layout_width="wrap_content"
+                android:layout_height="20dip"
+                android:layout_below="@id/text_time"
+                android:layout_marginLeft="20dip"
+                android:gravity="bottom"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <ImageButton
+                android:id="@+id/paly_pouse"
+                android:layout_width="56dip"
+                android:layout_height="56dip"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dip"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:src="@drawable/icon_pause" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

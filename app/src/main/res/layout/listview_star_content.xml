@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/include_toolbar" />
+
+    <com.yslc.view.BaseListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/buttom"
+        android:layout_below="@id/toolbar"
+        android:background="@color/white"
+        android:divider="@drawable/line_dotted" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/buttom"
+        android:layout_below="@id/toolbar"
+        android:background="@drawable/view_shard" />
+
+    <include
+        android:id="@+id/buttom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/titlebarSize"
+        android:layout_alignParentBottom="true"
+        layout="@layout/include_comment_input" />
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        layout="@layout/include_loading" />
+
+</RelativeLayout>

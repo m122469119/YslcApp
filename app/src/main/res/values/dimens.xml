@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ..........................App字体大小............................ -->
+    <dimen name="titleSize">20sp</dimen>
+    <!-- 标题文字大小 -->
+    <!-- ................................................................. -->
+
+
+    <!-- ..........................App图片大小............................ -->
+
+
+    <!-- ................................................................ -->
+
+
+    <!-- .............................其他................................ -->
+    <!-- 标题栏高度 -->
+    <dimen name="titlebarSize">54dip</dimen>
+
+    <!-- 选项栏高度 -->
+    <dimen name="selectbarSize">50dip</dimen>
+
+    <!-- 横向类型滚动条高度 -->
+    <dimen name="colnumbarSize">40dip</dimen>
+
+    <!-- 侧滑抽屉边界偏移值 -->
+    <dimen name="slidingOffset">65dip</dimen>
+
+    <!-- 股市行情提示信息布局高度 -->
+    <dimen name="stocyTopHeight">72dip</dimen>
+    <dimen name="stocyMinTopHeight">72dip</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="stocyKTypeBtnRadus">58dip</dimen>
+    <!-- ................................................................. -->
+
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="kTypeArray">
+        <item>五分钟K线图</item>
+        <item>十分钟K线图</item>
+        <item>三十分钟K线图</item>
+        <item>日K图</item>
+        <item>周K图</item>
+        <item>月K图</item>
+    </array>
+</resources>

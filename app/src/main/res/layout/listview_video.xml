@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refreshable_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <GridView
+            android:id="@+id/gridView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:horizontalSpacing="10dip"
+            android:numColumns="2"
+            android:padding="10dip"
+            android:verticalSpacing="10dip" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <include layout="@layout/include_loading" />
+
+</RelativeLayout>

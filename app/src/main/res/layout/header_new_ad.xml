@@ -1,0 +1,121 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="140dip" />
+
+    <View
+        android:id="@+id/line"
+        style="@style/line_h_style"
+        android:layout_below="@id/viewPager" />
+
+    <com.yslc.view.BaseIndicator
+        android:id="@+id/myIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="30dip"
+        android:layout_above="@id/line"
+        android:layout_alignParentRight="true"
+        android:background="@color/greyTrans"
+        android:gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/titleTv"
+        android:layout_width="match_parent"
+        android:layout_height="30dip"
+        android:layout_above="@id/line"
+        android:layout_toLeftOf="@id/myIndicator"
+        android:background="@color/greyTrans"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dip"
+        android:paddingRight="15dip"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="2dip">
+
+            <TextView
+                android:id="@+id/Shanghai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="----"
+                android:textColor="@color/textColor87"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/Now1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:drawablePadding="3dip"
+                android:text="---"
+                android:textColor="@color/green"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/Differ1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="---"
+                android:textColor="@color/textColor54"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <View style="@style/line_v_style" />
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="2dip">
+
+            <TextView
+                android:id="@+id/shenzhen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="----"
+                android:textColor="@color/textColor87"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/Now2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:drawablePadding="3dip"
+                android:text="---"
+                android:textColor="@color/red"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/Differ2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="---"
+                android:textColor="@color/textColor54"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parantView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/include_toolbar" />
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/titlebarSize"
+        android:layout_marginTop="@dimen/titlebarSize"
+        android:scrollbars="none" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/titlebarSize"
+        android:layout_marginTop="@dimen/titlebarSize"
+        android:background="@drawable/view_shard" />
+
+    <include
+        android:id="@+id/buttom"
+        layout="@layout/include_comment_input"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/titlebarSize"
+        android:layout_gravity="bottom" />
+
+    <include
+        layout="@layout/include_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/titlebarSize" />
+
+    <FrameLayout
+        android:id="@+id/video_fullView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+</FrameLayout>

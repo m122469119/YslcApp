@@ -1,0 +1,47 @@
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+android {
+    signingConfigs {
+        config {
+            keyAlias 'hh'
+            keyPassword '123456'
+            storeFile file('D:/Android Development/key store/tey.txt')
+            storePassword '123456'
+        }
+    }
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+    defaultConfig {
+        applicationId "com.yslc"
+        minSdkVersion 8
+        targetSdkVersion 23
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile files('libs/android-async-http-1.4.3.jar')
+    compile files('libs/jpush-android-2.0.5.jar')
+    compile files('libs/MobCommons.jar')
+    compile files('libs/MobTools.jar')
+    compile files('libs/org.apache.http.legacy.jar')
+    compile files('libs/ShareSDK-Core-2.6.4.jar')
+    compile files('libs/ShareSDK-QQ-2.6.4.jar')
+    compile files('libs/ShareSDK-QZone-2.6.4.jar')
+    compile files('libs/ShareSDK-SinaWeibo-2.6.4.jar')
+    compile files('libs/ShareSDK-Wechat-2.6.4.jar')
+    compile files('libs/ShareSDK-Wechat-Core-2.6.4.jar')
+    compile files('libs/ShareSDK-Wechat-Moments-2.6.4.jar')
+    compile files('libs/universal-image-loader-1.9.3.jar')
+}

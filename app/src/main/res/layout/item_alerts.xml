@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/listview_selector"
+    android:paddingBottom="12dip"
+    android:paddingLeft="16dip"
+    android:paddingRight="16dip"
+    android:paddingTop="12dip">
+
+    <TextView
+        android:id="@+id/value"
+        style="@style/listViewTextStyle"
+        android:layout_toRightOf="@id/time"
+        android:ellipsize="end"
+        android:maxLines="5"
+        android:singleLine="false"
+        android:textColor="@color/textColor87" />
+
+    <TextView
+        android:id="@+id/readNum"
+        style="@style/listViewTextStyle"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/value"
+        android:layout_marginTop="8dip"
+        android:lineSpacingExtra="3dip"
+        android:textSize="14sp" />
+
+</RelativeLayout>

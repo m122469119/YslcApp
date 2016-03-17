@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">越声理财</string>
+    <string name="nowDownload"> 正在下载 </string>
+    <string name="gotoApp"> 进入越声理财 </string>
+    <string name="tryAgin"> 点击重新加载 </string>
+    <string name="empty"> </string>
+
+    <!-- .........ListView的加载更多与 RefreshableView的下拉刷新.......... -->
+    <string name="xlistview_footer_hint_normal">查看更多</string>
+    <string name="xlistview_footer_hint_onmore">没有更多了</string>
+    <string name="xlistview_header_hint_loading">正在加载中</string>
+
+    <!-- ........................首页.................................... -->
+    <string name="yslcNew"> 新闻资讯 </string>
+    <string name="information"> 资讯 </string>
+    <string name="my"> 我 </string>
+    <string name="star"> 明星 </string>
+    <string name="aginClick"> 再按一次退出程序 </string>
+
+    <!-- ...........................左右侧滑菜单......................... -->
+    <string name="news"> 新闻 </string>
+    <string name="vedio"> 视频 </string>
+    <string name="starZone"> 明星专区 </string>
+    <string name="interactive"> 股市广播  </string>
+    <string name="interactives"> 广播重温  </string>
+    <string name="stockMarket"> 股市行情  </string>
+    <string name="interactivesDetail"> 广播重温详情  </string>
+    <string name="pay"> 支付 </string>
+
+    <!-- 新闻详情 -->
+    <string name="newDetail"> 新闻详情  </string>
+    <string name="send"> 发送 </string>
+    <string name="seeComments"> 查看评论 </string>
+    <string name="vedioDetail"> 视频详情  </string>
+
+    <!-- 字号设置 -->
+    <string name="setTextSize"> 字体大小  </string>
+    <string name="little"> 小号 </string>
+    <string name="meddile"> 中号 </string>
+    <string name="big"> 大号 </string>
+
+    <!-- 评论列表 -->
+    <string name="commentTitle"> 评论列表  </string>
+    <string name="writePost"> 写跟帖 </string>
+    <string name="readComment"> 查看评论 </string>
+    <string name="doCommentInfo"> 评论发表中… </string>
+    <string name="doCommentFail"> 发表评论失败 </string>
+
+    <!-- 用户模块 -->
+    <string name="login"> 登录 </string>
+    <string name="logining"> 正在登录  </string>
+    <string name="registering"> 正在注册  </string>
+    <string name="updateing"> 正在修改  </string>
+    <string name="inputPassword"> 请输入您的密码 </string>
+    <string name="rememberPass"><u>忘记密码</u></string>
+    <string name="register"><u>去注册</u></string>
+    <string name="registers"> 注册 </string>
+    <string name="inputPass2"> 请确认密码 </string>
+    <string name="inputPass1"> 请输入密码 </string>
+    <string name="inputCode"> 请输入手机验证码 </string>
+    <string name="inputPhone"> 请输入手机号 </string>
+    <string name="getCode"> 获取验证码 </string>
+    <string name="fastLogin"> 已有账号，快速登录 </string>
+    <string name="oldPassword"> 原密码  </string>
+    <string name="newPassword"> 新密码  </string>
+    <string name="confirmPassword"> 确认密码 </string>
+    <string name="confirmUpdate"> 确认修改  </string>
+    <string name="findPassword"> 找回密码  </string>
+    <string name="about"> 关于  </string>
+    <string name="updatePassword"> 修改密码  </string>
+    <string name="exitLogin"> 已登录,退出登录  </string>
+    <string name="goLogin"> 未登录，去登陆>>  </string>
+    <string name="valFriend"> 邀请好友  </string>
+    <string name="chioseImg"> "选择头像"  </string>
+
+    <!-- 设置 -->
+    <string name="set"> 设置 </string>
+    <string name="isPush"> 是否消息推送 </string>
+    <string name="isWifi"> 仅Wifi环境下载更新 </string>
+    <string name="checkVersion"> 检测新版本 </string>
+
+    <!-- 明星专区 -->
+    <string name="starInfo"> 所有文章和观点 </string>
+    <string name="contentDetail"> 文章详情 </string>
+    <string name="starMain"> 明星主页 </string>
+
+    <!-- 分享渠道 -->
+    <string name="wb"> 新浪微博 </string>
+    <string name="qq"> QQ </string>
+    <string name="wx"> 微信 </string>
+    <string name="friend"> 朋友圈 </string>
+    <string name="qqzone"> QQ空间 </string>
+    <string name="cancelShare"> 取消 </string>
+
+    <!-- 广播 -->
+    <string name="showRelive"> 节目重温>> </string>
+    <string name="showReliveInfo"> 暂无往期内容 </string>
+    <string name="action_commint">确定</string>
+    <string name="title_activity_crop_image">裁剪头像</string>
+
+    <!-- 股市行情 -->
+    <string name="stocyCode"> 股票代码 </string>
+    <string name="time"> 时间 </string>
+    <string name="search"> 搜索 </string>
+    <string name="turnScreen"> 转屏 </string>
+    <string name="stocyKey"> 输入股票代码或字母 </string>
+
+</resources>
