@@ -17,7 +17,6 @@ public class ActivityManager {
     private static Stack<Activity> mStack = null;
 
     private ActivityManager() {
-
     }
 
     /**
