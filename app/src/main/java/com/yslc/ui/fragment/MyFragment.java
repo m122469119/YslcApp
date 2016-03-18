@@ -160,7 +160,7 @@ public class MyFragment extends BaseFragment implements OnClickListener {
 
             case R.id.updatePass:
                 // 判断是否登录
-                if (!SharedPreferencesUtil.isLogin(context, Constant.PLAREN_LOGIN)) {
+                if (!SharedPreferencesUtil.isLogin(context, Constant.PAEASE_LOGIN)) {
                     startActivityForResult(
                             new Intent(context, LoginActivity.class), 1);
                     return;

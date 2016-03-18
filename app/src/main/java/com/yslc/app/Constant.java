@@ -52,7 +52,7 @@ public class Constant {
      * ............................其他常量..........................*
      */
     public static final String PACKGER_NAME = "com.tzkb";
-    public static final String PLAREN_LOGIN = "请先登录";
+    public static final String PAEASE_LOGIN = "请先登录";
     public static final String LOGIN_SUCCESS = "登录成功";
     public static final String LOGIN_FAILER = "登录失败";
     public static final String REGISTER_SUCCESS = "注册成功";
