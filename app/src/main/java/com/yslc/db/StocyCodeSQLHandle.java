@@ -27,7 +27,7 @@ public class StocyCodeSQLHandle {
 
     /**
      * 是否存在数据
-     *
+     * <p>查询数据库看是否有数据</p>
      * @return : 是否存在数据
      */
     public boolean isData() {
@@ -42,10 +42,11 @@ public class StocyCodeSQLHandle {
 
     /**
      * 插入所有数据
-     *
+     * <p>开启事务删除所有数据，再插入list列表的数据到本地数据库</p>
      * @param list:列表
      */
     public void insertAll(List<StocyCodeBean> list) {
+        //开启事务
         db.beginTransaction();
 
         //删除所有数据

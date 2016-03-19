@@ -4,8 +4,9 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
 /**
- * 动画工具类
- * <p>
+ * 动画工具类（本身也是动画子类，继承Animation
+ * <p>实现动画借口</p>
+ * <p>构造本类需要一个监听回调类，动画结束的时候调用监听回头的方法</p>
  * Created by Administrator on 2015/12/24.
  */
 public class AnimationUtil implements Animation.AnimationListener {

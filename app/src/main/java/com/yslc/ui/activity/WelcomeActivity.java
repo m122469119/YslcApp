@@ -29,6 +29,7 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener, Vi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //设置状态栏透明
         setTranslucentStatusBar(true);
 
         if (isFristOpenApp()) {
@@ -44,6 +45,11 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener, Vi
 
     /**
      * 初始化页面
+     *
+     * <p>设置按钮点击事件</p>
+     * <p>设置ViewPager滑动事件</p>
+     * <p>设置ViewPager图片</p>
+     * <p>设置ViewPager适配器</p>
      */
     @Override
     protected void initView() {
@@ -60,13 +66,14 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener, Vi
 
         // 创建指示器绑定ViewPager
         ((BaseIndicator) findViewById(R.id.myIndicator)).setViewPager(viewPager, this);
-
+        //进入主页button
         gotoApp = findViewById(R.id.gotoApp);
         gotoApp.setOnClickListener(this);
     }
 
     /**
      * 判断是否第一次打开APP
+     * @return 注意：返回true代表不是第一次，返回false代表是第一次
      */
     private boolean isFristOpenApp() {
         spf = new SharedPreferencesUtil(this,
@@ -74,6 +81,11 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener, Vi
         return spf.getBoolean(Constant.SYSTEM_ISFRIST_KEY);
     }
 
+    /**
+     * 进入主页点击事件
+     * <p>进入主页，并把是否第一次进入甚至为true(代表下次不是第一次）</p>
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.gotoApp) {
@@ -83,6 +95,7 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener, Vi
             onFinishActivity();
         }
     }
+//-------------下面三个方法是重写OnChangeListener监听的接口方法-------------
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

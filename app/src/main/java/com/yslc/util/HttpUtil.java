@@ -7,7 +7,8 @@ import com.loopj.android.http.RequestParams;
 
 /**
  * 网络请求工具类
- *
+ * <p>使用了三方框架AsyncHttpClient,设置了网络超时</p>
+ * <p>设置了IP，网络接口配置常量</p>
  * @author HH
  */
 public class HttpUtil {
@@ -68,9 +69,9 @@ public class HttpUtil {
 
     /**
      * 发送post请求
-     *
+     * <p>先判断网络是否连接，再使用post发送请求</p>
      * @param url             地址
-     * @param context         内容
+     * @param context         上下文
      * @param params          参数
      * @param responseHandler 回调
      */
@@ -88,8 +89,9 @@ public class HttpUtil {
     /**
      * 发送get请求
      *
+     * <p>先判断网络是否连接，再使用post发送请求</p>
      * @param url             地址
-     * @param context         内容
+     * @param context         上下文
      * @param params          参数
      * @param responseHandler 回调
      */
@@ -115,6 +117,7 @@ public class HttpUtil {
 
     /**
      * 获取接口地址
+     * <p>拼接url</p>
      */
     private static String getHostUrl(String url) {
         return IP + url;

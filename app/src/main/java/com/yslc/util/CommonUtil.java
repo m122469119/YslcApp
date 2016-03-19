@@ -88,8 +88,8 @@ public class CommonUtil {
 
     /**
      * 判断网络连接情况
-     *
-     * @param context
+     * <p>获取网络管理类，判断是否正在链接</p>
+     * @param context 上下文
      * @return
      */
     public static boolean isNetworkAvalible(Context context) {

@@ -34,16 +34,18 @@ public class StockCodeModelSerice {
     }
 
     /**
-     * 判断是否需要导入股票代码
-     * 获取所有股票代码列表并导入数据库
+     * 获取股票信息列表
      *
-     * @param callback
+     * <p>判断是否需要导入股票代码</p>
+     * <p>获取所有股票代码列表并导入数据库</p>
+     *
      */
-    public void getStockCodeList(GetDataCallback callback) {
-        if (intoStocyCode()) {
+    public void getStockCodeList() {
+        if (intoStocyCode()) {//判断是否需要更新
             stockMarketModel.getStockCodeList(new GetDataCallback() {
                 @Override
                 public <T> void success(T data) {
+                    //强转并插入数据库
                     intoStocyDB((ArrayList<StocyCodeBean>) data);
                 }
 
@@ -77,6 +79,7 @@ public class StockCodeModelSerice {
 
     /**
      * 判断上次导入数据的时间是否超过24小时，需要更新股票数据
+     * <p>超过24小时或没有数据返回true</p>
      */
     private boolean intoStocyCode() {
         SharedPreferencesUtil spf = new SharedPreferencesUtil(context, Constant.SYSTEM_NAME);

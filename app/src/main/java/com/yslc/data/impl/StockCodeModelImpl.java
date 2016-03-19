@@ -29,6 +29,11 @@ public class StockCodeModelImpl implements IStockCodeModel {
         this.context = context;
     }
 
+    /**
+     * 获取股票代码列表数据
+     * <p>连接网络获取股票信息</p>
+     * @param callback
+     */
     @Override
     public void getStockCodeList(GetDataCallback callback) {
         HttpUtil.post(HttpUtil.GET_STOCK_CODElIST, context, null, new JsonHttpResponseHandler() {
@@ -41,7 +46,7 @@ public class StockCodeModelImpl implements IStockCodeModel {
                         callback.failer(null);
                         return;
                     }
-
+                    //解析数据
                     JSONArray ja = arg0.getJSONArray("stock");
                     ArrayList<StocyCodeBean> list = new ArrayList<>(ja.length());
                     StocyCodeBean bean;
@@ -54,6 +59,7 @@ public class StockCodeModelImpl implements IStockCodeModel {
                         bean.setStock_Abbreviation(jo.optString("Stock_Abbreviation"));
                         list.add(bean);
                     }
+                    //返回数据
                     callback.success(list);
                 } catch (JSONException e) {
                     e.printStackTrace();
