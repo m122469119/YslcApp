@@ -36,8 +36,15 @@ public class NewModelImpl implements INewModel {
         this.context = context;
     }
 
+    /**
+     * 把请求id作为GET请求参数发送到后台获取数据，并解析
+     * <p>url是栏目url(HttpUtil.GET_COLNUM)</p>
+     * @param btid : 类型Id
+     * @param callback 回调函数
+     */
     @Override
     public void getColumnData(String btid, GetDataCallback callback) {
+        //请求参数
         RequestParams params = new RequestParams();
         params.put("btid", btid);
         HttpUtil.get(HttpUtil.GET_COLNUM, context, params,
@@ -85,6 +92,12 @@ public class NewModelImpl implements INewModel {
                 });
     }
 
+    /**
+     * 从后台获取快讯内容数据
+     * @param pageSize 请求数据1
+     * @param pageIndex 请求数据2
+     * @param callback 回调函数
+     */
     @Override
     public void fristLoadFastNewData(String pageSize, String pageIndex, GetDataCallback callback) {
         RequestParams params = new RequestParams();

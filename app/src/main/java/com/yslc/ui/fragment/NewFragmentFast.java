@@ -34,12 +34,12 @@ import com.yslc.view.LoadView.OnTryListener;
  * @author HH
  */
 public class NewFragmentFast extends BaseFragment implements OnTryListener {
-    private SwipeRefreshLayout refreshableView;
-    private BaseListView listView;
+    private SwipeRefreshLayout refreshableView;//下拉刷新
+    private BaseListView listView;//加载更多listView
     private LoadView loadView;
-    private QuickAdapter<NewBean> adapter;
+    private QuickAdapter<NewBean> adapter;//适配器
     private Context context;
-    private ArrayList<NewBean> infoItemList;
+    private ArrayList<NewBean> infoItemList;//list数据
     private NewModelService newModelService;
 
     @Override
@@ -55,15 +55,29 @@ public class NewFragmentFast extends BaseFragment implements OnTryListener {
         return R.layout.listview_new;
     }
 
+    /**
+     * 第一次加载
+     * <p>父类调用</p>
+     */
     @Override
     protected void onFristLoadData() {
         super.onFristLoadData();
 
         if (loadView.setStatus(LoadView.LOADING)) {
+            //开始加载
             oneLoad();
         }
     }
 
+    /**
+     * 初始化View
+     * <p>关联loadView并设置监听事件</p>
+     * <p>关联listView</p>
+     * <p>关联下拉刷新</p>
+     * <p>设置点击事件</p>
+     * <p>实例化业务逻辑类</p>
+     * @param views
+     */
     @Override
     protected void findView(View views) {
         super.findView(views);
@@ -72,8 +86,10 @@ public class NewFragmentFast extends BaseFragment implements OnTryListener {
         loadView.setOnTryListener(this);
         listView = (BaseListView) views.findViewById(R.id.listview);
         refreshableView = (SwipeRefreshLayout) views.findViewById(R.id.refreshable_view);
-        refreshableView.setColorSchemeResources(R.color.refreshViewColor1, R.color.refreshViewColor2, R.color.refreshViewColor3);
-
+        //设置进度动画的颜色资源
+        refreshableView.setColorSchemeResources(R.color.refreshViewColor1,
+                R.color.refreshViewColor2, R.color.refreshViewColor3);
+        //设置点击事件
         listViewSetEvent();
         newModelService = new NewModelService(context);
     }
@@ -151,7 +167,7 @@ public class NewFragmentFast extends BaseFragment implements OnTryListener {
                     listView.noMoreData();
                 }
 
-                // 刷新列表
+                // 添加更多数据并刷新列表
                 infoItemList.addAll((ArrayList<NewBean>) data);
                 listRefersh();
             }
@@ -166,6 +182,9 @@ public class NewFragmentFast extends BaseFragment implements OnTryListener {
 
     /**
      * 进行列表的刷新
+     * <p>数据更新了，需要把新数据显示在listView上</p>
+     * <p></p>
+     * <p>如果适配器没有实例化，则先实例化适配器，并且设置适配数据</p>
      */
     private void listRefersh() {
         if (null == adapter) {

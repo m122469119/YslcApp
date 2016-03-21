@@ -11,8 +11,9 @@ import com.yslc.view.LoadView;
 
 /**
  * 所有Fragment基类
- * <p>
+ *
  * <p>嵌入加载视图</p>
+ * <p>第一次进入开始执行onFristLoadData()方法加载数据</p>
  * @author HH
  */
 public abstract class BaseFragment extends Fragment {

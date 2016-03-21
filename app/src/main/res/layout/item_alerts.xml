@@ -7,7 +7,7 @@
     android:paddingLeft="16dip"
     android:paddingRight="16dip"
     android:paddingTop="12dip">
-
+<!--正文摘要-->
     <TextView
         android:id="@+id/value"
         style="@style/listViewTextStyle"
@@ -16,7 +16,7 @@
         android:maxLines="5"
         android:singleLine="false"
         android:textColor="@color/textColor87" />
-
+<!--右下角阅读量-->
     <TextView
         android:id="@+id/readNum"
         style="@style/listViewTextStyle"
