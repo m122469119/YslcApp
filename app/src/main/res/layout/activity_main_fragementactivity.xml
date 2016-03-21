@@ -5,7 +5,7 @@
     <include
         android:id="@+id/toolbar"
         layout="@layout/include_toolbar" />
-
+<!--toolbar下面紧接一个drawlayout-->
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawerlayout"
         android:layout_width="match_parent"

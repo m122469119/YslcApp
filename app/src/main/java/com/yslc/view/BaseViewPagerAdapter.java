@@ -13,6 +13,11 @@ import android.widget.ImageView.ScaleType;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yslc.bean.AdBean;
 
+/**
+ * 这是个viewPagerAdapter
+ * <p>可以使用本地图片id设置图片</p>
+ * <p>可使用url下载网络图片（imageLoader网络框架）</p>
+ */
 public class BaseViewPagerAdapter extends PagerAdapter {
     private List<ImageView> views;
     private ImageLoader imageLoader;
@@ -47,7 +52,7 @@ public class BaseViewPagerAdapter extends PagerAdapter {
     /**
      * 设置本地资源图片
      *
-     * @param sdList
+     * @param sdList 本地图片id
      * @param isForever 是否无限滑动
      */
     public void setSdImage(List<Integer> sdList, boolean isForever) {

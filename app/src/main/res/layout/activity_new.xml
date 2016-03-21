@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+<!--副标题-->
     <include
         android:id="@+id/colnumbar"
         layout="@layout/include_colnum_bar" />
@@ -12,13 +12,13 @@
         android:layout_height="match_parent"
         android:layout_below="@id/colnumbar"
         android:background="@color/white" />
-
+<!--分隔线-->
     <View
         android:layout_width="match_parent"
         android:layout_height="5dip"
         android:layout_below="@id/colnumbar"
         android:background="@drawable/line_shard_bottom" />
-
+<!--正在加载View-->
     <include layout="@layout/include_loading" />
 
 </RelativeLayout>

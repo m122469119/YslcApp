@@ -58,6 +58,7 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener, Vi
 
         // 设置滑动图片数据
         BaseViewPagerAdapter adapter = new BaseViewPagerAdapter(this);
+        //设置本地图片
         adapter.setSdImage(
                 new ArrayList<>(Arrays.asList(R.drawable.test1,
                         R.drawable.test2, R.drawable.test3, R.drawable.test4)),

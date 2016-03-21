@@ -38,8 +38,9 @@ public class BaseIndicator extends LinearLayout implements OnPageChangeListener 
     /**
      * 没有标题类型的滑动图片ViewPager
      *
-     * @param viewPager
+     * @param viewPager 本指示点控件要搭配的ViewPager
      * @param context
+     * @see #setViewPager(ViewPager, Context, List, TextView)
      */
     public void setViewPager(ViewPager viewPager, Context context) {
         this.viewPager = viewPager;
@@ -54,8 +55,11 @@ public class BaseIndicator extends LinearLayout implements OnPageChangeListener 
     /**
      * 有标题类型的滑动图片ViewPager
      *
-     * @param viewPager
+     * @param viewPager 本指示点控件要搭配的ViewPager
      * @param context
+     * @param titleList 文字说明列表
+     * @param titleTv textView文字说明控件
+     * @see #setViewPager(ViewPager, Context)
      */
     public void setViewPager(ViewPager viewPager, Context context,
                              List<AdBean> titleList, TextView titleTv) {
@@ -95,6 +99,7 @@ public class BaseIndicator extends LinearLayout implements OnPageChangeListener 
         }
     }
 
+    //-------------以下是ViewPager滑动事件------------
     @Override
     public void onPageScrollStateChanged(int position) {
 
@@ -105,6 +110,11 @@ public class BaseIndicator extends LinearLayout implements OnPageChangeListener 
 
     }
 
+    /**
+     * 设置position点的位置为亮，并设置文字说明
+     *
+     * @param position 位置
+     */
     @Override
     public void onPageSelected(int position) {
 
@@ -116,7 +126,7 @@ public class BaseIndicator extends LinearLayout implements OnPageChangeListener 
                 if (null != titleList && null != titleTv) {
                     titleTv.setText(titleList.get(i).getTitle());
                 }
-            } else {
+            } else {//设置空白
                 indicatorArr[i].setImageDrawable(ContextCompat.getDrawable(getContext(),
                         R.drawable.banner_dian_blur));
             }

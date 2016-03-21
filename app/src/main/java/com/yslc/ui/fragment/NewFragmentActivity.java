@@ -31,16 +31,30 @@ import com.yslc.view.ColumnHorizontalScrollView.OnSelecterCallback;
 public class NewFragmentActivity extends BaseFragment implements
         OnClickListener, OnPageChangeListener, OnSelecterCallback,
         OnTryListener {
-    private ColumnHorizontalScrollView mColumnView;
+    private ColumnHorizontalScrollView mColumnView;//滑动标题
     private ViewPager mViewPager;
     private LoadView loadView;
-    private NewModelService newModelService;
+    private NewModelService newModelService;//业务类
 
+    /**
+     * 设置布局
+     * @return
+     */
     @Override
     protected int getLayoutId() {
         return R.layout.activity_new;
     }
 
+    /**
+     * 初始化布局
+     * <p>load监听</p>
+     * <p>关联副标题布局并设置监听</p>
+     * <p>关联Viewpager布局</p>
+     * <p>监听副标题有边按钮</p>
+     * <p>初始化业务类</p>
+     * <p>获取和加载数据</p>
+     * @param views
+     */
     @Override
     protected void findView(View views) {
         super.findView(views);
@@ -55,6 +69,7 @@ public class NewFragmentActivity extends BaseFragment implements
 
         newModelService = new NewModelService(getContext());
         if (loadView.setStatus(LoadView.LOADING)) {
+            //获取数据
             getTitle();
         }
 

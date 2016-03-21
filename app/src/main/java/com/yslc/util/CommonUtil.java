@@ -20,9 +20,9 @@ public class CommonUtil {
     /**
      * 根据手机分辨率从DP转成PX
      *
-     * @param context
-     * @param dpValue
-     * @return
+     * @param context 上下文
+     * @param dpValue dp值
+     * @return 像素大小px
      */
     public static int dip2px(Context context, float dpValue) {
         float scale = context.getResources().getDisplayMetrics().density;

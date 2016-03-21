@@ -11,13 +11,14 @@ import com.yslc.view.LoadView;
 
 /**
  * 所有Fragment基类
- *
+ * <p>
+ * <p>嵌入加载视图</p>
  * @author HH
  */
 public abstract class BaseFragment extends Fragment {
-    private View views;
+    private View views;//fragment布局
     private boolean isLoad;
-    private LoadView loadView;
+    private LoadView loadView;//加载视图
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public abstract class BaseFragment extends Fragment {
             }
         }
 
-        if (getLayoutId() != 0) {
+        if (getLayoutId() != 0) {///????
             //防止Fragment加载进父容器出错
             ViewGroup parans = (ViewGroup) views.getParent();
             if (null != parans) {
@@ -54,7 +55,7 @@ public abstract class BaseFragment extends Fragment {
 
     /**
      * 布局Id
-     *
+     * <p>此方法给子类重写</p>
      * @return
      */
     protected int getLayoutId() {
@@ -63,7 +64,7 @@ public abstract class BaseFragment extends Fragment {
 
     /**
      * 界面初始化
-     *
+     * <p>此方法给子类重写</p>
      * @param : views 该Fragment的根容器
      */
     protected void findView(View views) {
@@ -84,6 +85,7 @@ public abstract class BaseFragment extends Fragment {
      * 第一次加载数据
      * <p>
      * 主要针对ViewPager的预加载情况，防止每次请求数据
+     * <p>此方法提供给子类重写</p>
      */
     protected void onFristLoadData() {
 

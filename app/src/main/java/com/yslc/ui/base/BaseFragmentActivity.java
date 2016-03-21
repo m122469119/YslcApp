@@ -16,7 +16,8 @@ import com.yslc.inf.IFragmentActivityCallBack;
  * ● 实现初始化FragmentManager
  * ● 实现添加Fragment
  * ● 实现设置显示Fragment
- *
+ * <p>实现了自定义的IFragmentActivityCallBack接口</p>
+ * <P>实现OnCheckedChangeListener,点击Radiobutton后，切换对应的Fragment</P>
  * @author HH
  */
 public abstract class BaseFragmentActivity extends BaseActivity implements
@@ -26,6 +27,11 @@ public abstract class BaseFragmentActivity extends BaseActivity implements
     protected ArrayList<String> mTitleList = new ArrayList<>();
     private int currFragmentIndex = 0;
 
+    /**
+     * 获取上传记录的FragmentIndex
+     * <p>实例化FragmentManager对象</p>
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,14 +43,26 @@ public abstract class BaseFragmentActivity extends BaseActivity implements
         fm = getSupportFragmentManager();
     }
 
+    /**
+     * 设置radioGroup监听对象
+     * @param mRadioGroup
+     */
     protected void setmRadioGroup(RadioGroup mRadioGroup) {
         mRadioGroup.setOnCheckedChangeListener(this);
     }
 
+    /**
+     * RadioGroup监听事件
+     * <P></P>
+     * <p>点击RadioButton或转换相应的Fragment</p>
+     * <p>原来的fragment停止，新的fragment（没有就创建）开始显示</p>
+     * @param group
+     * @param checkedId
+     */
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         for (int i = 0, len = group.getChildCount(); i < len; i++) {
-            if (group.getChildAt(i).getId() == checkedId) {
+            if (group.getChildAt(i).getId() == checkedId) {//选中RadioButton事件
                 // 设置标题
                 onChanceFragment(mTitleList.get(i));
 
@@ -67,12 +85,17 @@ public abstract class BaseFragmentActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * 此方法给子类重写
+     * @param title 标题
+     */
     protected void onChanceFragment(String title) {
 
     }
 
     /**
      * 添加Fragment
+     * <p>添加fragment，添加标题</p>
      */
     @Override
     public void addFragment(Fragment fragment, String title) {
@@ -80,6 +103,10 @@ public abstract class BaseFragmentActivity extends BaseActivity implements
         mTitleList.add(title);
     }
 
+    /**
+     * 添加布局文件fragment
+     * @param id fragment在xml文件的id
+     */
     @Override
     public void showFragment(int id) {
         fm = getSupportFragmentManager();
@@ -95,6 +122,8 @@ public abstract class BaseFragmentActivity extends BaseActivity implements
 
     /**
      * 设置Fragment 隐藏上一个Fragment，显示下一个Fragment
+     * <p>使用FragmentTransaction显示position的fragment</p>
+     * @param position 要显示的fragment位置
      */
     @Override
     public void setFragment(int position) {
@@ -111,6 +140,10 @@ public abstract class BaseFragmentActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * 使用Bundle保存fragmentIndex
+     * @param outState Bundle
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         //保存当前显示的fragment下标

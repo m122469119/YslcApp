@@ -25,27 +25,41 @@ import com.yslc.util.ToastUtil;
 
 /**
  * 首页FragmentActivity,包含咨讯、视频、明星、我，四大Fragment
- *
+ * <p>
+ * 侧边栏点击空白有bug
+ * <p>包含侧边栏</p>
  * @author HH
  */
 public class IndexFragementActivity extends BaseFragmentActivity implements
         OnClickListener {
-    private TextView titleTv;
+    private TextView titleTv;//标题文字
     private boolean mBackKeyPressed;
-    private DrawerLayout drawer;
+    private DrawerLayout drawer;//侧滑菜单
 
     private int switchId = -1; //需要跳转的id
 
+    /**
+     * 设置主布局
+     * @return
+     */
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main_fragementactivity;
     }
 
+    /**
+     * 设置toolbar标题
+     * @return
+     */
     @Override
     protected String getToolbarTitle() {
         return getText(R.string.yslcNew).toString();
     }
 
+    /**
+     * 设置toolbar标题
+     * @param title 标题
+     */
     @Override
     protected void onChanceFragment(String title) {
         super.onChanceFragment(title);
@@ -53,16 +67,27 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
         titleTv.setText(title);
     }
 
+    /**
+     * 初始化布局
+     * <p></p>
+     * <p>初始化标题</p>
+     * <p>初始化fragment</p>
+     * <p>初始化RadioGroup</p>
+     * <p>初始化侧边栏（DrawerLayout）</p>
+     */
     @Override
     protected void initView() {
         titleTv = (TextView) findViewById(R.id.titleText);
+        //添加fragment
         initFragment();
+        //监听RadioButton
         setmRadioGroup((RadioGroup) findViewById(R.id.radioGroup));
         setDrawerLayout();
     }
 
     /**
-     * 初始化Fragmen
+     * 初始化Fragment
+     * <p>添加四个fragment</p>
      */
     private void initFragment() {
         // 初始化Fragment
@@ -82,24 +107,27 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
         findViewById(R.id.interactives).setOnClickListener(this);
         findViewById(R.id.stockMarket).setOnClickListener(this);
         findViewById(R.id.radio).setOnClickListener(this);
-
-        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawer, (Toolbar) findViewById(R.id.toolbar), R.string.empty, R.string.empty) {
+        //点击事件
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle
+                (this, drawer, (Toolbar) findViewById(R.id.toolbar), R.string.empty, R.string.empty) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
 
                 switchId = -1;
             }
-
+            //点击侧边栏关闭事件
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
 
                 if (switchId != -1) {
+                    //跳转
                     switchTo(switchId);
                 }
             }
         };
+        //开关图片显示在toolbar上
         mDrawerToggle.syncState();
         drawer.setDrawerListener(mDrawerToggle);
     }
@@ -111,6 +139,10 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
         switchId = v.getId();
     }
 
+    /**
+     * 侧边栏跳转
+     * @param id
+     */
     private void switchTo(int id) {
         switch (id) {
             case R.id.magazine:
@@ -156,6 +188,9 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
         }
     }
 
+    /**
+     * 清除sharedPreferences的股票缓存
+     */
     @Override
     protected void onResume() {
         super.onResume();
