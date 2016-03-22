@@ -20,6 +20,7 @@ public abstract class BaseFragment extends Fragment {
     private View views;//fragment布局
     private boolean isLoad;
     private LoadView loadView;//加载视图
+//    protected LoadView loadView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

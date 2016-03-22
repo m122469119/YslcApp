@@ -21,7 +21,7 @@ import com.yslc.view.LoadView.OnTryListener;
 import com.yslc.view.ColumnHorizontalScrollView.OnSelecterCallback;
 
 /**
- * 咨讯Fragment
+ * 资讯Fragment
  * 获取所有咨讯标题以及Id
  * 使用ViewPager装载，包括不同类型的Fragment
  * 传递不同类型的咨讯Id给Framgent，Fragment通过Id获取资讯内容

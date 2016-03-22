@@ -126,6 +126,13 @@ public class NewModelImpl implements INewModel {
                 });
     }
 
+    /**
+     * 从后台获取更多数据
+     * @param sstId 请求参数
+     * @param pageSize 总页数
+     * @param pageIndex 请求页码
+     * @param callback 回调
+     */
     @Override
     public void loadMoreNewData(String sstId, String pageSize, String pageIndex, GetDataCallback callback) {
         RequestParams params = new RequestParams();
@@ -152,6 +159,10 @@ public class NewModelImpl implements INewModel {
                 });
     }
 
+    /**
+     * 获取并解析资讯下头版头条数据
+     * @param callback
+     */
     @Override
     public void loadMoreNewData(GetDataCallback callback) {
         HttpUtil.get(HttpUtil.GET_MAIN, context, null,
@@ -181,7 +192,7 @@ public class NewModelImpl implements INewModel {
     }
 
     /**
-     * 解析咨讯
+     * 解析资讯
      *
      * @param json
      * @return
@@ -245,6 +256,10 @@ public class NewModelImpl implements INewModel {
 
     }
 
+    /**
+     * 获取大盘信息
+     * @param callback
+     */
     @Override
     public void getStockInfo(GetDataCallback callback) {
         HttpUtil.get(HttpUtil.GET_STOCK, context, null,
@@ -275,7 +290,7 @@ public class NewModelImpl implements INewModel {
                                 jo = ja.getJSONObject(i);
                                 StockInfo mode = new StockInfo();
                                 mode.setName(jo.optString("name"));
-                                mode.setDiffer(jo.optString("proportion"));
+                                mode.setDiffer(jo.optString("differ"));
                                 mode.setNow(jo.optString("now"));
                                 mode.setProportion(jo.optString("proportion"));
                                 list.add(mode);

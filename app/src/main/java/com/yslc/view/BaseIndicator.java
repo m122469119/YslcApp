@@ -57,7 +57,7 @@ public class BaseIndicator extends LinearLayout implements OnPageChangeListener 
      *
      * @param viewPager 本指示点控件要搭配的ViewPager
      * @param context
-     * @param titleList 文字说明列表
+     * @param titleList 文字说明数据列表
      * @param titleTv textView文字说明控件
      * @see #setViewPager(ViewPager, Context)
      */

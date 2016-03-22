@@ -42,25 +42,25 @@ import com.yslc.view.BaseListView.OnLoadMoreListener;
 import com.yslc.view.LoadView.OnTryListener;
 
 /**
- * 咨讯Fragment(带轮换图片和大盘信息的咨讯Fragment)
- *
+ * 资讯Fragment(带轮换图片和大盘信息的咨讯Fragment)
+ * <p>头版头条</p>
  * @author HH
  */
 public class NewFragmentOne extends BaseFragment implements OnTryListener {
     private static final int TIME_IMG = 3000; // 图片轮播时间
     private static final int TIME_INFO = 10000; // 大盘信息更新时间
     private Context context;
-    private TimerUtil imgTimer, infoTimer;
+    private TimerUtil imgTimer, infoTimer;//计时工具类
     private SwipeRefreshLayout refreshableView;
     private LoadView loadView;
     private BaseIndicator myIndicator;
     private BaseListView listView;
     private ViewPager viewPager;
     private TextView shTv1, shTv2, shTv3, szTv1, szTv2, szTv3, titleTv;
-    private ImageLoader imageLoader;
+    private ImageLoader imageLoader;//图片下载框架
 
     private QuickAdapter<NewBean> adapter;
-    private boolean isSlid = true;
+    private boolean isSlid = true;//轮播滑动标志
     private String colnumBeanId;
     private List<AdBean> titleImgList; // 图片列表
     private ArrayList<NewBean> infoItemList; // 咨讯内容列表
@@ -68,14 +68,21 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
 
     private NewModelService service;
 
+    /**
+     * 初始化Activity</br>
+     * <p>获取上下文、副标题号、图片工具实例、实例业务逻辑类</p>
+     * <p>设置两个计时器，一个图片轮播，一个用于更新大盘信息</p>
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         context = getActivity();
+        //副标题号
         colnumBeanId = getArguments().getString("id");
         imageLoader = ImageLoader.getInstance();
-        service = new NewModelService(context);
+        service = new NewModelService(context);//业务逻辑类
         imgTimer = new TimerUtil(TIME_IMG);
         imgTimer.setOnTimerCallback(new TimerUtil.OnTimerCallback() {
             @Override
@@ -97,37 +104,55 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
         });
     }
 
+    /**
+     * 设置布局文件
+     * <p>包含下拉刷新和加载更多的list</p>
+     * @return
+     */
     @Override
     protected int getLayoutId() {
         return R.layout.listview_new;
     }
 
+    /**
+     * 初始化布局</br>
+     * <p>设置监听事件</p>
+     *
+     * @param views
+     */
     @Override
     protected void findView(View views) {
         super.findView(views);
-
+        //listView上面的布局，轮播加股票指数
         View headView = View.inflate(getActivity(), R.layout.header_new_ad, null);
+        //六个股票指数
         shTv1 = (TextView) headView.findViewById(R.id.Shanghai);
         shTv2 = (TextView) headView.findViewById(R.id.Now1);
         shTv3 = (TextView) headView.findViewById(R.id.Differ1);
         szTv1 = (TextView) headView.findViewById(R.id.shenzhen);
         szTv2 = (TextView) headView.findViewById(R.id.Now2);
         szTv3 = (TextView) headView.findViewById(R.id.Differ2);
+        //下拉刷新
         refreshableView = (SwipeRefreshLayout) views.findViewById(R.id.refreshable_view);
-        refreshableView.setColorSchemeResources(R.color.refreshViewColor1, R.color.refreshViewColor2, R.color.refreshViewColor3);
+        refreshableView.setColorSchemeResources(R.color.refreshViewColor1,
+                R.color.refreshViewColor2, R.color.refreshViewColor3);
+        //正在加载view
         loadView = (LoadView) views.findViewById(R.id.view);
         loadView.setOnTryListener(this);
+        //轮播
         viewPager = (ViewPager) headView.findViewById(R.id.viewPager);
         myIndicator = (BaseIndicator) headView.findViewById(R.id.myIndicator);
         titleTv = (TextView) headView.findViewById(R.id.titleTv);
+        //主内容list
         listView = (BaseListView) views.findViewById(R.id.listview);
         listView.setHeaderDividersEnabled(true);
         listView.setFooterDividersEnabled(true);
+        //添加headView
         listView.addHeaderView(headView);
-        titleImgList = new ArrayList<>();
-        infoItemList = new ArrayList<>();
-        setOnTouch();
-        listViewEvent();
+        titleImgList = new ArrayList<>();//初始化图片列表
+        infoItemList = new ArrayList<>();//初始化内容数据列表
+        setOnTouch();//viewPager事件
+        listViewEvent();//设置其他监听事件
     }
 
     /**
@@ -165,16 +190,16 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
     }
 
     /**
-     * 加载首页数据
+     * 加载数据
      */
     private void loadData() {
         service.loadMoreNewData(new GetDataCallback() {
             @Override
-            public <T> void success(T data) {
+            public <T> void success(T data) {//data 包含轮播数据和内容数据
                 refreshableView.setRefreshing(false);
                 loadView.setStatus(LoadView.SUCCESS);
-                infoItemList.clear();
-
+                infoItemList.clear();//清除内容
+                //拆分数据
                 HashMap<ArrayList<AdBean>, ArrayList<NewBean>> map = (HashMap<ArrayList<AdBean>, ArrayList<NewBean>>) data;
                 Iterator iterator = map.keySet().iterator();
                 ArrayList<AdBean> adList = null;
@@ -184,11 +209,12 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
                     newList = map.get(adList);
                 }
 
-                if (!isRefersh) {
+                //下拉刷新只刷新列表部分（大盘信息由定时器自动刷新）
+                if (!isRefersh) {//不是下拉刷新
                     // 显示广告,获取大盘信息
                     titleImgList.clear();
                     titleImgList.addAll(adList);
-                    getComposite();
+                    getComposite();//大盘数据
                     showAd();
                 } else {
                     listView.onFinishLoad();
@@ -196,7 +222,7 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
 
                 // 显示列表
                 infoItemList.addAll(newList);
-                showListView();
+                showListView();//刷新列表
                 isRefersh = false;
             }
 
@@ -237,10 +263,12 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
 
     /**
      * 显示标题广告
+     * <p>创建设置适配器</p>
+     * <p>创建设置指示器</p>
      */
     private void showAd() {
         BaseViewPagerAdapter adapters = new BaseViewPagerAdapter(getActivity());
-        adapters.setNetImage(titleImgList, true);
+        adapters.setNetImage(titleImgList, true);//网络图片，无限滑动
         viewPager.setAdapter(adapters);
         // 创建指示器
         myIndicator.setViewPager(viewPager, getActivity(), titleImgList, titleTv);
@@ -248,7 +276,7 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
 
         //图片无限循环
         int n = Integer.MAX_VALUE / 2 % titleImgList.size();
-        int itemPosition = Integer.MAX_VALUE / 2 - n;
+        int itemPosition = Integer.MAX_VALUE / 2 - n;//计算出一个最接近MAX_VALUE/2而且余数为0的数
         viewPager.setCurrentItem(itemPosition);
     }
 
@@ -263,6 +291,7 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
                     R.layout.item_main_listview, infoItemList) {
                 @Override
                 protected void convert(BaseAdapterHelper helper, NewBean item) {
+                    //两个参数url,和imageView
                     imageLoader.displayImage(item.getNiImg(),
                             (ImageView) helper.getView(R.id.img));
                     helper.setText(R.id.title, item.getNiTitle());
@@ -276,18 +305,19 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
 
     /**
      * 获取大盘信息
+     * <p>获取去成功后刷新大盘</p>
      */
     private void getComposite() {
         service.getStockInfo(new GetDataCallback() {
             @Override
             public <T> void success(T data) {
                 ArrayList<StockInfo> list = (ArrayList<StockInfo>) data;
-                shTv1.setText(list.get(0).getName());
-                showColoe(shTv2, list.get(0).getNow(), list.get(0).getProportion(), shTv3);
+                shTv1.setText(list.get(0).getName());//上海大盘
+                showColor(shTv2, list.get(0).getNow(), list.get(0).getProportion(), shTv3);
                 shTv3.setText(list.get(0).getDiffer() + "  " + list.get(0).getProportion() + "%");
 
-                szTv1.setText(list.get(1).getName());
-                showColoe(szTv2, list.get(1).getNow(), list.get(1).getProportion(), szTv3);
+                szTv1.setText(list.get(1).getName());//深圳大盘
+                showColor(szTv2, list.get(1).getNow(), list.get(1).getProportion(), szTv3);
                 szTv3.setText(list.get(1).getDiffer() + "  " + list.get(1).getProportion() + "%");
 
                 // 开启大盘信息更新定时操作
@@ -303,21 +333,27 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
 
     /**
      * 根据大盘信息显示颜色图片
+     * <p>设置指数</p>
+     * <p>根据上涨下跌，设置颜色</p>
+     * @param tv 指数
+     * @param str 指数名称
+     * @param radio 上涨或下跌标志
+     * @param tv2 上涨点数与涨幅
      */
-    private void showColoe(TextView tv, String str, String radio, TextView tv2) {
+    private void showColor(TextView tv, String str, String radio, TextView tv2) {
         tv.setText(str);
         if (Float.parseFloat(radio) > 0) {
             // 上涨（使用红色文字，红色小图标）
             tv.setTextColor(ContextCompat.getColor(context, R.color.redInfo));
             tv2.setTextColor(ContextCompat.getColor(context, R.color.redInfo));
-            tv.setCompoundDrawablesWithIntrinsicBounds(
+            tv.setCompoundDrawablesWithIntrinsicBounds(//左边设置红色向上箭头
                     ContextCompat.getDrawable(context, R.drawable.icon_red),
                     null, null, null);
         } else {
             // 下跌 （使用绿色文字，绿色小图标）
             tv.setTextColor(ContextCompat.getColor(context, R.color.greenInfo));
             tv2.setTextColor(ContextCompat.getColor(context, R.color.greenInfo));
-            tv.setCompoundDrawablesWithIntrinsicBounds(
+            tv.setCompoundDrawablesWithIntrinsicBounds(//左边设置绿色向下箭头
                     ContextCompat.getDrawable(context, R.drawable.icon_green),
                     null, null, null);
         }
@@ -385,6 +421,9 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
         });
     }
 
+    /**
+     * 创建fragment后第一次开始加载数据
+     */
     @Override
     protected void onFristLoadData() {
         super.onFristLoadData();

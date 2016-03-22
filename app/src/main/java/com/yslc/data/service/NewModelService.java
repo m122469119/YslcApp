@@ -71,7 +71,7 @@ public class NewModelService {
 
     /**
      * 加载带有广告条的资讯
-     *
+     * <p>资讯下头版头条数据</p>
      * @param callback
      */
     public void loadMoreNewData(GetDataCallback callback) {
@@ -92,17 +92,18 @@ public class NewModelService {
 
     /**
      * 加载更多资讯，用于分页实现
-     *
+     * <p>如果第一次加载或者下拉刷新，则显示第一页</p>
      * @param isFrist:是否第一次加载或者下拉刷新
-     * @param sstId
-     * @param callback
+     * @param sstId 作为请求参数
+     * @param callback 回调函数
      */
     public void loadMoreNewData(boolean isFrist, String sstId, GetDataCallback callback) {
         int tempIndex = pageIndex;
         if (isFrist) {
             tempIndex = 1;
         }
-        newModel.loadMoreNewData(sstId, String.valueOf(pageSize), String.valueOf(tempIndex), new GetDataCallback() {
+        newModel.loadMoreNewData(sstId, String.valueOf(pageSize), String.valueOf(tempIndex),
+                new GetDataCallback() {
             @Override
             public <T> void success(T data) {
                 pageIndex++;

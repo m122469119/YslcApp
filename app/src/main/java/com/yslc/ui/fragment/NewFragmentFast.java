@@ -42,6 +42,11 @@ public class NewFragmentFast extends BaseFragment implements OnTryListener {
     private ArrayList<NewBean> infoItemList;//list数据
     private NewModelService newModelService;
 
+    /**
+     * <p>获取上下文</p>
+     * <p>实例化数据列表</p>
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +86,7 @@ public class NewFragmentFast extends BaseFragment implements OnTryListener {
     @Override
     protected void findView(View views) {
         super.findView(views);
-
+//        loadView = super.loadView;
         loadView = (LoadView) views.findViewById(R.id.view);
         loadView.setOnTryListener(this);
         listView = (BaseListView) views.findViewById(R.id.listview);
@@ -130,6 +135,7 @@ public class NewFragmentFast extends BaseFragment implements OnTryListener {
 
     /**
      * 第一次加载或者刷新
+     * <p>成功后加载停止，把数据添加到数据列表</p>
      */
     private void oneLoad() {
         newModelService.fristLoadFastNewData(new GetDataCallback() {
@@ -154,6 +160,7 @@ public class NewFragmentFast extends BaseFragment implements OnTryListener {
 
     /**
      * 加载更多数据
+     * <p>如果成功获取更多数据，把数据追加到数据列表，并刷新list</p>
      */
     private void loadMore() {
         newModelService.loadMoreNewData(false, null, new GetDataCallback() {
