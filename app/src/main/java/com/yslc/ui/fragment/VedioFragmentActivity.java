@@ -20,7 +20,7 @@ import com.yslc.view.ColumnHorizontalScrollView.OnSelecterCallback;
 /**
  * 视频Fragment
  * 思路同咨讯Fragmetn,没有使用ViewPager装载子Fragment
- *
+ * 此Fragment跟NewFragmentActivity太过相识，没有注释的方法请参考NewFragmentActivity同类方法
  * @author HH
  */
 public class VedioFragmentActivity extends BaseFragment implements
@@ -30,21 +30,31 @@ public class VedioFragmentActivity extends BaseFragment implements
     private ArrayList<ColnumBean> listTitle;
     private NewModelService newModelService;
 
+    /**
+     * 设置布局
+     * @return
+     */
     @Override
     protected int getLayoutId() {
         return R.layout.activity_video;
     }
 
+    /**
+     * 初始化布局
+     * @param views
+     */
     @Override
     protected void findView(View views) {
         super.findView(views);
-
+        //loadView
         loadView = (LoadView) views.findViewById(R.id.view);
         loadView.setOnTryListener(this);
+        //副标题
         mColumnView = (ColumnHorizontalScrollView) views
                 .findViewById(R.id.columnView);
         mColumnView.setOnSelecterCallback(this);
         views.findViewById(R.id.rightBtn).setOnClickListener(this);
+        //实例业务类
         newModelService = new NewModelService(getContext());
         // 获取视频栏目数据
         if (loadView.setStatus(LoadView.LOADING)) {
@@ -86,7 +96,7 @@ public class VedioFragmentActivity extends BaseFragment implements
      * @param index 显示的子Fragment的下标
      */
     private void startFragment(int index) {
-        mColumnView.selectTab(index);
+        mColumnView.selectTab(index);//选中某个副标题
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
         VideoFragment fragment = new VideoFragment();
         Bundle bundle = new Bundle();

@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 /**
  * 广播播放Activity(直播)
- *
+ * <p>股市广播Activity</p>
  * @author HH
  */
 public class RadioPlayerActivity extends BaseActivity implements

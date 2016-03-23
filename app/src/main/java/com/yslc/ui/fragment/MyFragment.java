@@ -33,9 +33,9 @@ import com.yslc.util.ToastUtil;
  * @author HH
  */
 public class MyFragment extends BaseFragment implements OnClickListener {
-    private Button exitLogin;
-    private ImageView img;
-    private TextView account;
+    private Button exitLogin;//退出登录
+    private ImageView img;//用户头像
+    private TextView account;//用户状态
     private Context context;
     private ImageLoader imageLoader;
     private SharedPreferencesUtil spfUtil;
@@ -45,6 +45,12 @@ public class MyFragment extends BaseFragment implements OnClickListener {
         return R.layout.fragment_my;
     }
 
+    /**
+     * 初始化布局
+     * <p>获取上下文、实例化加载网络图片工具类</p>
+     * <p>实例化sharePreferencesUtil工具类</p>
+     * @param views
+     */
     @Override
     protected void findView(View views) {
         super.findView(views);
@@ -57,6 +63,7 @@ public class MyFragment extends BaseFragment implements OnClickListener {
         account = (TextView) views.findViewById(R.id.account);
         account.setOnClickListener(this);
         img = (ImageView) views.findViewById(R.id.personImg);
+        //设置其他监听事件
         views.findViewById(R.id.set).setOnClickListener(this);
         views.findViewById(R.id.about).setOnClickListener(this);
         views.findViewById(R.id.updatePass).setOnClickListener(this);
@@ -67,6 +74,7 @@ public class MyFragment extends BaseFragment implements OnClickListener {
 
     /**
      * 判断是否登录
+     * <p>根据是否登录，显示不同界面</p>
      */
     @Override
     public void onResume() {
@@ -84,12 +92,12 @@ public class MyFragment extends BaseFragment implements OnClickListener {
      * 初始化登录状态
      */
     private void initIsLogin() {
-        exitLogin.setVisibility(View.VISIBLE);
-        account.setText(spfUtil.getString(Constant.SPF_USER_PHONE_KEY));
+        exitLogin.setVisibility(View.VISIBLE);//显示退出登录按钮
+        account.setText(spfUtil.getString(Constant.SPF_USER_PHONE_KEY));//设置用户电话
 
         //用户头像是否保存到了sd卡，没有则保存到sd卡
         Bitmap bitmap = BitmapFactory.decodeFile(FileUtil.getSdCardPath() + Constant.FILES_USERIMG);
-        if (null == bitmap) {
+        if (null == bitmap) {//sd卡没有头像图片，下载图片
             imageLoader.loadImage(spfUtil.getString(Constant.SPF_USER_IMGURL_KEY), new ImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String s, View view) {
@@ -103,7 +111,7 @@ public class MyFragment extends BaseFragment implements OnClickListener {
 
                 @Override
                 public void onLoadingComplete(String s, View view, Bitmap b) {
-                    if (b != null) {
+                    if (b != null) {//下载成功，保存头像到sd卡
                         FileUtil.saveFile(b, Constant.FILES_USERIMG);
                     }
                     img.setImageBitmap(b);
@@ -114,7 +122,7 @@ public class MyFragment extends BaseFragment implements OnClickListener {
 
                 }
             });
-        } else {
+        } else {//sd卡有图片，设置图片
             img.setImageBitmap(bitmap);
         }
     }
@@ -123,9 +131,10 @@ public class MyFragment extends BaseFragment implements OnClickListener {
      * 初始化未登录状态
      */
     private void initNoLogin() {
-        exitLogin.setVisibility(View.GONE);
+        exitLogin.setVisibility(View.GONE);//去掉退出登录按钮
+        //未登录默认图片
         img.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.login_login));
-        account.setText(getString(R.string.goLogin));
+        account.setText(getString(R.string.goLogin));//未登录默认状态
     }
 
     @Override
@@ -150,25 +159,25 @@ public class MyFragment extends BaseFragment implements OnClickListener {
                 new ShareDialog(context, ShareDialog.SHARE_APP);
                 break;
 
-            case R.id.set:
+            case R.id.set://设置
                 startActivity(new Intent(context, SettingActivity.class));
                 break;
 
-            case R.id.about:
+            case R.id.about://关于
                 ToastUtil.showMessage(context, "关于");
                 break;
 
-            case R.id.updatePass:
+            case R.id.updatePass://修改密码
                 // 判断是否登录
                 if (!SharedPreferencesUtil.isLogin(context, Constant.PAEASE_LOGIN)) {
-                    startActivityForResult(
+                    startActivityForResult(//没有登录，先登录
                             new Intent(context, LoginActivity.class), 1);
                     return;
                 }
                 startActivity(new Intent(context, UpdatePasswordActivity.class));
                 break;
 
-            case R.id.exitLogin:
+            case R.id.exitLogin://退出登录
                 exitLogin();
                 break;
         }
@@ -176,6 +185,8 @@ public class MyFragment extends BaseFragment implements OnClickListener {
 
     /**
      * 退出登录操作
+     * <p>回到未登录界面</p>
+     * <p>清除用户数据</p>
      */
     private void exitLogin() {
         // 未登录界面初始化
@@ -190,7 +201,7 @@ public class MyFragment extends BaseFragment implements OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            //登录成功后进行的操作
+            //登录成功后打开修改密码页面
             startActivity(new Intent(context, UpdatePasswordActivity.class));
         }
     }

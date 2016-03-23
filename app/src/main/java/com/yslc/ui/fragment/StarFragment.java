@@ -32,7 +32,7 @@ import com.yslc.view.LoadView.OnTryListener;
 
 /**
  * 明星Fragment
- *
+ * <p>与VideoFragment类似，方法说明参考VideoFragment</p>
  * @author HH
  */
 public class StarFragment extends BaseFragment implements OnTryListener {

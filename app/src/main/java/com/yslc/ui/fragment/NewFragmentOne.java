@@ -434,6 +434,12 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
         }
     }
 
+    /**
+     * 此方法系统调用
+     * <p>可见是开启定时器</p>
+     * <p>不可见时关闭定时器</p>
+     * @param isVisibleToUser
+     */
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -464,6 +470,9 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
         infoTimer.stopTimer();
     }
 
+    /**
+     * 销毁定时器
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -472,6 +481,9 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
         infoTimer.destroyTimer();
     }
 
+    /**
+     * 重试刷新
+     */
     @Override
     public void onTry() {
         if (loadView.setStatus(LoadView.LOADING)) {

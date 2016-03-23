@@ -19,7 +19,8 @@ import com.yslc.view.ColumnHorizontalScrollView.OnSelecterCallback;
 
 /**
  * 明星FragmentActivity
- *
+ * <p>明星选卡</p>
+ * <p>大多数方法雷同VedioFragmentActivity,所以不加注释了</p>
  * @author HH
  */
 public class StarFragmentActivity extends BaseFragment implements

@@ -38,6 +38,7 @@ public class NewFragmentActivity extends BaseFragment implements
 
     /**
      * 设置布局
+     * <p>包含副标题、分隔线和正在加载View</p>
      * @return
      */
     @Override

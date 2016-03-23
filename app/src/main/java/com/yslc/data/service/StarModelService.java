@@ -85,6 +85,7 @@ public class StarModelService {
 
     /**
      * 加载更多明星列表
+     * @param stId 副标题id
      */
     public void getStarMoreListData(String stId, GetDataCallback callback) {
         starModel.getStarListData(stId, String.valueOf(pageSize), String.valueOf(pageIndex), new GetDataCallback() {

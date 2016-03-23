@@ -73,6 +73,10 @@ public abstract class BaseFragment extends Fragment {
 
     }
 
+    /**
+     * 参数为true调用onFristLoadData加载数据
+     * @param isVisibleToUser
+     */
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);

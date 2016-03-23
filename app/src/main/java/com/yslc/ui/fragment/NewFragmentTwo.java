@@ -29,8 +29,8 @@ import com.yslc.view.BaseListView.OnLoadMoreListener;
 import com.yslc.view.LoadView.OnTryListener;
 
 /**
- * 咨讯Fragment（不含轮换图片和大盘信息的咨讯Fragment）
- *
+ * 资讯Fragment（不含轮换图片和大盘信息的咨讯Fragment）
+ * <p>资讯默认fragment</p>
  * @author HH
  */
 public class NewFragmentTwo extends BaseFragment implements OnTryListener {
@@ -45,6 +45,11 @@ public class NewFragmentTwo extends BaseFragment implements OnTryListener {
     private ArrayList<NewBean> infoItemList;
     private NewModelService newModelService;
 
+    /**
+     * 获取context、副标题id、实例化图片框架类、实例化数据列表
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,11 +60,20 @@ public class NewFragmentTwo extends BaseFragment implements OnTryListener {
         infoItemList = new ArrayList<>();
     }
 
+    /**
+     * 设置布局
+     * <p>包含下拉刷新和加载更多控件</p>
+     * @return
+     */
     @Override
     protected int getLayoutId() {
         return R.layout.listview_new;
     }
 
+    /**
+     * 第一次加载数据
+     * <p>调用oneload开始下载</p>
+     */
     @Override
     protected void onFristLoadData() {
         super.onFristLoadData();
@@ -69,18 +83,27 @@ public class NewFragmentTwo extends BaseFragment implements OnTryListener {
         }
     }
 
+    /**
+     * 初始化布局
+     * <p>初始化加载View、listView、下拉刷新</p>
+     * <p>实例化业务处理类</p>
+     * <p>设置监听事件</p>
+     * @param views
+     */
     @Override
     protected void findView(View views) {
         super.findView(views);
-
+        //正在加载框
         loadView = (LoadView) views.findViewById(R.id.view);
         loadView.setOnTryListener(this);
+        //listView
         listView = (BaseListView) views.findViewById(R.id.listview);
         listView.setHeaderDividersEnabled(true);
         listView.setFooterDividersEnabled(true);
+        //下拉刷新
         refreshableView = (SwipeRefreshLayout) views.findViewById(R.id.refreshable_view);
         refreshableView.setColorSchemeResources(R.color.refreshViewColor1, R.color.refreshViewColor2, R.color.refreshViewColor3);
-
+        //实例化业务处理类
         newModelService = new NewModelService(context);
         listViewOnEvent();
     }
@@ -98,12 +121,6 @@ public class NewFragmentTwo extends BaseFragment implements OnTryListener {
                 }
             }
         });
-
-        /*refreshableView.setOnRefreshListener(() -> {
-            if (loadView.setStatus(LoadView.LOADING)) {
-                oneLoad();
-            }
-        });*/
 
 
         listView.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -183,6 +200,7 @@ public class NewFragmentTwo extends BaseFragment implements OnTryListener {
 
     /**
      * 进行列表的刷新
+     * <p>没有适配器创建，有的话直接刷新</p>
      */
     private void listRefersh() {
         if (null == adapter) {
@@ -204,6 +222,9 @@ public class NewFragmentTwo extends BaseFragment implements OnTryListener {
         }
     }
 
+    /**
+     * 重新加载
+     */
     @Override
     public void onTry() {
         if (loadView.setStatus(LoadView.LOADING)) {

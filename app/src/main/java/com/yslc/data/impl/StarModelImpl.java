@@ -37,6 +37,10 @@ public class StarModelImpl implements IStarModel {
         this.context = context;
     }
 
+    /**
+     * 获取明星数据
+     * @param callback
+     */
     @Override
     public void getStarColumnData(GetDataCallback callback) {
         HttpUtil.get(HttpUtil.GET_STAR_TYPE, context, null,
@@ -52,7 +56,7 @@ public class StarModelImpl implements IStarModel {
                     public void onSuccess(String arg0) {
                         super.onSuccess(arg0);
 
-                        // 获取栏目成功
+                        // 获取栏目成功并解析
                         ArrayList<ColnumBean> listTitle = new ArrayList<>();
                         try {
                             JSONArray ja = new JSONArray(arg0);
@@ -73,6 +77,13 @@ public class StarModelImpl implements IStarModel {
                 });
     }
 
+    /**
+     * 明星选项卡，加载更多
+     * @param stId 副标题id
+     * @param pageSize
+     * @param pageIndex
+     * @param callback
+     */
     @Override
     public void getStarListData(String stId, String pageSize, String pageIndex, GetDataCallback callback) {
         RequestParams params = new RequestParams();

@@ -34,7 +34,7 @@ import android.widget.ImageView;
 
 /**
  * 视频列表
- *
+ * 使用GridVie显示视频item
  * @author HH
  */
 public class VideoFragment extends BaseFragment implements OnScrollListener,
@@ -47,9 +47,15 @@ public class VideoFragment extends BaseFragment implements OnScrollListener,
     private String colnumBeanId = null;
     private Context context;
     private ArrayList<NewBean> vedioLists;
-    private int pageSize = 15;
+    private int pageSize = 15;//页面大小
     private int pageIndex = 1;
 
+    /**
+     * 关联context
+     * 获取副标题id
+     * 实例化加载网络图片工具类
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,18 +65,31 @@ public class VideoFragment extends BaseFragment implements OnScrollListener,
         imageLoader = ImageLoader.getInstance();
     }
 
+    /**
+     * 设置布局文件
+     * 包含下拉刷新，正在加载圈圈，和GridView（视频列表）
+     * @return
+     */
     @Override
     protected int getLayoutId() {
         return R.layout.listview_video;
     }
 
+    /**
+     * 初始化布局
+     * <p>实例化（视频）数据类</p>
+     * <p>关联加载圈圈、视频内容GridView、下拉刷新并设置监听事件</p>
+     * @param views
+     */
     @Override
     protected void findView(View views) {
         super.findView(views);
 
-        vedioLists = new ArrayList<>();
+        vedioLists = new ArrayList<>();//视频数据
+        //加载圈圈
         loadView = (LoadView) views.findViewById(R.id.view);
         loadView.setOnTryListener(this);
+        //下拉刷新
         refreshableView = (SwipeRefreshLayout) views
                 .findViewById(R.id.refreshable_view);
         // 设置卷内的颜色
@@ -79,15 +98,20 @@ public class VideoFragment extends BaseFragment implements OnScrollListener,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+        //视频列表
         gridView = (GridView) views.findViewById(R.id.gridView);
 
-        // 加载更多
+        // 加载更多（设置监听器）
         listViewLoadmore();
 
-        // 下拉刷新
+        // 下拉刷新（监听器）
         listViewPush();
     }
 
+    /**
+     * 第一次进来加载
+     * <p>获取数据</p>
+     */
     @Override
     protected void onFristLoadData() {
         super.onFristLoadData();
@@ -99,6 +123,7 @@ public class VideoFragment extends BaseFragment implements OnScrollListener,
 
     /**
      * 获取数据
+     * @param pageIndex 请求参数（当前页面）
      */
     private void getData(final int pageIndex) {
         RequestParams params = new RequestParams();
@@ -121,20 +146,20 @@ public class VideoFragment extends BaseFragment implements OnScrollListener,
                         super.onSuccess(arg0);
 
                         loadView.setStatus(LoadView.SUCCESS);
-                        if (pageIndex == 1) {
+                        if (pageIndex == 1) {//第一页判断是刷新
                             vedioLists.clear();
                         }
-
+                        //解析数据
                         try {
                             JSONObject jo = new JSONObject(arg0);
-                            parseJson(jo);
+                            parseJson(jo);//解析数据
                             if (jo.getJSONArray("NewsInfo").length() == 0
                                     && pageIndex == 1) {
                                 // 没有数据的情况
                                 loadView.setStatus(LoadView.EMPTY_DATA);
                                 return;
                             }
-
+                            //加载更多
                             if (jo.getJSONArray("NewsInfo").length() < pageSize
                                     && pageIndex >= 2) {
                                 // 没有更多数据了，加载更多的情况
@@ -161,6 +186,7 @@ public class VideoFragment extends BaseFragment implements OnScrollListener,
 
     /**
      * 解析JSON数据
+     * <p>保存在vediolists数据类里</p>
      */
     private void parseJson(JSONObject jo) {
         try {
@@ -185,6 +211,7 @@ public class VideoFragment extends BaseFragment implements OnScrollListener,
 
     /**
      * 设置数据
+     * <p>刷新adapter(没有则创建adapter并配置)</p>
      */
     private void setData() {
         if (null != adapter) {
@@ -199,7 +226,7 @@ public class VideoFragment extends BaseFragment implements OnScrollListener,
                 imageLoader.displayImage(item.getNiImg(),
                         (ImageView) helper.getView(R.id.img));
                 helper.setText(R.id.title, item.getNiTitle());
-                helper.setTag(R.id.playBtn, item.getNild());
+                helper.setTag(R.id.playBtn, item.getNild());//播放图片View记住视频id
                 helper.setOnClickListener(R.id.playBtn, new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -217,7 +244,7 @@ public class VideoFragment extends BaseFragment implements OnScrollListener,
     }
 
     /**
-     * 下拉刷新
+     * 设置下拉刷新事件
      */
     private void listViewPush() {
         refreshableView.setOnRefreshListener(new OnRefreshListener() {
@@ -229,18 +256,20 @@ public class VideoFragment extends BaseFragment implements OnScrollListener,
     }
 
     /**
-     * 加载更多
+     * 设置加载更多事件
      */
     private void listViewLoadmore() {
         gridView.setOnScrollListener(this);
     }
 
+    //-------------滑动接口-----------------
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
 
     }
 
     private boolean isRefresh = true;
+
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem,
@@ -255,7 +284,7 @@ public class VideoFragment extends BaseFragment implements OnScrollListener,
             }
         }
     }
-
+    //------------结束滑动接口-----------------
     @Override
     public void onTry() {
         // 重新获取数据
