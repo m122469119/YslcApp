@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
-
+<!--圆圈-->
     <ImageView
         android:id="@+id/progress"
         android:layout_width="wrap_content"
@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:contentDescription="@null"
         android:src="@drawable/progress" />
-
+<!--圆圈下的文字-->
     <TextView
         android:id="@+id/tryAgin"
         android:layout_width="wrap_content"

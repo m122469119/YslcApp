@@ -1,17 +1,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
+<!--轮播-->
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="140dip" />
-
+<!--轮播分隔线-->
     <View
         android:id="@+id/line"
         style="@style/line_h_style"
         android:layout_below="@id/viewPager" />
-
+<!--轮播指示点-->
     <com.yslc.view.BaseIndicator
         android:id="@+id/myIndicator"
         android:layout_width="wrap_content"
@@ -20,7 +20,7 @@
         android:layout_alignParentRight="true"
         android:background="@color/greyTrans"
         android:gravity="center_vertical" />
-
+<!--轮播标题-->
     <TextView
         android:id="@+id/titleTv"
         android:layout_width="match_parent"
@@ -35,14 +35,14 @@
         android:singleLine="true"
         android:textColor="@color/white"
         android:textSize="16sp" />
-
+<!--股票指数-->
     <LinearLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/line"
         android:background="@color/white">
-
+<!--上证指数-->
         <LinearLayout
             android:layout_width="0dip"
             android:layout_height="wrap_content"
@@ -78,9 +78,9 @@
                 android:textColor="@color/textColor54"
                 android:textSize="15sp" />
         </LinearLayout>
-
+<!--分隔线-->
         <View style="@style/line_v_style" />
-
+<!--深证指数-->
         <LinearLayout
             android:layout_width="0dip"
             android:layout_height="wrap_content"

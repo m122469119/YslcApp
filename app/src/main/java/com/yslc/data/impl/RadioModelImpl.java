@@ -28,6 +28,10 @@ public class RadioModelImpl implements IRadioModel {
         this.context = context;
     }
 
+    /**
+     * 获取股市广播
+     * @param callback
+     */
     @Override
     public void getRadioData(GetDataCallback callback) {
         HttpUtil.get(HttpUtil.PLAY_VEDIO, context, null,
@@ -43,7 +47,7 @@ public class RadioModelImpl implements IRadioModel {
                     @Override
                     public void onSuccess(JSONObject json) {
                         super.onSuccess(json);
-
+                        //解析数据
                         RadioBean mode = new RadioBean();
                         mode.setRadioUrl(json.optString("Url"));
                         mode.setRadioName(json.optString("RadP_Name"));
@@ -102,6 +106,11 @@ public class RadioModelImpl implements IRadioModel {
                 });
     }
 
+    /**
+     * 重播电台节目详情页面第一项节目描述
+     * @param radioId 电台id
+     * @param callback 回调函数
+     */
     @Override
     public void getRadioReliveDetail(String radioId, GetDataCallback callback) {
         RequestParams params = new RequestParams();
@@ -135,6 +144,14 @@ public class RadioModelImpl implements IRadioModel {
                 });
     }
 
+    /**
+     * 电台节目往期列表
+     * <p>成功后解析数据</p>
+     * @param dbName 电台名称
+     * @param pageSize 页面大小
+     * @param pageIndex 页码
+     * @param callback 回调函数
+     */
     @Override
     public void getReliveListForHost(String dbName, String pageSize, String pageIndex, GetDataCallback callback) {
         RequestParams params = new RequestParams();
@@ -153,7 +170,7 @@ public class RadioModelImpl implements IRadioModel {
                     @Override
                     public void onSuccess(int arg0, JSONObject arg1) {
                         super.onSuccess(arg0, arg1);
-
+                        //解析数据
                         try {
                             ArrayList<RadioBean> list = new ArrayList<>();
                             JSONArray ja = arg1.getJSONArray("list");

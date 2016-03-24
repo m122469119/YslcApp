@@ -38,31 +38,50 @@ public class RadioPlayerActivity extends BaseActivity implements
     private RadioModelService radioModelService;
     private boolean isPrepared = false;
 
+    /**
+     * 设置布局
+     * @return
+     */
     @Override
     protected int getLayoutId() {
         return R.layout.activity_radio_player;
     }
 
+    /**
+     * 初始化布局
+     * <p>关联返回按钮，播放按钮，刷新按钮并监听</p>
+     * <p>关联动画</p>
+     * <p>播放工具类、计时器设置</p>
+     * <p>实例化业务逻辑类</p>
+     * <p>获取数据</p>
+     */
     @Override
     protected void initView() {
-        ViewUtil.TranslucentStatusBar(this);
+        ViewUtil.TranslucentStatusBar(this);//状态栏透明
 
-        findViewById(R.id.backBtn).setOnClickListener(this);
-        playImg = (ImageButton) findViewById(R.id.paly_pouse);
+        findViewById(R.id.backBtn).setOnClickListener(this);//返回
+        playImg = (ImageButton) findViewById(R.id.paly_pouse);//播放
         playImg.setOnClickListener(this);
-        refreshImg = (ImageButton) findViewById(R.id.refreshBtn);
+        refreshImg = (ImageButton) findViewById(R.id.refreshBtn);//刷新
         refreshImg.setOnClickListener(this);
+        //关联animation(刷新旋转）
         animation = AnimationUtils.loadAnimation(this, R.anim.load_progress_anim);
-
+        //播放设置
         pv = new PlayerUtil();
         pv.setOnPlayListener(this);
+        //计时器设置
         timerUtil = new TimerUtil(0);
         timerUtil.setOnTimerCallback(this);
+        //业务逻辑类
         radioModelService = new RadioModelService(this);
 
         getData();
     }
 
+    /**
+     * 点击事件
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -99,14 +118,15 @@ public class RadioPlayerActivity extends BaseActivity implements
 
     /**
      * 获取数据
+     * <p>获取数据成功则设置数据</p>
      */
     private void getData() {
-        if (!CommonUtil.isNetworkAvalible(this)) {
+        if (!CommonUtil.isNetworkAvalible(this)) {//判断网络
             ToastUtil.showMessage(this, HttpUtil.NO_INTERNET_INFO);
             return;
         }
 
-        refreshImg.startAnimation(animation);
+        refreshImg.startAnimation(animation);//为刷新按钮设置动画
         playImg.setEnabled(false);
         radioModelService.getRadioData(new GetDataCallback() {
             @Override
@@ -122,6 +142,9 @@ public class RadioPlayerActivity extends BaseActivity implements
         });
     }
 
+    /**
+     * 定时获取数据
+     */
     @Override
     public void onTimer() {
         // 再次获取数据
@@ -144,19 +167,24 @@ public class RadioPlayerActivity extends BaseActivity implements
         if (!pv.isPlay()) {
             // 开始播放广播
             pv.playUrl(mode.getRadioUrl());
-        } else {
+        } else {//已经在播放则停止刷新圆圈
             startPlay();
         }
 
         startTimeThread(Integer.parseInt(mode.getRadioTime()));
     }
 
+    /**
+     * 设置计时器时间，播放完成后，再次获取数据
+     *
+     * @param time
+     */
     private void startTimeThread(int time) {
         // 下一次访问定时
-        time = time < 0 ? 10000 : time * 1000;
-        timerUtil.stopTimer();
-        timerUtil.setTime(time);
-        timerUtil.startTimer();
+        time = time < 0 ? 10000 : time * 1000;//3416*1000毫秒
+        timerUtil.stopTimer();//停止计时
+        timerUtil.setTime(time);//设置计时器时间
+        timerUtil.startTimer();//开始计时
     }
 
     /**
@@ -196,7 +224,9 @@ public class RadioPlayerActivity extends BaseActivity implements
     }
 
     /**
-     * 播放回调
+     * 播放监听回调（注意不是开始播放的方法）
+     * <p>停止刷新圆圈</p>
+     * <p>改变播放按钮状态</p>
      */
     @Override
     public void startPlay() {

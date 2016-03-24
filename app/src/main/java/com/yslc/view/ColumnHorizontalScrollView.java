@@ -119,7 +119,7 @@ public class ColumnHorizontalScrollView extends HorizontalScrollView {
 
     /**
      * 设置栏目数据
-     *
+     * <p>设置副标题</p>
      */
     public void setColumnData(ArrayList<ColnumBean> listTitle) {
         dataSize = listTitle.size();

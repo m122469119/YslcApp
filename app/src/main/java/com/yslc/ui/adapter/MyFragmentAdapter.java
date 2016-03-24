@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 /**
  * 咨讯页面ViewPager FragmentAdapter
- *
+ * <p>广播重温Activity</p>
  * @author HH
  */
 public class MyFragmentAdapter extends FragmentPagerAdapter {

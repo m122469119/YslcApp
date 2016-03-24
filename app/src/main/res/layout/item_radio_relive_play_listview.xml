@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--电台列表的item布局-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="70dip"
@@ -7,12 +8,12 @@
     android:paddingLeft="15dip"
     android:paddingRight="15dip"
     android:paddingTop="10dip">
-
+<!--节目名称-->
     <TextView
         android:id="@+id/radioName"
         style="@style/listViewTextStyle"
         android:textColor="@color/textColor87" />
-
+<!--节目播出时间-->
     <TextView
         android:id="@+id/radioDate"
         style="@style/listViewTextStyle"
@@ -20,7 +21,7 @@
         android:layout_marginTop="5dip"
         android:textColor="@color/textColor54"
         android:textSize="14sp" />
-
+<!--播放按钮图片-->
     <ImageView
         android:id="@+id/radioTo"
         android:layout_width="50dip"

@@ -37,6 +37,11 @@ public class RadioReliveFragment extends BaseFragment implements OnTryListener,
     private List<RadioBean> infoItemList;
     private RadioModelService radioModelService;
 
+    /**
+     * 创建fragment
+     * <p>获取上下文，副标题id，实例化数据类</p>
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,11 +50,22 @@ public class RadioReliveFragment extends BaseFragment implements OnTryListener,
         infoItemList = new ArrayList<>();
     }
 
+    /**
+     * 设置布局
+     * <p>包含加载更多列表和加载圈圈</p>
+     * @return
+     */
     @Override
     protected int getLayoutId() {
         return R.layout.listview_vedio_relive;
     }
 
+    /**
+     * 初始化布局
+     * <p>关联listView和加载圈圈并设置监听</p>
+     * <p>实例化业务处理类</p>
+     * @param views
+     */
     @Override
     protected void findView(View views) {
         super.findView(views);
@@ -61,6 +77,10 @@ public class RadioReliveFragment extends BaseFragment implements OnTryListener,
         radioModelService = new RadioModelService(context);
     }
 
+    /**
+     * 第一次加载
+     * <p>下载数据</p>
+     */
     @Override
     protected void onFristLoadData() {
         super.onFristLoadData();
@@ -71,6 +91,7 @@ public class RadioReliveFragment extends BaseFragment implements OnTryListener,
 
     /**
      * 加载界面列表
+     * <p>下载数据，成功后刷新列表</p>
      */
     private void loadData() {
         radioModelService.getRadioReliveListData(colnumBean.getId(), new GetDataCallback() {
@@ -81,7 +102,7 @@ public class RadioReliveFragment extends BaseFragment implements OnTryListener,
                 if (infoItemList.size() == 0) {
                     loadView.setStatus(LoadView.EMPTY_DATA);
                 } else {
-                    listRefersh();
+                    listRefersh();//刷新列表
                 }
             }
 
@@ -108,6 +129,13 @@ public class RadioReliveFragment extends BaseFragment implements OnTryListener,
         listView.setAdapter(adapter);
     }
 
+    /**
+     * 点击事件
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
@@ -118,6 +146,9 @@ public class RadioReliveFragment extends BaseFragment implements OnTryListener,
         context.startActivity(intent);
     }
 
+    /**
+     * 重试
+     */
     @Override
     public void onTry() {
         if (loadView.setStatus(LoadView.LOADING)) {

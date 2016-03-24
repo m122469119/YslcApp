@@ -35,7 +35,7 @@ public class PlayerUtil implements OnBufferingUpdateListener,
 
     /**
      * 播放广播
-     *
+     * <p>播放网络广播</p>
      * @param videoUrl 广播URL
      */
     public void playUrl(String videoUrl) {

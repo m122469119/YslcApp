@@ -21,7 +21,8 @@ import android.widget.TextView;
 
 /**
  * 广播播放Activity(重播)
- *
+ * <p>与RadioPlayerActivity差不多，少了一个计时功能</p>
+ * @see RadioPlayerActivity
  * @author HH
  */
 public class RadioRelivePlayerActivity extends BaseActivity implements
@@ -34,37 +35,43 @@ public class RadioRelivePlayerActivity extends BaseActivity implements
     private boolean isPrepared = false;
 
     @Override
+    protected int getLayoutId() {
+        return R.layout.activity_radio_player;
+    }
+
+    /**
+     * 初始化布局
+     * <p>包含状态栏、播放工具、标题、返回键、刷新、播放键设置</p>
+     * <p>开始设置控件数据</p>
+     */
+    @Override
     protected void initView() {
         super.initView();
 
-        ViewUtil.TranslucentStatusBar(this);
-        bean = (RadioBean) getIntent().getSerializableExtra("RadioBean");
-        pv = new PlayerUtil();
+        ViewUtil.TranslucentStatusBar(this);//状态栏透明
+        bean = (RadioBean) getIntent().getSerializableExtra("RadioBean");//获取播放数据
+        pv = new PlayerUtil();//播放工具类
         pv.setOnPlayListener(this);
 
+        //标题
         ((TextView) findViewById(R.id.titleText)).setText(getString(R.string.interactives));
-        findViewById(R.id.backBtn).setOnClickListener(this);
-        playImg = (ImageButton) findViewById(R.id.paly_pouse);
+        findViewById(R.id.backBtn).setOnClickListener(this);//返回键
+        playImg = (ImageButton) findViewById(R.id.paly_pouse);//播放/停止按钮
         playImg.setOnClickListener(this);
-        refreshImg = (ImageButton) findViewById(R.id.refreshBtn);
+        refreshImg = (ImageButton) findViewById(R.id.refreshBtn);//刷新按钮
         refreshImg.setOnClickListener(this);
+        //为刷新按钮设置动画
         animation = AnimationUtils.loadAnimation(this, R.anim.load_progress_anim);
         refreshImg.startAnimation(animation);
 
         setData(bean);
     }
 
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_radio_player;
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.backBtn:
-                onFinishActivity();
+                onFinishActivity();//返回
                 break;
 
             case R.id.paly_pouse:
@@ -91,11 +98,11 @@ public class RadioRelivePlayerActivity extends BaseActivity implements
                 playImg.setEnabled(false);
 
                 // 刷新,开始播放广播
-                if (!pv.isPlay()) {
+                if (!pv.isPlay()) {//不是在播放则开始刷新
                     refreshImg.startAnimation(animation);
-                    pv.playUrl(bean.getRadioUrl());
-                } else {
-                    startPlay();
+                    pv.playUrl(bean.getRadioUrl());//下载电台播放
+                } else {//播放则啥都不做
+                    startPlay();//停止刷新动画
                 }
                 break;
         }
@@ -105,16 +112,17 @@ public class RadioRelivePlayerActivity extends BaseActivity implements
      * 设置数据
      */
     private void setData(RadioBean bean) {
-        if (!CommonUtil.isNetworkAvalible(this)) {
+        if (!CommonUtil.isNetworkAvalible(this)) {//检测网络
             ToastUtil.showMessage(this, HttpUtil.NO_INTERNET_INFO);
             return;
         }
 
         // 设置头像和标题
         ImageLoader loader = ImageLoader.getInstance();
-        loader.displayImage(bean.getRadioHostUrl(),
+        loader.displayImage(bean.getRadioHostUrl(),//头像
                 (ImageView) findViewById(R.id.starImg),
                 ViewUtil.getCircleOptions());
+        //设置界面名称和主持人
         ((TextView) findViewById(R.id.text_time)).setText(bean.getRadioName());
         ((TextView) findViewById(R.id.text_info)).setText("主持人:" + bean.getRadioHost());
 
@@ -127,6 +135,7 @@ public class RadioRelivePlayerActivity extends BaseActivity implements
 
     /**
      * 播放回调
+     * <p>下载好电台后，停止刷新动画，改变播放按钮</p>
      */
     @Override
     public void startPlay() {

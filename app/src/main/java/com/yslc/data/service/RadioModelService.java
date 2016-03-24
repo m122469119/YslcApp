@@ -68,8 +68,8 @@ public class RadioModelService {
     /**
      * 获取某节目往期列表
      *
-     * @param dbName
-     * @param callback
+     * @param dbName 节目名称
+     * @param callback 回调函数
      */
     public void getReliveListForHost(String dbName, GetDataCallback callback) {
         radioModel.getReliveListForHost(dbName, String.valueOf(pageSize), String.valueOf(pageIndex), new GetDataCallback() {
