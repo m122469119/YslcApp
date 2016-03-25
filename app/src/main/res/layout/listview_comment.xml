@@ -14,18 +14,18 @@
         layout="@layout/include_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/buttom"
+        android:layout_above="@+id/button"
         android:layout_below="@id/toolbar" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/buttom"
+        android:layout_above="@+id/button"
         android:layout_below="@id/toolbar"
         android:background="@drawable/view_shard" />
 
     <include
-        android:id="@+id/buttom"
+        android:id="@+id/button"
         layout="@layout/include_comment_input"
         android:layout_width="match_parent"
         android:layout_height="@dimen/titlebarSize"

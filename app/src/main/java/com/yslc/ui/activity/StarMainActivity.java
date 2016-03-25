@@ -45,39 +45,53 @@ public class StarMainActivity extends BaseActivity implements OnClickListener,
     private ArrayList<StarBean> dataList;
     private StarModelService starModelService;
 
+    /**
+     * 包含加载更多listView，加载圈圈,标题栏
+     * @return
+     */
     @Override
     protected int getLayoutId() {
         return R.layout.listview_star_main;
     }
 
+    /**
+     * 设置标题
+     * @return 标题
+     */
     @Override
     protected String getToolbarTitle() {
         return getString(R.string.starMain);
     }
 
+    /**
+     * 初始化布局
+     * <p>实例化业务处理类</p>
+     * <p>开始下载数据</p>
+     */
     @Override
     protected void initView() {
-        headerView = View.inflate(this, R.layout.header_star_main, null);
+        headerView = View.inflate(this, R.layout.header_star_main, null);//明星简介
         imageLoader = ImageLoader.getInstance();
-        dataList = new ArrayList<>();
+        dataList = new ArrayList<>();//数据类
         listView = (BaseListViewForTitleBar) findViewById(R.id.listview);
-        titleBar = findViewById(R.id.toolbar);
-        listView.setTitleBar(titleBar);
+        titleBar = findViewById(R.id.toolbar);//标题栏
+        listView.setTitleBar(titleBar);//关联标题栏
         // ListView添加HeaderView
-        setStarInfo(null);
-        listViewSetEvent();
+        setStarInfo(null);//初始化headerView
+        listViewSetEvent();//点击事件
         loadView = (LoadView) findViewById(R.id.view);
         loadView.setOnTryListener(this);
 
         // 获取明星基本信息
-        starModelService = new StarModelService(this);
+        starModelService = new StarModelService(this);//业务处理类
         if (loadView.setStatus(LoadView.LOADING)) {
-            getData();
+            getData();//下载数据
         }
     }
 
     /**
      * 加载更多已经进入博文详情
+     * <p>listView点击事件</p>
      */
     private void listViewSetEvent() {
         listView.setOnItemClickListener(new OnItemClickListener() {
@@ -115,16 +129,18 @@ public class StarMainActivity extends BaseActivity implements OnClickListener,
 
     /**
      * 获取明星文章内容列表
+     * <p>成功后显示明星信息和明星文章列表信息</p>
      */
     private void getData() {
-        starModelService.getStarArticelList(getIntent().getStringExtra("sifId"), new GetDataCallback() {
+        starModelService.getStarArticleList(getIntent().getStringExtra("sifId"), new GetDataCallback() {
             @Override
             public <T> void success(T data) {
                 loadView.setStatus(LoadView.SUCCESS);
-                HashMap<StarBean, ArrayList<StarBean>> map = (HashMap<StarBean, ArrayList<StarBean>>) data;
+                HashMap<StarBean, ArrayList<StarBean>> map =
+                        (HashMap<StarBean, ArrayList<StarBean>>) data;
                 Iterator iter = map.keySet().iterator();
-                StarBean mode = null;
-                ArrayList<StarBean> list = null;
+                StarBean mode = null;//明星信息数据
+                ArrayList<StarBean> list = null;//文章列表数据
                 if (iter.hasNext()) {
                     mode = (StarBean) iter.next();
                     list = map.get(mode);
@@ -132,6 +148,7 @@ public class StarMainActivity extends BaseActivity implements OnClickListener,
                 // 设置个人资料
                 setStarInfo(mode);
 
+                //如果该明星没有发表信息，则显示暂未发表文章
                 if (list.size() <= 0 && starModelService.getPageIndex() == 2) {
                     // 暂无文章
                     View view = View.inflate(
@@ -142,6 +159,7 @@ public class StarMainActivity extends BaseActivity implements OnClickListener,
                     listView.addHeaderView(view);
                 }
 
+                //没有更多文章处理
                 listView.onFinishLoad();
                 if (list.size() < starModelService.getPageSize() && starModelService.getPageIndex() > 2) {
                     listView.noMoreData();
@@ -149,7 +167,7 @@ public class StarMainActivity extends BaseActivity implements OnClickListener,
 
                 // 设置文章列表
                 dataList.addAll(list);
-                setStarList();
+                setStarList();//设置文章
             }
 
             @Override
@@ -162,9 +180,12 @@ public class StarMainActivity extends BaseActivity implements OnClickListener,
 
     /**
      * 设置明星个人信息
+     * <p>没有headView,则初始化headView布局，并添加</p>
+     * <p>在headView显示明星信息</p>
+     * @param mode 明星信息
      */
     private void setStarInfo(StarBean mode) {
-        if (listView.getHeaderViewsCount() < 1) {
+        if (listView.getHeaderViewsCount() < 1) {//没有headView
             headerView.findViewById(R.id.starInfoLayout).setVisibility(
                     View.GONE);
             starImg = (ImageView) headerView.findViewById(R.id.starImg);
@@ -174,22 +195,25 @@ public class StarMainActivity extends BaseActivity implements OnClickListener,
             return;
         }
 
+        //明星信息类不为空，显示明星信息控件不为空，则显示明星信息
         if (mode != null && null != headerView) {
-            headerView.findViewById(R.id.starInfoLayout)
+            headerView.findViewById(R.id.starInfoLayout)//显示明星信息
                     .setVisibility(View.VISIBLE);
+            //下载明星头像
             imageLoader.displayImage(mode.getSif_Img(), starImg, ViewUtil.getCircleOptions());
-            starName.setText(mode.getSif_Name());
+            starName.setText(mode.getSif_Name());//设置明星姓名
         }
 
     }
 
     /**
      * 设置明星文章内容列表
+     * <p>点赞设置监听</p>
      */
     private void setStarList() {
-        if (null != adapter) {
+        if (null != adapter) {//通知更新
             adapter.notifyDataSetChanged();
-        } else {
+        } else {//配置适配器
             adapter = new QuickAdapter<StarBean>(this,
                     R.layout.item_star_article_listview, dataList) {
                 @Override
@@ -198,10 +222,10 @@ public class StarMainActivity extends BaseActivity implements OnClickListener,
                     helper.setText(R.id.time, item.getSn_Time());
                     helper.setText(R.id.content, item.getContent());
                     helper.setText(R.id.comment, "评论" + item.getSif_ComNumber());
-                    TextView tv = helper.getView(R.id.prise);
-                    tv.setTag(item);
-                    tv.setText(item.getSif_Praise());
-                    if (item.isPraise()) {
+                    TextView tv = helper.getView(R.id.prise);//点赞数量
+                    tv.setTag(item);//点赞控件标签数据
+                    tv.setText(item.getSif_Praise());//设置数量
+                    if (item.isPraise()) {//是否可以点赞
                         tv.setEnabled(true);
                     } else {
                         tv.setEnabled(false);
@@ -214,16 +238,17 @@ public class StarMainActivity extends BaseActivity implements OnClickListener,
     }
 
     /**
-     * 点赞接口
+     * 点赞事件
      */
     private void doPraise(final TextView tv) {
-        starModelService.doPraiseForArtice(((StarBean) tv.getTag()).getSif_Id(), new GetDataCallback() {
+        starModelService.doPraiseForArticle(((StarBean) tv.getTag()).getSif_Id(), new GetDataCallback() {
             @Override
-            public <T> void success(T data) {
+            public <T> void success(T data) {//"msg"数据
                 tv.setEnabled(false);
-                ToastUtil.showMessage(StarMainActivity.this, data.toString());
+                ToastUtil.showMessage(StarMainActivity.this, data.toString());//点赞成功
 
-                ((StarBean) tv.getTag()).setPraise(false);
+                ((StarBean) tv.getTag()).setPraise(false);//不可重复点赞
+                //点赞加一（转来转去有点煞笔）
                 String praise = String.valueOf(Integer.parseInt(((StarBean) tv.getTag())
                         .getSif_Praise()) + 1);
                 ((StarBean) tv.getTag()).setSif_Praise(praise);
@@ -238,6 +263,9 @@ public class StarMainActivity extends BaseActivity implements OnClickListener,
         });
     }
 
+    /**
+     * 重新加载事件
+     */
     @Override
     public void onTry() {
         if (loadView.setStatus(LoadView.LOADING)) {

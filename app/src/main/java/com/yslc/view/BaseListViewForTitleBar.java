@@ -12,7 +12,7 @@ import android.widget.ListView;
 
 /**
  * 基类ListView，实现加载更多
- *
+ * <p>相比BaseListView多了TitleBar部分，可以考虑重构</p>
  * @author HH
  */
 public class BaseListViewForTitleBar extends ListView implements OnScrollListener {

@@ -105,11 +105,11 @@ public class StarModelService {
     /**
      * 获取明星文章列表
      *
-     * @param sifId
+     * @param sifId 请求参数（明星id）
      * @param callback
      */
-    public void getStarArticelList(String sifId, GetDataCallback callback) {
-        starModel.getStarArticelList(sifId, String.valueOf(pageSize), String.valueOf(pageIndex), new GetDataCallback() {
+    public void getStarArticleList(String sifId, GetDataCallback callback) {
+        starModel.getStarArticleList(sifId, String.valueOf(pageSize), String.valueOf(pageIndex), new GetDataCallback() {
             @Override
             public <T> void success(T data) {
                 pageIndex++;
@@ -126,21 +126,21 @@ public class StarModelService {
     /**
      * 明星文章点赞
      *
-     * @param snId
+     * @param snId 文章id
      * @param callback
      */
-    public void doPraiseForArtice(String snId, GetDataCallback callback) {
-        starModel.doPraiseForArtice(snId, callback);
+    public void doPraiseForArticle(String snId, GetDataCallback callback) {
+        starModel.doPraiseForArticle(snId, callback);
     }
 
     /**
      * 评论明星文章
-     *
-     * @param snId
-     * @param commentValue
+     * <p>未登录，跳到登录页面</p>
+     * @param snId 文章id
+     * @param commentValue 评论
      * @param callback
      */
-    public void doStarArticeComment(String snId, String commentValue, GetDataCallback callback) {
+    public void doStarArticleComment(String snId, String commentValue, GetDataCallback callback) {
         // 判断是否登录
         if (!SharedPreferencesUtil.isLogin(context)) {
             ToastUtil.showMessage(context, "请先登录");
@@ -148,23 +148,23 @@ public class StarModelService {
             return;
         }
 
-        starModel.doStarArticeComment(SharedPreferencesUtil.getUserId(context), snId, commentValue, callback);
+        starModel.doStarArticleComment(SharedPreferencesUtil.getUserId(context), snId, commentValue, callback);
     }
 
     /**
      * 获取明星文章详情（内容+评论）
      *
      * @param isRefresh 是否刷新列表
-     * @param snId
+     * @param snId 文章id
      * @param callback
      */
-    public void getStarArticeDetail(Boolean isRefresh, String snId, GetDataCallback callback) {
+    public void getStarArticleDetail(Boolean isRefresh, String snId, GetDataCallback callback) {
         int temp = pageIndex;
         if (isRefresh) {
             temp = 1;
         }
 
-        starModel.getStarArticeDetail(snId, String.valueOf(pageSize), String.valueOf(temp), new GetDataCallback() {
+        starModel.getStarArticleDetail(snId, String.valueOf(pageSize), String.valueOf(temp), new GetDataCallback() {
             @Override
             public <T> void success(T data) {
                 pageIndex++;

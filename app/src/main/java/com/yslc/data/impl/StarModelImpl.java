@@ -136,8 +136,16 @@ public class StarModelImpl implements IStarModel {
         }
     }
 
+    /**
+     * 获取明星文章列表（文章标题列表）
+     * <p>获取成功后解析</p>
+     * @param sifId 明星id
+     * @param pageSize 页面大小
+     * @param pageIndex 页码
+     * @param callback 回调
+     */
     @Override
-    public void getStarArticelList(String sifId, String pageSize, String pageIndex, GetDataCallback callback) {
+    public void getStarArticleList(String sifId, String pageSize, String pageIndex, GetDataCallback callback) {
         RequestParams params = new RequestParams();
         params.put("Sif_Id", sifId);
         params.put("pageSize", pageSize);
@@ -203,13 +211,17 @@ public class StarModelImpl implements IStarModel {
                 });
     }
 
+    /**
+     * 点赞
+     * @param snId 文章id
+     * @param callback 回调
+     */
     @Override
-    public void doPraiseForArtice(String snId, GetDataCallback callback) {
+    public void doPraiseForArticle(String snId, GetDataCallback callback) {
         RequestParams params = new RequestParams();
         params.put("Sn_Id", snId);
         HttpUtil.get(HttpUtil.DO_PRAISE, context, params,
                 new JsonHttpResponseHandler() {
-
                     @Override
                     public void onFailure(Throwable arg0, JSONObject arg1) {
                         super.onFailure(arg0, arg1);
@@ -223,7 +235,7 @@ public class StarModelImpl implements IStarModel {
 
                         if (!arg0.optString("Status").equals(
                                 HttpUtil.ERROR_CODE)) {
-                            callback.success(arg0.optString("msg"));
+                            callback.success(arg0.optString("msg"));//成功
                         } else {
                             callback.failer(arg0.optString("msg"));
                         }
@@ -231,8 +243,15 @@ public class StarModelImpl implements IStarModel {
                 });
     }
 
+    /**
+     * 获取明星文章以及文章的评论列表
+     * @param snId 文章id
+     * @param pageSize
+     * @param pageIndex
+     * @param callback
+     */
     @Override
-    public void getStarArticeDetail(String snId, String pageSize, String pageIndex, GetDataCallback callback) {
+    public void getStarArticleDetail(String snId, String pageSize, String pageIndex, GetDataCallback callback) {
         RequestParams params = new RequestParams();
         params.put("Sn_Id", snId);
         params.put("pageSize", pageSize);
@@ -296,8 +315,15 @@ public class StarModelImpl implements IStarModel {
                 });
     }
 
+    /**
+     * 发表评论
+     * @param userId 用户id
+     * @param snId 文章id
+     * @param commentValue 评论内容
+     * @param callback 回调
+     */
     @Override
-    public void doStarArticeComment(String userId, String snId, String commentValue, GetDataCallback callback) {
+    public void doStarArticleComment(String userId, String snId, String commentValue, GetDataCallback callback) {
         RequestParams params = new RequestParams();
         params.put("Ui_Id", userId);
         params.put("Sn_Id", snId);

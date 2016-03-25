@@ -24,7 +24,7 @@
         android:background="@drawable/view_shard" />
 
     <include
-        android:id="@+id/buttom"
+        android:id="@+id/button"
         layout="@layout/include_comment_input"
         android:layout_width="match_parent"
         android:layout_height="@dimen/titlebarSize"

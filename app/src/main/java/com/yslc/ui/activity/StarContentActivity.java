@@ -50,26 +50,42 @@ public class StarContentActivity extends BaseActivity implements
     private boolean noData = false;
     private StarModelService starModelService;
 
+    /**
+     * 设置布局
+     * <p>包含标题，内容，评论</p>
+     * @return
+     */
     @Override
     protected int getLayoutId() {
         return R.layout.listview_star_content;
     }
 
+    /**
+     * 设置标题
+     * @return
+     */
     @Override
     protected String getToolbarTitle() {
         return getText(R.string.contentDetail).toString();
     }
 
+    /**
+     * 初始化布局
+     * <p>实例化数据类、图片加载工具类、业务逻辑类</p>
+     * <p>发表评论，编辑评论，评论列表、加载圈圈初始化和设置</p>
+     */
     @Override
     protected void initView() {
-        dataList = new ArrayList<>();
+        dataList = new ArrayList<>();//数据类
         imageLoader = ImageLoader.getInstance();
 
+        //发送评论按钮
         send = (Button) findViewById(R.id.send);
         send.setText("发送");
         send.setTextColor(ContextCompat.getColor(this, R.color.gray));
         send.setOnClickListener(this);
         send.setEnabled(false);
+        //编辑评论
         contentInput = (EditText) findViewById(R.id.content);
         contentInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -84,7 +100,7 @@ public class StarContentActivity extends BaseActivity implements
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (contentInput.getText().toString().trim().length() == 0) {
+                if (contentInput.getText().toString().trim().length() == 0) {//不可发送空字符
                     // 不可评论状态
                     send.setTextColor(ContextCompat.getColor(StarContentActivity.this, R.color.gray));
                     send.setEnabled(false);
@@ -95,20 +111,20 @@ public class StarContentActivity extends BaseActivity implements
                 }
             }
         });
-
+        //评论列表
         listView = (BaseListView) findViewById(R.id.listview);
         listView.setHeaderDividersEnabled(true);
         listView.setFooterDividersEnabled(true);
         listView.setOnLoadMoreListener(this);
-
+        //加载圈圈
         loadView = (LoadView) findViewById(R.id.view);
-        loadView.setOnClickListener(null);
+        loadView.setOnClickListener(null);//这句有用吗？
         loadView.setOnTryListener(this);
 
         // 获取文章详情
-        starModelService = new StarModelService(this);
+        starModelService = new StarModelService(this);//实例化逻辑类
         if (loadView.setStatus(LoadView.LOADING)) {
-            getComment(false);
+            getComment(false);//获取评论
         }
     }
 
@@ -124,10 +140,13 @@ public class StarContentActivity extends BaseActivity implements
     }
 
     /**
-     * 获取评论列表
+     * 获取评论列表和文章
+     * <p>成功后显示文章和显示评论</p>
+     * @param isRefresh 是否刷新
      */
     private void getComment(boolean isRefresh) {
-        starModelService.getStarArticeDetail(isRefresh, getIntent().getStringExtra("snId"), new GetDataCallback() {
+        starModelService.getStarArticleDetail(isRefresh, getIntent().getStringExtra("snId"),
+                new GetDataCallback() {
             @Override
             public <T> void success(T data) {
                 loadView.setStatus(LoadView.SUCCESS);
@@ -137,31 +156,33 @@ public class StarContentActivity extends BaseActivity implements
                     // 表示刷新
                     dataList.clear();
                 }
-
-                HashMap<CommentBean, ArrayList<CommentBean>> map = (HashMap<CommentBean, ArrayList<CommentBean>>) data;
+                //拆分数据
+                HashMap<CommentBean, ArrayList<CommentBean>> map =
+                        (HashMap<CommentBean, ArrayList<CommentBean>>) data;
                 Iterator iterator = map.keySet().iterator();
                 StarBean mode = null;
                 ArrayList<CommentBean> list = null;
                 if (iterator.hasNext()) {
-                    mode = (StarBean) iterator.next();
-                    list = map.get(mode);
+                    mode = (StarBean) iterator.next();//文章内容
+                    list = map.get(mode);//评论列表
                 }
-
+                //没有评论
                 if (list.size() == 0 && starModelService.getPageIndex() == 2) {
                     noData = true;
                 }
 
                 // 是否到了最后一页
-                if (list.size() < starModelService.getPageSize() && starModelService.getPageIndex() > 2) {
+                if (list.size() < starModelService.getPageSize() && starModelService
+                        .getPageIndex() > 2) {
                     listView.noMoreData();
                 }
 
                 //加载评论和详情
                 dataList.addAll(list);
                 if (mode != null) {
-                    setHeaderData(mode);
+                    setHeaderData(mode);//显示文章
                 }
-                setCommentData();
+                setCommentData();//显示评论
 
             }
 
@@ -177,6 +198,7 @@ public class StarContentActivity extends BaseActivity implements
 
     /**
      * 设置ListView Header数据
+     * <p>设置文章内容</p>
      */
     private void setHeaderData(StarBean mode) {
         if (listView.getHeaderViewsCount() == 0) {
@@ -199,6 +221,7 @@ public class StarContentActivity extends BaseActivity implements
 
     /**
      * 设置评论列表内容
+     * <p>没有适配器则先配置适配器</p>
      */
     private void setCommentData() {
         if (null != adapter) {
@@ -220,6 +243,9 @@ public class StarContentActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * 加载更多
+     */
     @Override
     public void onLoadMore() {
         getComment(false);
@@ -227,34 +253,39 @@ public class StarContentActivity extends BaseActivity implements
 
     /**
      * 提交评论
+     * <p>提交成功后刷新列表</p>
      */
     private void commitComment() {
-        showWaitDialogs(R.string.doCommentInfo, true);
-        starModelService.doStarArticeComment(getIntent().getStringExtra("snId"), CommonUtil.inputFilter(contentInput), new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {
-                hideWaitDialog();
-                ToastUtil.showMessage(StarContentActivity.this, data.toString());
-                contentInput.setText("");
-                if (null != noComment) {
-                    noComment.setText("评论列表");
-                }
-                // 刷新评论
-                getComment(true);
-            }
+        showWaitDialogs(R.string.doCommentInfo, true);//等待对话框，可取消
+        starModelService.doStarArticleComment(getIntent().getStringExtra("snId"),
+                CommonUtil.inputFilter(contentInput), new GetDataCallback() {
+                    @Override
+                    public <T> void success(T data) {
+                        hideWaitDialog();//隐藏对话框
+                        ToastUtil.showMessage(StarContentActivity.this, data.toString());//成功
+                        contentInput.setText("");
+                        if (null != noComment) {
+                            noComment.setText("评论列表");
+                        }
+                        // 刷新评论
+                        getComment(true);
+                    }
 
-            @Override
-            public <T> void failer(T data) {
-                hideWaitDialog();
-                ToastUtil.showMessage(StarContentActivity.this, data.toString());
-            }
-        });
+                    @Override
+                    public <T> void failer(T data) {
+                        hideWaitDialog();
+                        ToastUtil.showMessage(StarContentActivity.this, data.toString());
+                    }
+                });
     }
 
+    /**
+     * 重新加载
+     */
     @Override
     public void onTry() {
         if (loadView.setStatus(LoadView.LOADING)) {
-            getComment(false);
+            getComment(true);
         }
     }
 

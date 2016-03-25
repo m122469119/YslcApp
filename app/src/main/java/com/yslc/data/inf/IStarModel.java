@@ -27,7 +27,7 @@ public interface IStarModel {
      * @param pageIndex
      * @param callback
      */
-    void getStarArticelList(String sifId, String pageSize, String pageIndex, GetDataCallback callback);
+    void getStarArticleList(String sifId, String pageSize, String pageIndex, GetDataCallback callback);
 
     /**
      * 明星文章点赞
@@ -35,7 +35,7 @@ public interface IStarModel {
      * @param snId
      * @param callback
      */
-    void doPraiseForArtice(String snId, GetDataCallback callback);
+    void doPraiseForArticle(String snId, GetDataCallback callback);
 
     /**
      * 获取明星文章详情（内容+评论）
@@ -45,7 +45,7 @@ public interface IStarModel {
      * @param pageIndex
      * @param callback
      */
-    void getStarArticeDetail(String snId, String pageSize, String pageIndex, GetDataCallback callback);
+    void getStarArticleDetail(String snId, String pageSize, String pageIndex, GetDataCallback callback);
 
     /**
      * 评论明星文章
@@ -55,5 +55,5 @@ public interface IStarModel {
      * @param commentValue
      * @param callback
      */
-    void doStarArticeComment(String userId, String snId, String commentValue, GetDataCallback callback);
+    void doStarArticleComment(String userId, String snId, String commentValue, GetDataCallback callback);
 }
