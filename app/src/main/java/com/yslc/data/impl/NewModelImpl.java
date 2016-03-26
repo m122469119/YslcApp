@@ -305,6 +305,13 @@ public class NewModelImpl implements INewModel {
                 });
     }
 
+    /**
+     * 对WebView上的文章进行评论
+     * @param uiId 用户id
+     * @param niId 文章id
+     * @param ncContent 评论内容
+     * @param callback 回调
+     */
     @Override
     public void doNewComment(String uiId, String niId, String ncContent, GetDataCallback callback) {
         RequestParams params = new RequestParams();
@@ -341,6 +348,13 @@ public class NewModelImpl implements INewModel {
                 });
     }
 
+    /**
+     * 获取webView上的文章的评论列表
+     * @param niId 文章id
+     * @param pageSize 页面大小
+     * @param pageIndex 页妈
+     * @param callback 回调
+     */
     @Override
     public void getNewCommentList(String niId, String pageSize, String pageIndex, GetDataCallback callback) {
         RequestParams params = new RequestParams();

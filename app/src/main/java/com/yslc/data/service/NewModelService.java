@@ -131,10 +131,10 @@ public class NewModelService {
 
     /**
      * 新闻详情页发布评论
-     *
-     * @param niId
-     * @param ncContent
-     * @param callback
+     * <p>webActivity发表评论</p>
+     * @param niId 文章id
+     * @param ncContent 评论内容
+     * @param callback 回调
      */
     public void doNewComment(String niId, String ncContent, GetDataCallback callback) {
         //判断是否有网络
@@ -156,9 +156,9 @@ public class NewModelService {
 
     /**
      * 获取新闻页面评论数据
-     *
-     * @param niId
-     * @param callback
+     * @param isFrist 是否第一次下载
+     * @param niId 文章id
+     * @param callback 回调
      */
     public void getNewCommentList(boolean isFrist, String niId, GetDataCallback callback) {
         int tempIndex = pageIndex;
@@ -166,7 +166,8 @@ public class NewModelService {
             tempIndex = 1;
         }
 
-        newModel.getNewCommentList(niId, String.valueOf(pageSize), String.valueOf(tempIndex), new GetDataCallback() {
+        newModel.getNewCommentList(niId, String.valueOf(pageSize), String.valueOf(tempIndex),
+                new GetDataCallback() {
             @Override
             public <T> void success(T data) {
                 pageIndex++;

@@ -14,7 +14,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
  */
 public class SetTextSizeDialog extends BaseDialog {
     private View view = null;
-    private OnTextSize onTextSize;
+    private OnTextSize onTextSize;//抽象类监听器
     private TextSizeEnum currentSize;
 
     /**
@@ -24,6 +24,11 @@ public class SetTextSizeDialog extends BaseDialog {
         TYPE_SMALL, TYPE_MEDIUM, TYPE_BIG,
     }
 
+    /**
+     * 构造方法包含show
+     * @param context
+     * @param ts
+     */
     public SetTextSizeDialog(Context context, TextSizeEnum ts) {
         super(context);
 
@@ -76,14 +81,14 @@ public class SetTextSizeDialog extends BaseDialog {
 
     /**
      * 设置大小
-     *
+     * <p>dialog点击事件调用此方法</p>
      * @param ts
      */
     private void setTextSize(TextSizeEnum ts) {
         if (ts != currentSize && null != onTextSize) {
             // 更改字体大小，进行回调
             currentSize = ts;
-            onTextSize.setTextSize(currentSize);
+            onTextSize.setTextSize(currentSize);//监听回调
         }
 
         this.dismiss();

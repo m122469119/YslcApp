@@ -3,11 +3,11 @@
     android:id="@+id/parantView"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+<!--标题栏-->
     <include
         android:id="@+id/toolbar"
         layout="@layout/include_toolbar" />
-
+<!--主内容-->
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
@@ -22,20 +22,20 @@
         android:layout_marginBottom="@dimen/titlebarSize"
         android:layout_marginTop="@dimen/titlebarSize"
         android:background="@drawable/view_shard" />
-
+<!--评论-->
     <include
         android:id="@+id/button"
         layout="@layout/include_comment_input"
         android:layout_width="match_parent"
         android:layout_height="@dimen/titlebarSize"
         android:layout_gravity="bottom" />
-
+<!--加载圈圈-->
     <include
         layout="@layout/include_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/titlebarSize" />
-
+<!--视频相关-->
     <FrameLayout
         android:id="@+id/video_fullView"
         android:layout_width="match_parent"

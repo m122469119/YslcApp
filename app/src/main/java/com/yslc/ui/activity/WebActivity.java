@@ -46,7 +46,7 @@ import com.yslc.view.LoadView.OnTryListener;
 public class WebActivity extends BaseActivity implements OnClickListener,
         OnTextSize, OnTryListener {
     private WebView webView;
-    private FrameLayout video_fullView;
+    private FrameLayout video_fullView;//视频布局
     private View xCustomView;
     private CustomViewCallback xCustomViewCallback;
     private myWebChromeClient xwebchromeclient;
@@ -56,8 +56,8 @@ public class WebActivity extends BaseActivity implements OnClickListener,
     private TextSizeEnum currentTextSize; // 当前字体
     private Button send;
     private EditText contentInput;
-    private MenuItem setTextMenu;
-    private int type = 0;
+    private MenuItem setTextMenu;//字体菜单
+    private int type = 0;//判断新闻或视频
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +67,10 @@ public class WebActivity extends BaseActivity implements OnClickListener,
         findView();
     }
 
+    /**
+     * 设置布局
+     * @return
+     */
     @Override
     protected int getLayoutId() {
         return R.layout.activity_web;
@@ -74,16 +78,19 @@ public class WebActivity extends BaseActivity implements OnClickListener,
 
     /**
      * 初始化页面
+     * <p>webView设置，构建url</p>
+     * <p>加载圈圈、评论框、发送按钮初始化</p>
+     * <p>开始加载网页</p>
      */
     private void findView() {
         type = getIntent().getIntExtra("type", 0);
-        TextView titleTv = (TextView) findViewById(R.id.titleText);
-        webView = (WebView) findViewById(R.id.webView);
+        TextView titleTv = (TextView) findViewById(R.id.titleText);//标题
+        webView = (WebView) findViewById(R.id.webView);//内容
         WebSettings settings = webView.getSettings();
-        settings.setJavaScriptEnabled(true);
-        webView.setWebViewClient(new myWebViewClient());
+        settings.setJavaScriptEnabled(true);//js
+        webView.setWebViewClient(new myWebViewClient());//网页监听
 
-        // Web类型
+        // Web类型（构建url)
         if (type == 0) {
             titleTv.setText(getString(R.string.newDetail));
 
@@ -111,25 +118,31 @@ public class WebActivity extends BaseActivity implements OnClickListener,
             URL = HttpUtil.GET_NEW + "?nid="
                     + getIntent().getStringExtra("nid");
         }
-
+        //评论
         send = (Button) findViewById(R.id.send);
         send.setOnClickListener(this);
-        contentInput = (EditText) findViewById(R.id.content);
+        contentInput = (EditText) findViewById(R.id.content);//评论输入框
+        //加载圈圈
         loadView = (LoadView) findViewById(R.id.view);
         loadView.setOnClickListener(null);
         loadView.setOnTryListener(this);
 
         // 评论输入框字符监听
         inputTextChange();
-
+        //默认字体中
         currentTextSize = TextSizeEnum.TYPE_MEDIUM;
 
         if (loadView.setStatus(LoadView.LOADING)) {
-            webView.loadUrl(URL);
+            webView.loadUrl(URL);//加载网页
         }
 
     }
 
+    /**
+     * 创建设置字体的菜单
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.set_text_size, menu);
@@ -137,11 +150,16 @@ public class WebActivity extends BaseActivity implements OnClickListener,
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * 菜单选择事件
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settextsize) {
-            setTextSize();
+            setTextSize();//打开字体选择对话框
             return true;
         }
 
@@ -180,7 +198,8 @@ public class WebActivity extends BaseActivity implements OnClickListener,
     }
 
     /**
-     * 加载过程监听
+     * 加载过程监听（内部类）
+     * <p>嵌入加载圈圈</p>
      */
     private class myWebViewClient extends WebViewClient {
         @Override
@@ -221,11 +240,20 @@ public class WebActivity extends BaseActivity implements OnClickListener,
 
     }
 
+    /**
+     * 内部类播放视频的时候调用
+     */
     public class myWebChromeClient extends WebChromeClient {
         // 播放网络视频时全屏会被调用的方法
+
+        /**
+         * 显示视频(全屏）
+         * @param view
+         * @param callback
+         */
         @Override
         public void onShowCustomView(View view, CustomViewCallback callback) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//横屏
             webView.setVisibility(View.INVISIBLE);
             // 如果一个视图已经存在，那么立刻终止并新建一个
             if (xCustomView != null) {
@@ -238,12 +266,12 @@ public class WebActivity extends BaseActivity implements OnClickListener,
             video_fullView.setVisibility(View.VISIBLE);
         }
 
-        // 视频播放退出全屏会被调用的
+        // 视频播放退出全屏会被调用的（回来webview)
         @Override
         public void onHideCustomView() {
             if (xCustomView == null)// 不是全屏播放状态
                 return;
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//竖屏
             xCustomView.setVisibility(View.GONE);
             xCustomViewCallback.onCustomViewHidden();
             video_fullView.removeView(xCustomView);
@@ -269,13 +297,19 @@ public class WebActivity extends BaseActivity implements OnClickListener,
         xwebchromeclient.onHideCustomView();
     }
 
+    /**
+     * 重写返回键
+     * @param keyCode
+     * @param event
+     * @return
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (inCustomView()) {
+            if (inCustomView()) {//视频
                 hideCustomView();
                 return true;
-            } else {
+            } else {//网页退出
                 webView.loadUrl("about:blank");
                 onFinishActivity();
                 return true;
@@ -285,6 +319,10 @@ public class WebActivity extends BaseActivity implements OnClickListener,
         return false;
     }
 
+    /**
+     * 评论按钮点击事件
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -307,16 +345,22 @@ public class WebActivity extends BaseActivity implements OnClickListener,
 
     /**
      * 进行字体设置
+     * <p>字体选择对话框设置</p>
      */
     private void setTextSize() {
         if (null == setTextSizeDialog) {
-            setTextSizeDialog = new SetTextSizeDialog(this, currentTextSize);
-            setTextSizeDialog.setOnTextSize(this);
+            setTextSizeDialog = new SetTextSizeDialog(this, currentTextSize);//包含show
+            setTextSizeDialog.setOnTextSize(this);//监听
         } else {
             setTextSizeDialog.show();
         }
     }
 
+    /**
+     * dialog监听事件回调
+     * <p>改变字体大小</p>
+     * @param ts 点击的字体大少
+     */
     @Override
     public void setTextSize(TextSizeEnum ts) {
         if (ts == TextSizeEnum.TYPE_SMALL) {
@@ -377,12 +421,13 @@ public class WebActivity extends BaseActivity implements OnClickListener,
      */
     private void commitComment() {
         showWaitDialogs(R.string.doCommentInfo, true);
-        new NewModelService(this).doNewComment(getIntent().getStringExtra("nid"), contentInput.getText().toString().trim(), new GetDataCallback() {
+        new NewModelService(this).doNewComment(getIntent().getStringExtra("nid"),
+                contentInput.getText().toString().trim(), new GetDataCallback() {
             @Override
             public <T> void success(T data) {
                 hideWaitDialog();
-                contentInput.setText("");
-                ToastUtil.showMessage(WebActivity.this, data.toString());
+                contentInput.setText("");//清空
+                ToastUtil.showMessage(WebActivity.this, data.toString());//评论成功
             }
 
             @Override
@@ -393,6 +438,9 @@ public class WebActivity extends BaseActivity implements OnClickListener,
         });
     }
 
+    /**
+     * 重新加载
+     */
     @Override
     public void onTry() {
         if (loadView.setStatus(LoadView.LOADING)) {
