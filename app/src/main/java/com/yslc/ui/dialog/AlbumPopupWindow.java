@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * 文件夹选择弹出框
- * <p>
+ * <p>选择相册弹出</p>
  * Created by HH on 2015/12/23.
  */
 public class AlbumPopupWindow extends PopupWindow {
@@ -33,10 +33,10 @@ public class AlbumPopupWindow extends PopupWindow {
     private ImageLoader imageLoader;
     private int checkPosition = 0;  //上一次选择的文件夹
 
-    public AlbumPopupWindow(Context context, List<AlbumModel> albunList) {
+    public AlbumPopupWindow(Context context, List<AlbumModel> albumList) {
         super(context);
         this.context = context;
-        this.albunList = albunList;
+        this.albunList = albumList;
         imageLoader = ImageLoader.getInstance();
         View view = View.inflate(context, R.layout.album_popupwindow_listview, null);
         findView(view);

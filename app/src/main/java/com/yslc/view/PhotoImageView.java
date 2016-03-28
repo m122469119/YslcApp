@@ -8,7 +8,7 @@ import android.widget.ImageView;
 
 /**
  * 照片剪切
- *
+ * <p>自定义显示图片控件</p>
  * @author HH
  */
 public class PhotoImageView extends ImageView {

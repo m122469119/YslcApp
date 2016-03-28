@@ -34,18 +34,38 @@ import com.yslc.view.PhotoImageView;
 public class ShowSdImgActivity extends BaseActivity implements OnItemClick {
     private GridView gridView;
     private ImageLoader imageLoader;
-    private List<String> imgPathArray;
+    private List<String> imgPathArray;//图片路径
     private QuickAdapter<String> adapter;
     private AlbumUtil albumService;
-    private AlbumPopupWindow albumDialog;
-    private TextView albunTV;
+    private AlbumPopupWindow albumDialog;//相册选择列表
+    private TextView albumTV;//相册名称
 
+    /**
+     * 设置布局
+     * <p>包含标题栏，图片列表，和选择相册</p>
+     * @return
+     */
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_show_sdimg;
+    }
+
+    @Override
+    protected String getToolbarTitle() {
+        return getString(R.string.chioseImg);
+    }
+
+    /**
+     * 初始化布局
+     * <p>查询图片地址，开始配置适配器</p>
+     */
     @Override
     protected void initView() {
         super.initView();
 
-        albumService = new AlbumUtil(this);
-        albunTV = (TextView) findViewById(R.id.albumTv);
+        albumService = new AlbumUtil(this);//初始化相片工具类
+        albumTV = (TextView) findViewById(R.id.albumTv);
+        //选择相册事件
         findViewById(R.id.linear).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,27 +78,21 @@ public class ShowSdImgActivity extends BaseActivity implements OnItemClick {
                 albumDialog.showDialog(v);
             }
         });
-
+        //图片列表
         gridView = (GridView) findViewById(R.id.gridView);
-        imageLoader = ImageLoader.getInstance();
+        imageLoader = ImageLoader.getInstance();//下载图片工具
 
-        getImgPath();
-        setAdapter();
+        getImgPath();//寻找最近图片
+        setAdapter();//设置Grid适配器
     }
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_show_sdimg;
-    }
-
-    @Override
-    protected String getToolbarTitle() {
-        return getString(R.string.chioseImg);
-    }
-
+    /**
+     * 相册选择事件
+     * @param albumName
+     */
     @Override
     public void onItemClick(String albumName) {
-        albunTV.setText(albumName);
+        albumTV.setText(albumName);
         imgPathArray.clear();
         imgPathArray.add("-1"); //照相机标识
         imgPathArray.addAll(albumService.getAlbum(albumName));
@@ -87,6 +101,7 @@ public class ShowSdImgActivity extends BaseActivity implements OnItemClick {
 
     /**
      * 获取所有照片SD卡路径
+     * <p>最近图片uri</p>
      */
     private void getImgPath() {
         imgPathArray = new ArrayList<>();
@@ -94,15 +109,18 @@ public class ShowSdImgActivity extends BaseActivity implements OnItemClick {
         imgPathArray.add(0, "-1"); //拍照标识
     }
 
+    /**
+     * 为gridView设置适配器
+     */
     private void setAdapter() {
         if (null == adapter) {
-            final DisplayImageOptions option = ViewUtil.getVagueOptions();
+            final DisplayImageOptions option = ViewUtil.getVagueOptions();//模糊图片
             adapter = new QuickAdapter<String>(this,
                     R.layout.controls_sd_image, imgPathArray) {
                 @Override
                 protected void convert(BaseAdapterHelper helper, String item) {
                     PhotoImageView img = helper.getView(R.id.img);
-                    if (item.equals("-1")) {
+                    if (item.equals("-1")) {//第一项拍摄
                         img.setImageDrawable(ContextCompat.getDrawable(
                                 ShowSdImgActivity.this, R.drawable.ic_camera));
                         img.setOnClickListener(new View.OnClickListener() {
@@ -110,20 +128,21 @@ public class ShowSdImgActivity extends BaseActivity implements OnItemClick {
                             public void onClick(View v) {
                                 // 使用相机拍照
                                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                if (null != intent.resolveActivity(ShowSdImgActivity.this.getPackageManager())) {
-                                    Uri imageUri = Uri.fromFile(creatTempPhoto());
+                                if (null != intent.resolveActivity(ShowSdImgActivity.this
+                                        .getPackageManager())) {//判断是否有组件处理此intent
+                                    Uri imageUri = Uri.fromFile(creatTempPhoto());//保存图片的uri
                                     intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                                     startActivityForResult(intent, 100);
                                 }
                             }
                         });
-                    } else {
+                    } else {//显示图片
                         imageLoader.displayImage("file://" + item, img, option);
                         img.setTag(item);
                         img.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                redictedIntent(v.getTag().toString());
+                                redictedIntent(v.getTag().toString());//图片裁剪
                             }
                         });
                     }
@@ -132,7 +151,7 @@ public class ShowSdImgActivity extends BaseActivity implements OnItemClick {
 
             gridView.setAdapter(adapter);
         } else {
-            adapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();//通知更新
         }
 
 

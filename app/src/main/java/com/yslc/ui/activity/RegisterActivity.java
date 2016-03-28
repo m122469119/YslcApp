@@ -23,7 +23,8 @@ import com.yslc.util.ToastUtil;
  *
  * @author HH
  */
-public class RegisterActivity extends BaseActivity implements OnClickListener, TimerUtil.OnTimerCallback {
+public class RegisterActivity extends BaseActivity implements OnClickListener,
+        TimerUtil.OnTimerCallback {
     private EditText inputPhone, inputCode, inputPass1, inputPass2;
     private Button getCode, register;
 
@@ -37,24 +38,32 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, T
         return R.layout.activity_register;
     }
 
+    /**
+     * 设置标题
+     * @return
+     */
     @Override
     protected String getToolbarTitle() {
         return getText(R.string.registers).toString();
     }
 
+    /**
+     * 初始化布局
+     */
     @Override
     protected void initView() {
+        //输入框
         inputPhone = (EditText) findViewById(R.id.inputPhone);
         inputCode = (EditText) findViewById(R.id.inputCode);
         inputPass1 = (EditText) findViewById(R.id.inputPasswordOne);
         inputPass2 = (EditText) findViewById(R.id.inputPasswordTwo);
-
+        //获取验证码按钮
         getCode = (Button) findViewById(R.id.getCode);
-        register = (Button) findViewById(R.id.registerBtn);
+        register = (Button) findViewById(R.id.registerBtn);//注册按钮
         getCode.setOnClickListener(this);
         register.setOnClickListener(this);
         findViewById(R.id.closeKey).setOnClickListener(this);
-        findViewById(R.id.fastLogin).setOnClickListener(this);
+        findViewById(R.id.fastLogin).setOnClickListener(this);//登录按钮
 
         // 输入框文字长度监听
         onTextLengthChange(inputPhone);
@@ -62,13 +71,14 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, T
         onTextLengthChange(inputPass1);
         onTextLengthChange(inputPass2);
 
-        userService = new UserModelService(this);
+        userService = new UserModelService(this);//业务逻辑类
         timerUtil = new TimerUtil(1000);  //倒计时工具，每隔1秒进行回调
         timerUtil.setOnTimerCallback(this);
     }
 
     /**
      * 输入框文字长度监听
+     * <p>四个输入款非空时可以点击注册</p>
      */
     private void onTextLengthChange(EditText input) {
         // 监听号码
@@ -103,7 +113,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, T
                 // 获取手机验证码
                 if (!CommonUtil.checkMobile(CommonUtil.inputFilter(inputPhone))) {
                     ToastUtil.showMessage(this, "请输入正确的手机号码");
-                } else {
+                } else {//格式正确获取验证码
                     getCodeHttp();
                 }
                 break;
@@ -113,8 +123,9 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, T
                 CommonUtil.hiddenSoftInput(this);
 
                 // 注册（需要验证验证码与两次密码填写是否正确）
-                if (userService.isValidationCode(getCodeNum, CommonUtil.inputFilter(inputCode)) && userService.passwordIsTrue(inputPass1, inputPass2)) {
-                    doRegister();
+                if (userService.isValidationCode(getCodeNum, CommonUtil.inputFilter(inputCode))
+                        && userService.passwordIsTrue(inputPass1, inputPass2)) {
+                    doRegister();//开始注册
                 }
                 break;
 
@@ -130,6 +141,9 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, T
         }
     }
 
+    /**
+     * 参考FindPasswordActivity
+     */
     @Override
     public void onTimer() {
         getCode.setText(String.valueOf(lotterTime--));
@@ -188,12 +202,14 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, T
      */
     private void doRegister() {
         showWaitDialogs(R.string.registering, true);
-        userService.userRegister(CommonUtil.inputFilter(inputPhone), Md5Util.getMD5(CommonUtil.inputFilter(inputPass1).getBytes()), new GetDataCallback() {
+        //使用用户名 密码注册
+        userService.userRegister(CommonUtil.inputFilter(inputPhone), Md5Util.
+                getMD5(CommonUtil.inputFilter(inputPass1).getBytes()), new GetDataCallback() {
             @Override
             public <T> void success(T data) {
                 hideWaitDialog();
                 ToastUtil.showMessage(RegisterActivity.this, Constant.REGISTER_SUCCESS);
-                ActivityManager.getInstence().killActivity(LoginActivity.class);
+                ActivityManager.getInstence().killActivity(LoginActivity.class);//结束注册Activity
                 onFinishActivity();
             }
 
@@ -214,4 +230,3 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, T
 
 }
 
-//////////////////////////  15975337560

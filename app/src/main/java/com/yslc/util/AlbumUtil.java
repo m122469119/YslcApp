@@ -50,7 +50,8 @@ public class AlbumUtil {
         if (cursor == null || !cursor.moveToNext())
             return new ArrayList<>();
         cursor.moveToLast();
-        AlbumModel current = new AlbumModel("最近照片", 0, cursor.getString(cursor.getColumnIndex(ImageColumns.DATA)), true); // "最近照片"相册
+        AlbumModel current = new AlbumModel("最近照片", 0, cursor.getString(cursor
+                .getColumnIndex(ImageColumns.DATA)), true); // "最近照片"相册
         albums.add(current);
         do {
             if (cursor.getInt(cursor.getColumnIndex(ImageColumns.SIZE)) < 1024 * 10)

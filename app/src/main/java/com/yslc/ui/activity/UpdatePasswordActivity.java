@@ -32,13 +32,21 @@ public class UpdatePasswordActivity extends BaseActivity implements
         return R.layout.activity_update_password;
     }
 
+    /**
+     * 设置标题
+     * @return
+     */
     @Override
     protected String getToolbarTitle() {
         return getText(R.string.updatePassword).toString();
     }
 
+    /**
+     * 初始化布局
+     */
     @Override
     protected void initView() {
+        //三个输入框和一个确认按钮
         oldPass = (EditText) findViewById(R.id.inputOldPassword);
         onTextLengthChange(oldPass);
         newPass = (EditText) findViewById(R.id.inputPasswordOne);
@@ -48,11 +56,12 @@ public class UpdatePasswordActivity extends BaseActivity implements
         confirm = (Button) findViewById(R.id.confirm);
         confirm.setOnClickListener(this);
         findViewById(R.id.closeKey).setOnClickListener(this);
-        userService = new UserModelService(this);
+        userService = new UserModelService(this);//业务类
     }
 
     /**
      * 输入框文字长度监听
+     * <p>三个输入框非空可以点击确认按钮</p>
      */
     private void onTextLengthChange(EditText input) {
         // 监听号码
@@ -83,7 +92,7 @@ public class UpdatePasswordActivity extends BaseActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.closeKey:
-                // 隐藏软键盘
+                // 隐藏软键盘并返回
                 CommonUtil.hiddenSoftInput(this);
                 break;
 
@@ -103,7 +112,8 @@ public class UpdatePasswordActivity extends BaseActivity implements
     private void updatePass() {
         showWaitDialogs(R.string.updateing, true);
 
-        userService.userUpdatePass(SharedPreferencesUtil.getUserId(this), Md5Util.getMD5(CommonUtil.inputFilter(oldPass).getBytes()),
+        userService.userUpdatePass(SharedPreferencesUtil.getUserId(this), Md5Util
+                        .getMD5(CommonUtil.inputFilter(oldPass).getBytes()),
                 Md5Util.getMD5(CommonUtil.inputFilter(newPass).getBytes()), new GetDataCallback() {
                     @Override
                     public <T> void success(T data) {

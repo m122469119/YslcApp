@@ -10,25 +10,25 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:context="${relativePackage}.${activityClass}">
-
+        <!--标题栏-->
         <include
             android:id="@+id/toolbar"
             layout="@layout/include_toolbar" />
-
+        <!--手机号-->
         <RelativeLayout style="@style/editLinearStyle">
-
+            <!--联系人icon-->
             <ImageView
                 android:id="@+id/img1"
                 style="@style/editLeftImgStyle"
                 android:contentDescription="@null"
                 android:src="@drawable/login_account" />
-
+            <!--分隔线-->
             <View
                 style="@style/line_v_style"
                 android:layout_marginBottom="7dip"
                 android:layout_marginTop="7dip"
                 android:layout_toRightOf="@id/img1" />
-
+            <!--手机号输入框-->
             <EditText
                 android:id="@+id/inputPhone"
                 style="@style/editStyle"
@@ -37,7 +37,7 @@
                 android:hint="@string/inputPhone"
                 android:inputType="phone"
                 android:maxLength="11" />
-
+            <!--获取验证码button-->
             <Button
                 android:id="@+id/getCode"
                 style="@style/btnStyle"
@@ -52,21 +52,21 @@
                 android:text="@string/getCode"
                 android:textSize="14sp" />
         </RelativeLayout>
-
+        <!--验证码-->
         <RelativeLayout style="@style/editLinearStyle">
-
+            <!--验证码icon-->
             <ImageView
                 android:id="@+id/img2"
                 style="@style/editLeftImgStyle"
                 android:contentDescription="@null"
                 android:src="@drawable/icon_code" />
-
+            <!--分隔线-->
             <View
                 style="@style/line_v_style"
                 android:layout_marginBottom="7dip"
                 android:layout_marginTop="7dip"
                 android:layout_toRightOf="@id/img2" />
-
+            <!--验证码输入框-->
             <EditText
                 android:id="@+id/inputCode"
                 style="@style/editStyle"
@@ -75,21 +75,21 @@
                 android:inputType="number"
                 android:maxLength="4" />
         </RelativeLayout>
-
+        <!--输入密码-->
         <RelativeLayout style="@style/editLinearStyle">
-
+            <!--密码icon-->
             <ImageView
                 android:id="@+id/img3"
                 style="@style/editLeftImgStyle"
                 android:contentDescription="@null"
                 android:src="@drawable/login_pass" />
-
+            <!--分隔线-->
             <View
                 style="@style/line_v_style"
                 android:layout_marginBottom="7dip"
                 android:layout_marginTop="7dip"
                 android:layout_toRightOf="@id/img3" />
-
+            <!--密码输入框-->
             <EditText
                 android:id="@+id/inputPasswordOne"
                 style="@style/editStyle"
@@ -98,21 +98,21 @@
                 android:inputType="textPassword"
                 android:maxLength="15" />
         </RelativeLayout>
-
+        <!--确认密码-->
         <RelativeLayout style="@style/editLinearStyle">
-
+            <!--密码icon-->
             <ImageView
                 android:id="@+id/img4"
                 style="@style/editLeftImgStyle"
                 android:contentDescription="@null"
                 android:src="@drawable/login_pass" />
-
+            <!--分隔线-->
             <View
                 style="@style/line_v_style"
                 android:layout_marginBottom="7dip"
                 android:layout_marginTop="7dip"
                 android:layout_toRightOf="@id/img4" />
-
+            <!--密码输入框-->
             <EditText
                 android:id="@+id/inputPasswordTwo"
                 style="@style/editStyle"
@@ -121,13 +121,13 @@
                 android:inputType="textPassword"
                 android:maxLength="15" />
         </RelativeLayout>
-
+        <!--注册按钮-->
         <Button
             android:id="@+id/registerBtn"
             style="@style/btnStyle"
             android:enabled="false"
             android:text="@string/registers" />
-
+        <!--登录按钮-->
         <Button
             android:id="@+id/fastLogin"
             style="@style/btnStyle"

@@ -29,6 +29,12 @@ public class UserModelImpl implements IUserModel {
         this.context = context;
     }
 
+    /**
+     * 登录
+     * @param userName 用户名
+     * @param userPass 密码
+     * @param callback 回调
+     */
     @Override
     public void userLogin(String userName, String userPass, GetDataCallback callback) {
         RequestParams params = new RequestParams();
@@ -65,6 +71,12 @@ public class UserModelImpl implements IUserModel {
                 });
     }
 
+    /**
+     * 用户注册
+     * @param userName 用户名（手机号）
+     * @param userPass 加密密码
+     * @param callback 回调
+     */
     @Override
     public void userRegister(String userName, String userPass, GetDataCallback callback) {
         RequestParams params = new RequestParams();
@@ -102,6 +114,12 @@ public class UserModelImpl implements IUserModel {
                 });
     }
 
+    /**
+     * 获取验证码
+     * @param type     验证码类型
+     * @param phone 手机号
+     * @param callback 回调
+     */
     @Override
     public void getValidationCode(String type, String phone, GetDataCallback callback) {
         RequestParams params = new RequestParams();
@@ -113,7 +131,7 @@ public class UserModelImpl implements IUserModel {
                     @Override
                     public void onFailure(Throwable arg0, String arg1) {
                         super.onFailure(arg0, arg1);
-                        callback.failer("验证码获取失败");
+                        callback.failer("验证码获取失败");//TODO
                     }
 
                     @Override
@@ -121,7 +139,7 @@ public class UserModelImpl implements IUserModel {
                         super.onSuccess(arg0);
 
                         if (arg0.equals(HttpUtil.ERROR_CODE)) {
-                            callback.failer("验证码获取失败");
+                            callback.failer("验证码获取失败");//TODO
                         } else {
                             try {
                                 JSONObject jo = new JSONObject(arg0);
@@ -138,6 +156,13 @@ public class UserModelImpl implements IUserModel {
                 });
     }
 
+    /**
+     * 修改密码
+     * @param userId 用户id
+     * @param oldUserPass 用户原密码
+     * @param newUserPass 用户新密码
+     * @param callback 回调
+     */
     @Override
     public void userUpdatePass(String userId, String oldUserPass, String newUserPass, GetDataCallback callback) {
         RequestParams params = new RequestParams();
@@ -167,6 +192,12 @@ public class UserModelImpl implements IUserModel {
                 });
     }
 
+    /**
+     * 修改密码
+     * @param userName 手机号（用户名）
+     * @param userPass 新密码
+     * @param callback 回调
+     */
     @Override
     public void userForgetPass(String userName, String userPass, GetDataCallback callback) {
         RequestParams params = new RequestParams();
@@ -192,7 +223,7 @@ public class UserModelImpl implements IUserModel {
                                 callback.failer(jo.optString("msg"));
                             } else {
                                 // 密码修改成功
-                                callback.success("密码修改成功");
+                                callback.success("密码修改成功");//TODO
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

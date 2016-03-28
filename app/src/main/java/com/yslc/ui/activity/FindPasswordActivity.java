@@ -27,7 +27,7 @@ public class FindPasswordActivity extends BaseActivity implements
     private EditText inputPhone, inputCode, inputPass1, inputPass2;
     private Button getCode, confirm;
 
-    private String getCodeNum = "-1";
+    private String getCodeNum = "-1";//验证码
     private int lotterTime = 60;
     private UserModelService userService;
     private TimerUtil timerUtil;
@@ -42,15 +42,18 @@ public class FindPasswordActivity extends BaseActivity implements
         return getText(R.string.findPassword).toString();
     }
 
+
     @Override
     protected void initView() {
+        //编辑框
         inputPhone = (EditText) findViewById(R.id.inputPhone);
         inputCode = (EditText) findViewById(R.id.inputCode);
         inputPass1 = (EditText) findViewById(R.id.inputPasswordOne);
         inputPass2 = (EditText) findViewById(R.id.inputPasswordTwo);
-        findViewById(R.id.closeKey).setOnClickListener(this);
-        getCode = (Button) findViewById(R.id.getCode);
-        confirm = (Button) findViewById(R.id.confirm);
+        findViewById(R.id.closeKey).setOnClickListener(this);//返回键
+        getCode = (Button) findViewById(R.id.getCode);//发送验证码按钮
+        confirm = (Button) findViewById(R.id.confirm);//确认修改按钮
+        //监听事件
         getCode.setOnClickListener(this);
         confirm.setOnClickListener(this);
         onTextLengthChange(inputPhone);
@@ -58,13 +61,15 @@ public class FindPasswordActivity extends BaseActivity implements
         onTextLengthChange(inputPass1);
         onTextLengthChange(inputPass2);
 
-        userService = new UserModelService(this);
+        userService = new UserModelService(this);//业务类
+        //计时器（一秒钟执行一次）
         timerUtil = new TimerUtil(1000);
         timerUtil.setOnTimerCallback(this);
     }
 
     /**
      * 输入框文字长度监听
+     * 四个框非空，则可以点击确认修改按钮
      */
     private void onTextLengthChange(EditText input) {
         // 监听号码
@@ -111,13 +116,15 @@ public class FindPasswordActivity extends BaseActivity implements
                 CommonUtil.hiddenSoftInput(this);
 
                 // 确认修改
-                if (userService.isValidationCode(getCodeNum, CommonUtil.inputFilter(inputCode)) && userService.passwordIsTrue(inputPass1, inputPass2)) {
+                //验证码输入正确，并且密码格式正确，则修改
+                if (userService.isValidationCode(getCodeNum, CommonUtil.inputFilter(inputCode))
+                        && userService.passwordIsTrue(inputPass1, inputPass2)) {
                     doUpdate();
                 }
                 break;
 
             case R.id.closeKey:
-                // 隐藏软键盘
+                // 隐藏软键盘，并关闭当前activity
                 CommonUtil.hiddenSoftInput(this);
                 break;
 
@@ -128,7 +135,7 @@ public class FindPasswordActivity extends BaseActivity implements
     public void onTimer() {
         getCode.setText(String.valueOf(--lotterTime));
         if (lotterTime == 0) {
-            timeOut();
+            timeOut();//超时
         }
     }
 
@@ -140,11 +147,14 @@ public class FindPasswordActivity extends BaseActivity implements
         // 倒计时已到，需要重新获取验证码
         getCode.setText(getText(R.string.getCode));
         getCode.setEnabled(true);
-        inputCode.setText("");
+        inputCode.setText("");//清空验证码输入框
         getCodeNum = "-1";
-        timerUtil.stopTimer();
+        timerUtil.stopTimer();//停止计时器
     }
 
+    /**
+     * 开始计时
+     */
     private void getCodeSuccess() {
         lotterTime = 60;
         getCode.setEnabled(false);
@@ -154,17 +164,19 @@ public class FindPasswordActivity extends BaseActivity implements
 
     /**
      * 获取后台手机验证码
+     * <p>成功后开始计时</p>
      */
     private void getCodeHttp() {
         showWaitDialogs(R.string.getCode, true);
 
-        userService.getValidationCode("1", CommonUtil.inputFilter(inputPhone), new GetDataCallback() {
+        userService.getValidationCode("1", CommonUtil.inputFilter(inputPhone),//TODO "1"
+                new GetDataCallback() {
             @Override
             public <T> void success(T data) {
                 hideWaitDialog();
-                ToastUtil.showMessage(FindPasswordActivity.this, "验证码已发送");
+                ToastUtil.showMessage(FindPasswordActivity.this, "验证码已发送");//TODO
                 getCodeNum = data.toString();
-                getCodeSuccess();
+                getCodeSuccess();//计时
             }
 
             @Override
@@ -178,14 +190,17 @@ public class FindPasswordActivity extends BaseActivity implements
 
     /**
      * 进行修改
+     * <p>修改密码</p>
      */
     private void doUpdate() {
         showWaitDialogs(R.string.updateing, true);
 
-        userService.userForgetPass(CommonUtil.inputFilter(inputPhone), Md5Util.getMD5(CommonUtil.inputFilter(inputPass1).getBytes()), new GetDataCallback() {
+        //手机号，加密密码号
+        userService.userForgetPass(CommonUtil.inputFilter(inputPhone), Md5Util
+                .getMD5(CommonUtil.inputFilter(inputPass1).getBytes()), new GetDataCallback() {
             @Override
             public <T> void success(T data) {
-                timeOut();
+                timeOut();//停止计时器
                 hideWaitDialog();
                 ToastUtil.showMessage(FindPasswordActivity.this,
                         data.toString());

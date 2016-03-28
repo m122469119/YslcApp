@@ -74,6 +74,7 @@ public class UserModelService {
     /**
      * 登录成功后...
      * 保存用户基本信息
+     * @param user 用户信息类
      */
     public void saveUserInfo(UserBean user) {
         ToastUtil.showMessage(context, Constant.LOGIN_SUCCESS);
@@ -90,9 +91,9 @@ public class UserModelService {
     /**
      * 用户注册请求
      *
-     * @param userName
-     * @param userPass
-     * @param callback
+     * @param userName 用户名（即手机号）
+     * @param userPass 加密密码
+     * @param callback 回调
      */
     public void userRegister(String userName, String userPass, GetDataCallback callback) {
         userData.userRegister(userName, userPass, new GetDataCallback() {
@@ -101,7 +102,7 @@ public class UserModelService {
                 //注册成功，保存用户基本数据
                 UserBean user = (UserBean) data;
                 user.setUserPhone(userName);
-                saveUserInfo(user);
+                saveUserInfo(user);//保存用户信息
                 callback.success(data);
             }
 
@@ -134,9 +135,9 @@ public class UserModelService {
     /**
      * 获取验证码
      *
-     * @param type
-     * @param phone
-     * @param callback
+     * @param type 请求类型 1 代表找回密码验证码 0代表注册验证码
+     * @param phone 电话号码
+     * @param callback 回调
      */
     public void getValidationCode(String type, String phone, GetDataCallback callback) {
         userData.getValidationCode(type, phone, callback);
@@ -158,10 +159,10 @@ public class UserModelService {
     /**
      * 修改用户密码
      *
-     * @param userId
-     * @param oldUserPass
-     * @param newUserPass
-     * @param callback
+     * @param userId 用户名
+     * @param oldUserPass 旧密码
+     * @param newUserPass 新密码
+     * @param callback 回调
      */
     public void userUpdatePass(String userId, String oldUserPass, String newUserPass, GetDataCallback callback) {
         userData.userUpdatePass(userId, oldUserPass, newUserPass, callback);
@@ -170,9 +171,9 @@ public class UserModelService {
     /**
      * 忘记密码后修改密码
      *
-     * @param userName
-     * @param userPass
-     * @param callback
+     * @param userName 用户名即手机号
+     * @param userPass 加密密码
+     * @param callback 回调
      */
     public void userForgetPass(String userName, String userPass, GetDataCallback callback) {
         userData.userForgetPass(userName, userPass, callback);

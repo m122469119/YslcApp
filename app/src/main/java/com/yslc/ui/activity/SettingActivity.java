@@ -47,13 +47,15 @@ public class SettingActivity extends BaseActivity implements
      */
     private void findView() {
         spfUtil = new SharedPreferencesUtil(this, Constant.SPF_SET_INFO_NAME);
-
+        //推送选项
         CheckBox isPush = (CheckBox) findViewById(R.id.isPush);
         isPush.setOnCheckedChangeListener(this);
         isPush.setChecked(spfUtil.getBoolean(Constant.SPF_IS_PUSH_KEY));
+        //wifi选项
         CheckBox isWifi = (CheckBox) findViewById(R.id.isWifi);
         isWifi.setOnCheckedChangeListener(this);
         isWifi.setChecked(spfUtil.getBoolean(Constant.SPF_IS_WIFI_KEY));
+        //检测版本监听
         findViewById(R.id.checkVersion).setOnClickListener(this);
     }
 
@@ -63,7 +65,7 @@ public class SettingActivity extends BaseActivity implements
             case R.id.isPush:
                 if (isChecked) {
                     spfUtil.setBoolean(Constant.SPF_IS_PUSH_KEY, true);
-                    JPushInterface.resumePush(this);
+                    JPushInterface.resumePush(this);//极光推送
                 } else {
                     spfUtil.setBoolean(Constant.SPF_IS_PUSH_KEY, false);
                     JPushInterface.stopPush(this);

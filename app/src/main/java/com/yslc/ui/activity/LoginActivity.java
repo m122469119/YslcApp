@@ -29,30 +29,47 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
     private ImageView clearUser, clearPass;
     private UserModelService userService;
 
+    /**
+     * 设置布局
+     * @return
+     */
     @Override
     protected int getLayoutId() {
         return R.layout.activity_login;
     }
 
+    /**
+     * 设置标题
+     * @return
+     */
     @Override
     protected String getToolbarTitle() {
         return getString(R.string.login);
     }
 
+    /**
+     * 初始化布局
+     * <p>实例化业务类</p>
+     * <p>关联登录按钮.清框按钮、输入框、返回键等并监听</p>
+     */
     @Override
     protected void initView() {
-        userService = new UserModelService(this);
+        userService = new UserModelService(this);//业务类
+        //登录按钮
         login = (Button) findViewById(R.id.loginBtn);
         login.setOnClickListener(this);
         findViewById(R.id.rememberPass).setOnClickListener(this);
         findViewById(R.id.register).setOnClickListener(this);
-        findViewById(R.id.closeKey).setOnClickListener(this);
+        findViewById(R.id.closeKey).setOnClickListener(this);//监听返回键
+        //清框按钮
         clearUser = (ImageView) findViewById(R.id.clearUser);
         clearUser.setOnClickListener(this);
         clearPass = (ImageView) findViewById(R.id.clearPass);
         clearPass.setOnClickListener(this);
+        //输入框
         inputUser = (EditText) findViewById(R.id.inputUsername);
         inputPass = (EditText) findViewById(R.id.inputPassword);
+        //输入框监听
         inputUser.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
@@ -119,7 +136,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 CommonUtil.hiddenSoftInput(this);
 
                 // 进行登录
-                if (userService.userLoginValidation(inputUser, inputPass)) {
+                if (userService.userLoginValidation(inputUser, inputPass)) {//验证格式
                     doLogin();
                 }
                 break;
@@ -145,15 +162,19 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 break;
 
             case R.id.closeKey:
-                // 隐藏软键盘
-                CommonUtil.hiddenSoftInput(this);
+                // 隐藏软键盘并返回（结束当前Activity)
+                CommonUtil.hiddenSoftInput(this);//TODO 算是bug吧
                 break;
         }
     }
 
+    /**
+     * 登录
+     */
     private void doLogin() {
         showWaitDialogs(R.string.logining, true);
-        userService.userLogin(CommonUtil.inputFilter(inputUser), Md5Util.getMD5(CommonUtil.inputFilter(inputPass).getBytes()), new GetDataCallback() {
+        userService.userLogin(CommonUtil.inputFilter(inputUser), Md5Util
+                .getMD5(CommonUtil.inputFilter(inputPass).getBytes()), new GetDataCallback() {
             @Override
             public <T> void success(T data) {
                 hideWaitDialog();
@@ -164,6 +185,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
             @Override
             public <T> void failer(T data) {
                 hideWaitDialog();
+                //用户名或密码错误
                 ToastUtil.showMessage(LoginActivity.this, data.toString());
             }
         });

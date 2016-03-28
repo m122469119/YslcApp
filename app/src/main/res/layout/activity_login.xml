@@ -8,27 +8,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
+        <!--标题栏-->
         <include
             android:id="@+id/toolbar"
             layout="@layout/include_toolbar" />
-
+        <!--输入手机号-->
         <RelativeLayout
             style="@style/editLinearStyle"
             android:descendantFocusability="afterDescendants">
-
+        <!--手机img-->
             <ImageView
                 android:id="@+id/img1"
                 style="@style/editLeftImgStyle"
                 android:contentDescription="@null"
                 android:src="@drawable/login_account" />
-
+            <!--分隔线-->
             <View
                 style="@style/line_v_style"
                 android:layout_marginBottom="7dip"
                 android:layout_marginTop="7dip"
                 android:layout_toRightOf="@id/img1" />
-
+            <!--手机号输入框-->
             <EditText
                 android:id="@+id/inputUsername"
                 style="@style/editStyle"
@@ -36,7 +36,7 @@
                 android:layout_toRightOf="@id/img1"
                 android:hint="@string/inputPhone"
                 android:maxLength="15" />
-
+            <!--清框按钮-->
             <ImageView
                 android:id="@+id/clearUser"
                 style="@style/editLeftImgStyle"
@@ -45,21 +45,21 @@
                 android:src="@drawable/icon_delete"
                 android:visibility="gone" />
         </RelativeLayout>
-
+        <!--密码-->
         <RelativeLayout style="@style/editLinearStyle">
-
+            <!--密码img-->
             <ImageView
                 android:id="@+id/img2"
                 style="@style/editLeftImgStyle"
                 android:contentDescription="@null"
                 android:src="@drawable/login_pass" />
-
+            <!--分隔线-->
             <View
                 style="@style/line_v_style"
                 android:layout_marginBottom="7dip"
                 android:layout_marginTop="7dip"
                 android:layout_toRightOf="@id/img2" />
-
+            <!--密码输入框-->
             <EditText
                 android:id="@+id/inputPassword"
                 style="@style/editStyle"
@@ -68,7 +68,7 @@
                 android:hint="@string/inputPassword"
                 android:inputType="textPassword"
                 android:maxLength="15" />
-
+            <!--清框按钮-->
             <ImageView
                 android:id="@+id/clearPass"
                 style="@style/editLeftImgStyle"
@@ -77,25 +77,25 @@
                 android:src="@drawable/icon_delete"
                 android:visibility="gone" />
         </RelativeLayout>
-
+        <!--登录按钮-->
         <Button
             android:id="@+id/loginBtn"
             style="@style/btnStyle"
             android:enabled="false"
             android:text="@string/login" />
-
+        <!--其他-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dip">
-
+            <!--忘记密码-->
             <TextView
                 android:id="@+id/rememberPass"
                 style="@style/textStyle"
                 android:padding="10dip"
                 android:text="@string/rememberPass"
                 android:textColor="@color/gray_to_blue" />
-
+            <!--去注册-->
             <TextView
                 android:id="@+id/register"
                 style="@style/textStyle"

@@ -2,11 +2,11 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <!--标题-->
     <include
         android:id="@+id/toolbar"
         layout="@layout/include_toolbar" />
-
+    <!--图片列表-->
     <GridView
         android:id="@+id/gridView"
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
         android:numColumns="3"
         android:padding="1dip"
         android:verticalSpacing="2dip" />
-
+    <!--选择相册-->
     <LinearLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
         android:layout_gravity="bottom"
         android:background="@color/greyTrans2"
         android:padding="15dip">
-
+        <!--相册名称-->
         <TextView
             android:id="@+id/albumTv"
             android:layout_width="wrap_content"
@@ -36,7 +36,7 @@
             android:text="最近照片"
             android:textColor="@color/white"
             android:textSize="16sp" />
-
+        <!--下拉列表选项-->
         <ImageView
             android:layout_width="10dip"
             android:layout_height="10dip"
