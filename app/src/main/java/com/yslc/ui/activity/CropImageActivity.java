@@ -39,13 +39,19 @@ public class CropImageActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        cropImageFrameView = (CropImageFrameView) findViewById(R.id.frameView);
+        cropImageFrameView = (CropImageFrameView) findViewById(R.id.frameView);//放置图片
         imageLoader = ImageLoader.getInstance();
-        imageLoader.displayImage("file://" + getIntent().getStringExtra("path"), (CropImageView) findViewById(R.id.userImg));
+        imageLoader.displayImage("file://" + getIntent().getStringExtra("path"),
+                (CropImageView) findViewById(R.id.userImg));//裁剪框
 
-        userService = new UserModelService(this);
+        userService = new UserModelService(this);//业务类
     }
 
+    /**
+     * 确定menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.show_sd_img, menu);
@@ -57,7 +63,7 @@ public class CropImageActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.upload) {
+        if (id == R.id.upload) {//确定点击事件
             uploadFile(getBitmap());
             return true;
         }
@@ -78,11 +84,13 @@ public class CropImageActivity extends BaseActivity {
 
     /**
      * 上传照片
+     * <p>成功后删除头像缓存</p>
      */
     private void uploadFile(final Bitmap bitmap) {
         showWaitDialogs(Constant.UPLOAD_WAIT, false);
 
-        userService.uploadUserImage(SharedPreferencesUtil.getUserId(this), bitmap, new GetDataCallback() {
+        userService.uploadUserImage(SharedPreferencesUtil.getUserId(this), bitmap,
+                new GetDataCallback() {
             @Override
             public <T> void success(T data) {
                 userService.clearUserImgCache(imageLoader);

@@ -68,6 +68,10 @@ public class AlbumPopupWindow extends PopupWindow {
         });
     }
 
+    /**
+     * 显示相册列表
+     * @param view
+     */
     public void showDialog(View view) {
         setAdapter();
         showAsDropDown(view, 0, 0);

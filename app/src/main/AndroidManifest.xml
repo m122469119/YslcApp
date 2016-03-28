@@ -110,7 +110,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.StockMarketActivity" />
         <activity
-            android:name=".ui.activity.SearchStocyActivity"
+            android:name=".ui.activity.SearchStockActivity"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" />
 
         <!-- *******************************Share SDK 配置************************** -->

@@ -64,18 +64,19 @@ public class ShowSdImgActivity extends BaseActivity implements OnItemClick {
         super.initView();
 
         albumService = new AlbumUtil(this);//初始化相片工具类
-        albumTV = (TextView) findViewById(R.id.albumTv);
+        albumTV = (TextView) findViewById(R.id.albumTv);//相册名字
         //选择相册事件
         findViewById(R.id.linear).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //选择相册
-                if (null == albumDialog) {
-                    albumDialog = new AlbumPopupWindow(ShowSdImgActivity.this, albumService.getAlbums());
+                //弹出选择相册列表
+                if (null == albumDialog) {//初始化
+                    albumDialog = new AlbumPopupWindow(ShowSdImgActivity.this,
+                            albumService.getAlbums());
                     albumDialog.setOnItemClick(ShowSdImgActivity.this);
                 }
 
-                albumDialog.showDialog(v);
+                albumDialog.showDialog(v);//弹出
             }
         });
         //图片列表
@@ -119,9 +120,9 @@ public class ShowSdImgActivity extends BaseActivity implements OnItemClick {
                     R.layout.controls_sd_image, imgPathArray) {
                 @Override
                 protected void convert(BaseAdapterHelper helper, String item) {
-                    PhotoImageView img = helper.getView(R.id.img);
+                    PhotoImageView img = helper.getView(R.id.img);//自定义的imageView
                     if (item.equals("-1")) {//第一项拍摄
-                        img.setImageDrawable(ContextCompat.getDrawable(
+                        img.setImageDrawable(ContextCompat.getDrawable(//设置拍照图片
                                 ShowSdImgActivity.this, R.drawable.ic_camera));
                         img.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -141,8 +142,8 @@ public class ShowSdImgActivity extends BaseActivity implements OnItemClick {
                         img.setTag(item);
                         img.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onClick(View v) {
-                                redictedIntent(v.getTag().toString());//图片裁剪
+                            public void onClick(View v) {//图片选择事件
+                                redictedIntent(v.getTag().toString());//进入图片裁剪页面
                             }
                         });
                     }
@@ -175,12 +176,18 @@ public class ShowSdImgActivity extends BaseActivity implements OnItemClick {
         return FileUtil.getSdCardPath() + Constant.FILES_TEMPIMG;
     }
 
+    /**
+     * 拍照返回处理
+     * @param arg0
+     * @param arg1
+     * @param arg2
+     */
     @Override
     protected void onActivityResult(int arg0, int arg1, Intent arg2) {
         super.onActivityResult(arg0, arg1, arg2);
 
         if (arg0 == 100) {
-            redictedIntent(getPhotoPath());
+            redictedIntent(getPhotoPath());//拍照完成裁剪
         }
     }
 

@@ -232,12 +232,19 @@ public class UserModelImpl implements IUserModel {
                 });
     }
 
+    /**
+     * 上传用户头像
+     * @param userId 用户id
+     * @param bitmap 用户头像
+     * @param callback
+     */
     @Override
     public void uploadUserImage(String userId, Bitmap bitmap, GetDataCallback callback) {
         RequestParams params = new RequestParams();
         params.put("Ui_Id", userId);
         try {
-            params.put("file", FileUtil.inputstreamToFile(FileUtil.crieImage(bitmap), Constant.FILES_USERIMG));
+            params.put("file", FileUtil.inputstreamToFile(FileUtil.crieImage(bitmap),
+                    Constant.FILES_USERIMG));
         } catch (Exception e) {
             callback.failer("IO异常");
             e.printStackTrace();

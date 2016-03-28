@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.yslc.app.Constant;
-import com.yslc.bean.StocyCodeBean;
+import com.yslc.bean.StockCodeBean;
 import com.yslc.data.impl.StockCodeModelImpl;
 import com.yslc.data.inf.IStockCodeModel;
 import com.yslc.db.StocyCodeSQLHandle;
@@ -23,8 +23,8 @@ public class StockCodeModelSerice {
     private Context context;
     private IStockCodeModel stockMarketModel;
     private StocyCodeSQLHandle stocyCodeSQLHandle;
-    private ArrayList<StocyCodeBean> filterCodeList;
-    private ArrayList<StocyCodeBean> codeAllList;
+    private ArrayList<StockCodeBean> filterCodeList;
+    private ArrayList<StockCodeBean> codeAllList;
     private GetDataCallback getDataCallback;
 
     public StockCodeModelSerice(Context context) {
@@ -46,7 +46,7 @@ public class StockCodeModelSerice {
                 @Override
                 public <T> void success(T data) {
                     //强转并插入数据库
-                    intoStocyDB((ArrayList<StocyCodeBean>) data);
+                    intoStocyDB((ArrayList<StockCodeBean>) data);
                 }
 
                 @Override
@@ -60,13 +60,13 @@ public class StockCodeModelSerice {
     /**
      * 获取所有股票代码列表并导入数据库
      *
-     * @param callback
+     * @param callback 回调
      */
     public void intoStockCodeList(GetDataCallback callback) {
         stockMarketModel.getStockCodeList(new GetDataCallback() {
             @Override
             public <T> void success(T data) {
-                intoStocyDB((ArrayList<StocyCodeBean>) data);
+                intoStocyDB((ArrayList<StockCodeBean>) data);
                 callback.success(null);
             }
 
@@ -105,14 +105,14 @@ public class StockCodeModelSerice {
     /**
      * 获取本地所有股票代码
      */
-    public ArrayList<StocyCodeBean> getLocalAllCode() {
+    public ArrayList<StockCodeBean> getLocalAllCode() {
         return stocyCodeSQLHandle.findByAll();
     }
 
     /**
      * 将最新数据导入数据库
      */
-    private void intoStocyDB(ArrayList<StocyCodeBean> list) {
+    private void intoStocyDB(ArrayList<StockCodeBean> list) {
         //股票代码数据较多，导入数据需要开启线程
         if (list.size() > 0) {
             new Thread() {
@@ -151,7 +151,7 @@ public class StockCodeModelSerice {
             }
 
             //模糊匹配关键字
-            for (StocyCodeBean bean : codeAllList) {
+            for (StockCodeBean bean : codeAllList) {
                 if (bean.getStock_Code().contains(params[0]) || bean.getStock_Abbreviation().contains(params[0])) {
                     filterCodeList.add(bean);
                 }

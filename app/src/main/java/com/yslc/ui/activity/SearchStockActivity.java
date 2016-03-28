@@ -20,7 +20,7 @@ import com.yslc.app.ActivityManager;
 import com.yslc.app.Constant;
 import com.yslc.ui.adapter.BaseAdapterHelper;
 import com.yslc.ui.adapter.QuickAdapter;
-import com.yslc.bean.StocyCodeBean;
+import com.yslc.bean.StockCodeBean;
 import com.yslc.util.CommonUtil;
 import com.yslc.util.SharedPreferencesUtil;
 import com.yslc.util.ToastUtil;
@@ -32,49 +32,63 @@ import java.util.ArrayList;
  *
  * @author HH
  */
-public class SearchStocyActivity extends BaseActivity implements GetDataCallback {
+public class SearchStockActivity extends BaseActivity implements GetDataCallback {
     private ListView listView;
     private EditText keyIuput;
     private ImageButton delete;
     private View noData;
-    private QuickAdapter<StocyCodeBean> adapter;
-    private ArrayList<StocyCodeBean> filterCodeList;
+    private QuickAdapter<StockCodeBean> adapter;
+    private ArrayList<StockCodeBean> filterCodeList;
     private StockCodeModelSerice service;
-    private boolean isData;
+    private boolean isData;//判断是否有数据
 
+    /**
+     * 设置布局
+     * @return
+     */
     @Override
     protected int getLayoutId() {
         return R.layout.activity_search_stocy;
     }
 
+    /**
+     * 初始化布局
+     * <p>listView点击事件</p>
+     */
     @Override
     protected void initView() {
-        filterCodeList = new ArrayList<>();
+        filterCodeList = new ArrayList<>();//数据类
+        //listView
         listView = (ListView) findViewById(R.id.listview);
+        //点击颜色
         listView.setSelector(ContextCompat.getDrawable(this, R.drawable.listview_selector));
+        //分隔线
         listView.setDivider(ContextCompat.getDrawable(this, R.drawable.line_dotted));
+        //点击事件
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //隐藏软键盘
-                CommonUtil.hiddenSoftInput(SearchStocyActivity.this);
+                CommonUtil.hiddenSoftInput(SearchStockActivity.this);
                 //清除缓存的股票行情数据
-                new SharedPreferencesUtil(SearchStocyActivity.this, Constant.CACHE_STOCK_DATA_NAME).clearAll();
+                new SharedPreferencesUtil(SearchStockActivity.this, Constant
+                        .CACHE_STOCK_DATA_NAME).clearAll();
                 //结束上一个股市行情Activity
+                //TODO 很煞笔
                 ActivityManager.getInstence().killActivity(StockMarketActivity.class);
                 //进入一个新的股市行情页面
-                Intent intent = new Intent(SearchStocyActivity.this, StockMarketActivity.class);
+                Intent intent = new Intent(SearchStockActivity.this, StockMarketActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("codeBean", filterCodeList.get(position));
                 intent.putExtras(bundle);
-                SearchStocyActivity.this.startActivity(intent);
+                SearchStockActivity.this.startActivity(intent);
                 //结束本Activity
                 onFinishActivity();
             }
         });
 
-        service = new StockCodeModelSerice(this);
-        service.setGetDataCallback(this);
+        service = new StockCodeModelSerice(this);//业务逻辑类
+        service.setGetDataCallback(this);//回调
         noData = findViewById(R.id.noData);
         isData = service.isData();
         noData.setVisibility(isData ? View.GONE : View.VISIBLE);
@@ -85,7 +99,7 @@ public class SearchStocyActivity extends BaseActivity implements GetDataCallback
                 initData();
             }
         });
-
+        //返回事件
         findViewById(R.id.rollback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +107,7 @@ public class SearchStocyActivity extends BaseActivity implements GetDataCallback
             }
         });
 
+        //清框按钮点击事件
         delete = (ImageButton) findViewById(R.id.delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +116,7 @@ public class SearchStocyActivity extends BaseActivity implements GetDataCallback
                 delete.setVisibility(View.GONE);
             }
         });
-
+        //搜索输入框
         keyIuput = (EditText) findViewById(R.id.keyInput);
         keyIuput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -119,7 +134,7 @@ public class SearchStocyActivity extends BaseActivity implements GetDataCallback
                 if (isData) {
                     service.setFilter(keyIuput.getText().toString());
                 }
-
+                //清框按钮
                 if (keyIuput.getText().toString().trim().length() < 1) {
                     delete.setVisibility(View.GONE);
                 } else {
@@ -128,9 +143,9 @@ public class SearchStocyActivity extends BaseActivity implements GetDataCallback
             }
         });
 
-        service.setFilter("");
+        service.setFilter("");//加载所有数据
     }
-
+    //--------GetDataCallback接口（成功返回过滤数据）------
     @Override
     public <T> void success(T data) {
         filterCodeList.clear();
@@ -143,12 +158,13 @@ public class SearchStocyActivity extends BaseActivity implements GetDataCallback
     public <T> void failer(T data) {
 
     }
-
+    //--------GetDataCallback接口结束-------
     private void setAdapter() {
         if (null == adapter) {
-            adapter = new QuickAdapter<StocyCodeBean>(this, R.layout.item_search_stocy_listview, filterCodeList) {
+            adapter = new QuickAdapter<StockCodeBean>(this, R.layout.item_search_stocy_listview,
+                    filterCodeList) {
                 @Override
-                protected void convert(BaseAdapterHelper helper, StocyCodeBean item) {
+                protected void convert(BaseAdapterHelper helper, StockCodeBean item) {
                     helper.setText(R.id.stocyCode, item.getStock_Code());
                     helper.setText(R.id.stocyName, item.getStock_Name());
                     helper.setText(R.id.stocyLetter, item.getStock_Abbreviation());
@@ -169,14 +185,14 @@ public class SearchStocyActivity extends BaseActivity implements GetDataCallback
             @Override
             public <T> void success(T data) {
                 hideWaitDialog();
-                ToastUtil.showMessage(SearchStocyActivity.this, "导入成功");
+                ToastUtil.showMessage(SearchStockActivity.this, "导入成功");
                 service.setFilter("");
             }
 
             @Override
             public <T> void failer(T data) {
                 hideWaitDialog();
-                ToastUtil.showMessage(SearchStocyActivity.this, "导入失败");
+                ToastUtil.showMessage(SearchStockActivity.this, "导入失败");
             }
         });
     }

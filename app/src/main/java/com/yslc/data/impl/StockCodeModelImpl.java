@@ -1,15 +1,12 @@
 package com.yslc.data.impl;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.yslc.bean.StocyCodeBean;
+import com.yslc.bean.StockCodeBean;
 import com.yslc.data.inf.IStockCodeModel;
 import com.yslc.inf.GetDataCallback;
 import com.yslc.util.HttpUtil;
-import com.yslc.util.LogUtil;
-import com.yslc.util.ToastUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,11 +45,11 @@ public class StockCodeModelImpl implements IStockCodeModel {
                     }
                     //解析数据
                     JSONArray ja = arg0.getJSONArray("stock");
-                    ArrayList<StocyCodeBean> list = new ArrayList<>(ja.length());
-                    StocyCodeBean bean;
+                    ArrayList<StockCodeBean> list = new ArrayList<>(ja.length());
+                    StockCodeBean bean;
                     JSONObject jo;
                     for (int i = 0, len = ja.length(); i < len; i++) {
-                        bean = new StocyCodeBean();
+                        bean = new StockCodeBean();
                         jo = ja.getJSONObject(i);
                         bean.setStock_Code(jo.optString("Stock_Code"));
                         bean.setStock_Name(jo.optString("Stock_Name"));

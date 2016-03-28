@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="12dip">
-
+    <!--股票代码-->
     <TextView
         android:id="@+id/stocyCode"
         style="@style/listViewTextStyle"
@@ -11,7 +11,7 @@
         android:layout_marginRight="12dip"
         android:layout_weight="1"
         android:gravity="center_horizontal" />
-
+    <!--股票名字-->
     <TextView
         android:id="@+id/stocyName"
         style="@style/listViewTextStyle"

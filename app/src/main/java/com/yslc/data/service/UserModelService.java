@@ -182,14 +182,14 @@ public class UserModelService {
     /**
      * 上传用户头像
      *
-     * @param userId
-     * @param bitmap
+     * @param userId 用户id
+     * @param bitmap 用户头像
      * @param callback
      */
     public void uploadUserImage(String userId, Bitmap bitmap, GetDataCallback callback) {
         userData.uploadUserImage(userId, bitmap, new GetDataCallback() {
             @Override
-            public <T> void success(T data) {
+            public <T> void success(T data) {//data为服务器返回图片地址
                 //保存用户头像
                 SharedPreferencesUtil share = new SharedPreferencesUtil(context, Constant.SPF_USER_INFO_NAME);
                 share.setString(Constant.SPF_USER_IMGURL_KEY, data.toString());

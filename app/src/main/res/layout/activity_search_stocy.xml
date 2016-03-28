@@ -2,27 +2,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
-
+    <!--标题栏-->
     <RelativeLayout
         android:id="@+id/top"
         android:layout_width="match_parent"
         android:layout_height="@dimen/titlebarSize"
         android:background="@color/titleBg">
-
+        <!--返回Button-->
         <ImageButton
             android:id="@+id/rollback"
             android:layout_width="@dimen/titlebarSize"
             android:layout_height="@dimen/titlebarSize"
             android:background="@null"
             android:src="@drawable/rollback" />
-
+        <!--搜索icon-->
         <ImageButton
             android:layout_width="@dimen/titlebarSize"
             android:layout_height="@dimen/titlebarSize"
             android:layout_toRightOf="@id/rollback"
             android:background="@null"
             android:src="@drawable/icon_search" />
-
+        <!--搜索框-->
         <EditText
             android:id="@+id/keyInput"
             android:layout_width="match_parent"
@@ -38,7 +38,7 @@
             android:textColor="@color/white"
             android:textColorHint="#afffffff"
             android:textSize="16sp" />
-
+        <!--清框按钮-->
         <ImageButton
             android:id="@+id/delete"
             android:layout_width="@dimen/titlebarSize"
@@ -47,7 +47,7 @@
             android:background="@null"
             android:src="@drawable/icon_deletes"
             android:visibility="gone" />
-
+        <!--搜索下划线-->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dip"
@@ -56,13 +56,13 @@
             android:layout_toRightOf="@id/rollback"
             android:background="@color/white" />
     </RelativeLayout>
-
+    <!--搜索列表-->
     <include
         layout="@layout/album_popupwindow_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/titlebarSize" />
-
+    <!--错误提示-->
     <TextView
         android:id="@+id/noData"
         style="@style/textStyle"

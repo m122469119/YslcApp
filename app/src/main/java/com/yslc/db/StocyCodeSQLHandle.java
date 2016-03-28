@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.yslc.bean.StocyCodeBean;
+import com.yslc.bean.StockCodeBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,14 +45,14 @@ public class StocyCodeSQLHandle {
      * <p>开启事务删除所有数据，再插入list列表的数据到本地数据库</p>
      * @param list:列表
      */
-    public void insertAll(List<StocyCodeBean> list) {
+    public void insertAll(List<StockCodeBean> list) {
         //开启事务
         db.beginTransaction();
 
         //删除所有数据
         deleteAll();
 
-        for (StocyCodeBean bean : list) {
+        for (StockCodeBean bean : list) {
             insertSingle(bean);
         }
 
@@ -66,12 +66,12 @@ public class StocyCodeSQLHandle {
      * @return list
      */
 
-    public ArrayList<StocyCodeBean> findByAll() {
+    public ArrayList<StockCodeBean> findByAll() {
         Cursor cursor = db.rawQuery(FIND_ALL_BY_KEY, null);
-        ArrayList<StocyCodeBean> list = new ArrayList<>();
-        StocyCodeBean bean;
+        ArrayList<StockCodeBean> list = new ArrayList<>();
+        StockCodeBean bean;
         while (cursor.moveToNext()) {
-            bean = new StocyCodeBean();
+            bean = new StockCodeBean();
             bean.setStock_Code(cursor.getString(0));
             bean.setStock_Name(cursor.getString(1));
             bean.setStock_Abbreviation(cursor.getString(2));
@@ -87,7 +87,7 @@ public class StocyCodeSQLHandle {
      *
      * @param bean：股票代码bean
      */
-    public void insertSingle(StocyCodeBean bean) {
+    public void insertSingle(StockCodeBean bean) {
         db.execSQL(ADD, new String[]{bean.getStock_Code(), bean.getStock_Name(), bean.getStock_Abbreviation()});
     }
 

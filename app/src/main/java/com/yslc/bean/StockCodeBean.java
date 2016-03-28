@@ -7,15 +7,15 @@ import java.io.Serializable;
  * <p>
  * Created by HH on 2016/1/6.
  */
-public class StocyCodeBean implements Serializable {
+public class StockCodeBean implements Serializable {
     private String Stock_Code;
     private String Stock_Name;
     private String Stock_Abbreviation;
 
-    public StocyCodeBean() {
+    public StockCodeBean() {
     }
 
-    public StocyCodeBean(String Stock_Code, String Stock_Name) {
+    public StockCodeBean(String Stock_Code, String Stock_Name) {
         this.Stock_Code = Stock_Code;
         this.Stock_Name = Stock_Name;
     }
