@@ -196,8 +196,10 @@ public class StocyKView extends StocyBaseView {
         for (SingleStockInfo info : infos) {
             cLeft += per16;
             x0 = cLeft + per26;
-            if ((x0 - (per16 + per26) / 2 < x && x < x0) || (x > x0 && x < x0 + ((per56 + per26) / 2))) {
-                return new float[]{x0, (float) (kChartTopTemp + (highPrice - info.getClose()) * heightScale), infos.indexOf(info)};
+            if ((x0 - (per16 + per26) / 2 < x && x < x0) || (x > x0 && x < x0
+                    + ((per56 + per26) / 2))) {
+                return new float[]{x0, (float) (kChartTopTemp +
+                        (highPrice - info.getClose()) * heightScale), infos.indexOf(info)};
             }
             cLeft += per56;
         }

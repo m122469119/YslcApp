@@ -13,7 +13,7 @@ import com.yslc.bean.StocksDetail;
 import com.yslc.util.KChartUtil;
 
 /**
- * 分时图买卖详情
+ * 分时图买卖详情对话框
  *
  * @author HH
  */

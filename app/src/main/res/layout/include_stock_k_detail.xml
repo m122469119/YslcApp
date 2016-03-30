@@ -13,14 +13,14 @@
         android:layout_weight="1"
         android:gravity="center_horizontal"
         android:orientation="vertical">
-
+        <!--股票时间-->
         <TextView
             android:id="@+id/stocyTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="----"
             android:textSize="15sp" />
-
+        <!--股价-->
         <TextView
             android:id="@+id/stocyPrice"
             android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
             android:text="0.00"
             android:textColor="#00ff00"
             android:textSize="20sp" />
-
+        <!--涨幅-->
         <TextView
             android:id="@+id/stocyGains"
             android:layout_width="wrap_content"
@@ -55,7 +55,7 @@
                 android:text="开盘:"
                 android:textColor="@color/textColor54"
                 android:textSize="15sp" />
-
+            <!--开盘价-->
             <TextView
                 android:id="@+id/stocyOpen"
                 android:layout_width="wrap_content"
@@ -76,7 +76,7 @@
                 android:text="最高:"
                 android:textColor="@color/textColor54"
                 android:textSize="15sp" />
-
+            <!--最高价-->
             <TextView
                 android:id="@+id/stocyHeight"
                 android:layout_width="wrap_content"
@@ -95,7 +95,7 @@
                 android:text="最底:"
                 android:textColor="@color/textColor54"
                 android:textSize="15sp" />
-
+            <!--最低价-->
             <TextView
                 android:id="@+id/stocyLow"
                 android:layout_width="wrap_content"
@@ -112,7 +112,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
-
+        <!--5日均线-->
         <TextView
             android:id="@+id/stocyM5"
             android:layout_width="wrap_content"
@@ -120,7 +120,7 @@
             android:text="M5:  ---"
             android:textColor="@color/stocyM5"
             android:textSize="15sp" />
-
+        <!--10日均线-->
         <TextView
             android:id="@+id/stocyM10"
             android:layout_width="wrap_content"
@@ -130,7 +130,7 @@
             android:text="M10:---"
             android:textColor="@color/stocyM10"
             android:textSize="15sp" />
-
+        <!--20日均线-->
         <TextView
             android:id="@+id/stocyM20"
             android:layout_width="wrap_content"

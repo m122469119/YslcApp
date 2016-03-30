@@ -2,17 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <!--k线汇总信息-->
     <include
         android:id="@+id/top"
         layout="@layout/include_stock_k_detail" />
-
+    <!--自定义k线控件-->
     <com.yslc.view.StocyKView
         android:id="@+id/stocyKView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/top" />
-
+    <!--自定义手势控件-->
     <com.yslc.view.CrossView
         android:id="@+id/crossView"
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
         android:layout_marginRight="8dip"
         android:gravity="right"
         android:padding="4dip">
-
+        <!--总手-->
         <TextView
             android:id="@+id/stocyTotal"
             android:layout_width="wrap_content"
@@ -34,7 +34,7 @@
             android:text="总量(万手):---"
             android:textColor="@color/red"
             android:textSize="15sp" />
-
+        <!--5日均线-->
         <TextView
             android:id="@+id/stocyTotalMD5"
             android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
             android:text="MD5:---"
             android:textColor="@color/stocyM5"
             android:textSize="15sp" />
-
+        <!--10日均线-->
         <TextView
             android:id="@+id/stocyTotalMD10"
             android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
             android:textColor="@color/stocyM10"
             android:textSize="15sp" />
     </LinearLayout>
-
+    <!--日k图按钮-->
     <Button
         android:id="@+id/kLineTypeBtn"
         android:layout_width="@dimen/stocyKTypeBtnRadus"
@@ -65,7 +65,7 @@
         android:gravity="center"
         android:text="日K图"
         android:textColor="@color/white" />
-    
+    <!--加载圈圈-->
     <include layout="@layout/include_loading" />
 
 </RelativeLayout>

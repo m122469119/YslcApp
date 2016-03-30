@@ -43,14 +43,16 @@ public class StockService {
      *
      * @param isRefresh:是否计时刷新，及时刷新需要访问最新数据
      * @param symbol:股票代码
-     * @param datalen:数据长度
+     * @param datalen:每次获取多少条数据
+     * @param callBack 回调函数
      */
     public void getMinuteKchart(boolean isRefresh, String symbol, String datalen, IGetStockDataCallBack callBack) {
-        if (!isRefresh) {
-            //是否有缓存数据
-            String cacheData = getCacheData(Constant.CACHE_STOCK_MIN_KEY);
-            if (cacheData.length() > 0) {
-                StocksDetail d = parseDetail(cacheData);
+        //不是定时刷新则优先使用缓存数据
+        if (!isRefresh) {//不是定时器的刷新
+            //是否有分时缓存数据
+            String cacheData = getCacheData(Constant.CACHE_STOCK_MIN_KEY);//缓存数据
+            if (cacheData.length() > 0) {//缓存数据＞0
+                StocksDetail d = parseDetail(cacheData);//解析数据
                 callBack.success(parseHourJson(cacheData, d.getClose()), d.getClose());
                 callBack.successDetail(d);
                 return;
@@ -59,8 +61,8 @@ public class StockService {
 
 
         RequestParams params = new RequestParams();
-        params.put("symbol", symbol);
-        params.put("datalen", datalen);
+        params.put("symbol", symbol);//股票代码
+        params.put("datalen", datalen);//数据长度
         params.put("p", HttpUtil.P);
         HttpUtil.post(HttpUtil.GET_STOCY_H_DATA, context, params, new AsyncHttpResponseHandler() {
             @Override
@@ -120,6 +122,7 @@ public class StockService {
 
     /**
      * 解析分时详情
+     * @param s json数据
      */
     private StocksDetail parseDetail(String s) {
         StocksDetail bean = new StocksDetail();
@@ -174,10 +177,11 @@ public class StockService {
      * @param klinetype:K线图类型(0:五分钟K线，1:15分钟K线， 2:30分钟K线， 3:60分钟K线，4:日K线，5:周线，6:月线)
      * @param datalen:每次获取多少条数据
      */
-    public void getKchartInfo(boolean isRefresh, String symbol, String klinetype, String datalen, IGetStockDataCallBack callBack) {
+    public void getKchartInfo(boolean isRefresh, String symbol, String klinetype, String datalen,
+                              IGetStockDataCallBack callBack) {
         //是否有缓存数据
-        if (!isRefresh) {
-            //获取对应的K线缓存数据
+        if (!isRefresh) {//不是定时器更新
+            //获取对应的K线缓存数据（有缓存数据优先使用）
             String cacheData = getCacheData(Constant.CACHE_STOCK_K_KEY + klinetype);
             if (cacheData.length() > 0) {
                 callBack.success(priseKchatJson(cacheData), -1);
