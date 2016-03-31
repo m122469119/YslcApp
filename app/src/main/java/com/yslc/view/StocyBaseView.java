@@ -35,26 +35,30 @@ public abstract class StocyBaseView extends SurfaceView implements
     protected float textHeight;
     public boolean isCreat = false;
 
+    /**
+     * 初始化
+     * <p>surfaceHolder设置</p>
+     * <p>初始化两个画笔</p>
+     */
     public void init() {
-        mSurfaceHolder = getHolder();
-        mSurfaceHolder.addCallback(this);
+        mSurfaceHolder = getHolder();//初始化SurfaceHolder
+        mSurfaceHolder.addCallback(this);//添加回调
 
         //线条画笔
         LineGrayPaint = new Paint();
-        LineGrayPaint.setColor(Color.GRAY);
-        LineGrayPaint.setAntiAlias(true);
-        LineGrayPaint.setStrokeWidth(1);
-        LineGrayPaint.setStyle(Style.STROKE);
+        LineGrayPaint.setColor(Color.GRAY);//灰色
+        LineGrayPaint.setAntiAlias(true);//去齿
+        LineGrayPaint.setStrokeWidth(1);//笔宽
+        LineGrayPaint.setStyle(Style.STROKE);//空心画笔
 
         //文本画笔
         textGrayPaint = new Paint();
         textGrayPaint.setColor(Color.GRAY);
         textGrayPaint.setAntiAlias(true);
         textGrayPaint.setTextSize(TEXT_SIZE);
-
         //计算文本高
         Paint.FontMetrics fm = textGrayPaint.getFontMetrics();
-        textHeight = (fm.bottom - fm.top) / 2;
+        textHeight = (fm.bottom - fm.top) / 2;//文字2分之一的高度
     }
 
     /**
@@ -66,18 +70,21 @@ public abstract class StocyBaseView extends SurfaceView implements
      * @param bottom：K线图（分时图）下
      */
     public void initBorder(int left, int top, int right, int bottom) {
-        KChartbottom = bottom / 3 * 2 - 25;
+        KChartbottom = bottom / 3 * 2 - 25;//k线图底部（三分之二-25）
         this.right = right;
         this.left = left;
-        this.kChartTop = top;
-        pillarsChartTop = KChartbottom + 65;
-        pillarsChartbottom = bottom;
-        totalWidth = right - left;
+        this.kChartTop = top;//k线图顶部
+        pillarsChartTop = KChartbottom + 65;//柱状图顶部（k线图和柱状图隔了65来放数据）
+        pillarsChartbottom = bottom;//柱状图底部
+        totalWidth = right - left;//总宽度
         perWidth = totalWidth / NUM;
     }
 
     /**
      * 画背景
+     * <p>根据长宽画白色背景图</p>
+     * @param h 高
+     * @param w 宽
      */
     private void drawBackgroud(int w, int h) {
         Paint paint = new Paint();
@@ -117,16 +124,20 @@ public abstract class StocyBaseView extends SurfaceView implements
      */
     protected abstract void drawHoursChart();
 
+    /**
+     * runnable接口
+     * <p>根据flag来重划分时图或k线图</p>
+     */
     @Override
     public void run() {
         try {
             int flag = mFlag;
-            drawBackgroud(getWidth(), getHeight());
+            drawBackgroud(getWidth(), getHeight());//画背景
             drawKChatBackGround(); // 背景图
-            if (flag == DRAW_MIN_TYPE) {
+            if (flag == DRAW_MIN_TYPE) {//分时图
                 // 分时
                 drawHoursChart();
-            } else if (flag == DRAW_K_TYPE) {
+            } else if (flag == DRAW_K_TYPE) {//k线图
                 // 均线
                 drawMAChart();
                 // k线
@@ -147,7 +158,7 @@ public abstract class StocyBaseView extends SurfaceView implements
 
     /**
      * 开始绘制图像
-     *
+     * <p>运行线程绘制</p>
      * @param flag：绘制图像的类型（分时，还是X线）
      */
     public synchronized void drawChartType(int flag) {
@@ -155,29 +166,47 @@ public abstract class StocyBaseView extends SurfaceView implements
         new Thread(this).run();
     }
 
+    //--------------三个构造函数------------------
+    //xml创建调用且指定style
     public StocyBaseView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
+        init();//初始化
     }
-
+    //xml创建调用
     public StocyBaseView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
-
+    //java代码创建调用
     public StocyBaseView(Context context) {
         this(context, null, 0);
     }
 
+    //--------------一下是surface.callback回调方法-----------------
+    /**
+     * 更新改变时调用
+     * @param holder
+     * @param format
+     * @param width
+     * @param height
+     */
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
                                int height) {
     }
 
+    /**
+     * surface随window创建调用此方法
+     * @param holder
+     */
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         isCreat = true;
     }
 
+    /**
+     * surface随window消亡调用此方法
+     * @param holder
+     */
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         isCreat = false;

@@ -35,17 +35,20 @@ public class StocyMinutesView extends StocyBaseView {
     private PathEffect effects;
     private double heightScale;
 
+    /**
+     * 绘制k线图，分时图的基本布局
+     */
     @Override
     protected void drawKChatBackGround() {
-        LineGrayPaint.setPathEffect(effects);
+        LineGrayPaint.setPathEffect(effects);//线段类型（虚线，实现，散离等）
         // 画上面的虚线
         Path path = new Path();
         int y = kChartTop;
-        path.moveTo(left, y);
-        path.lineTo(right, y);
-        String text = getPriceText(highPrice);
-        mCanvas.drawText(text, left, y + textHeight * 2, textGrayPaint);
-        double max = highPrice - lowPrice;
+        path.moveTo(left, y);//左上角
+        path.lineTo(right, y);//右上角
+        String text = getPriceText(highPrice);//最高价
+        mCanvas.drawText(text, left, y + textHeight * 2, textGrayPaint);//画最高价
+        double max = highPrice - lowPrice;//最大差价
         if (max > 10) {
             // 分成四等分,画中间的三根虚线
             int n = 4;
