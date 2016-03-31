@@ -107,6 +107,7 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
         findViewById(R.id.interactives).setOnClickListener(this);
         findViewById(R.id.stockMarket).setOnClickListener(this);
         findViewById(R.id.radio).setOnClickListener(this);
+        findViewById(R.id.fast_info).setOnClickListener(this);
         //点击事件
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle
                 (this, drawer, (Toolbar) findViewById(R.id.toolbar), R.string.empty, R.string.empty) {
@@ -160,6 +161,10 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
                 startActivity(new Intent(this, StockMarketActivity.class));
                 break;
 
+            case R.id.fast_info:
+                //闪电情报
+                startActivity(new Intent(this, FastInfoActivity.class));
+                break;
             case R.id.radio:
                 // 支付模块，预留
                 ToastUtil.showMessage(this, "支付");

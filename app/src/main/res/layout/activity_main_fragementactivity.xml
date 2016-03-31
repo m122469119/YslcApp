@@ -91,6 +91,12 @@
                 android:text="@string/stockMarket" />
 
             <RadioButton
+                android:id="@+id/fast_info"
+                style="@style/slidingText.slidingLeftBtn"
+                android:drawableLeft="@drawable/sliding_pay"
+                android:text="@string/fast_info" />
+
+            <RadioButton
                 android:id="@+id/radio"
                 style="@style/slidingText.slidingLeftBtn"
                 android:drawableLeft="@drawable/sliding_pay"

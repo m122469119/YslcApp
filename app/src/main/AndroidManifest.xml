@@ -90,6 +90,10 @@
         <activity
             android:name=".ui.activity.RadioPlayerActivity"
             android:screenOrientation="portrait" />
+        <!--闪电情报-->
+        <activity
+            android:name=".ui.activity.FastInfoActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.RadioReliveActivity"
             android:screenOrientation="portrait" />
