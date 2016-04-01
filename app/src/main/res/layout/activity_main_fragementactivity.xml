@@ -93,7 +93,7 @@
             <RadioButton
                 android:id="@+id/fast_info"
                 style="@style/slidingText.slidingLeftBtn"
-                android:drawableLeft="@drawable/sliding_pay"
+                android:drawableLeft="@drawable/fast_info_icon"
                 android:text="@string/fast_info" />
 
             <RadioButton

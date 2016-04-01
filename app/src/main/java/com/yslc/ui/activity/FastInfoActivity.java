@@ -1,5 +1,7 @@
 package com.yslc.ui.activity;
 
+import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -7,7 +9,6 @@ import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yslc.R;
 import com.yslc.bean.FastInfoBean;
 import com.yslc.data.service.StarModelService;
@@ -27,18 +28,16 @@ import java.util.ArrayList;
 
 /**
  * Created by Administrator on 2016/3/31.
- * TODO 下拉刷新，加载更多，点击事件
+ *
  */
 public class FastInfoActivity extends BaseActivity implements LoadView.OnTryListener{
-    private ImageLoader imageLoader;
     private BaseListView listView;
     private QuickAdapter<FastInfoBean> adapter;
-    private ImageView starImg;
-    private TextView starName;
     private int pagerIndex;
     private LoadView loadView;
     private ArrayList<FastInfoBean> dataList;//数据
-    private StarModelService starModelService;
+    private static final int DATA_COUNT = 10;//每次下载10条数据用于加载更多
+    private SwipeRefreshLayout refreshLayout;
 
     @Override
     protected int getLayoutId() {
@@ -59,23 +58,46 @@ public class FastInfoActivity extends BaseActivity implements LoadView.OnTryList
     protected void initView() {
         dataList = new ArrayList<>();
         listView =(BaseListView)findViewById(R.id.listview);
+        listView.setOnItemClickListener(listener);
+        listView.setRefreshLength(DATA_COUNT);//每次有10条数据（不能删）
+        listView.setOnLoadMoreListener(loadMoreListener);
+        //加载圈圈
         loadView = (LoadView)findViewById(R.id.view);
         loadView.setOnTryListener(this);
-        listView.setOnItemClickListener(listener);
-        listView.setOnLoadMoreListener(loadMoreListener);
-        getData(pagerIndex=1);
+        //下拉刷新
+        refreshLayout = (SwipeRefreshLayout)findViewById(R.id.refreshable_view);
+        refreshLayout.setColorSchemeResources(R.color.refreshViewColor1,
+                R.color.refreshViewColor2,R.color.refreshViewColor3);
+        refreshLayout.setOnRefreshListener(refreshListener);//下拉监听
+        getData(pagerIndex = 1);
     }
 
+    /**
+     * 下拉刷新
+     */
+    SwipeRefreshLayout.OnRefreshListener refreshListener = new SwipeRefreshLayout
+            .OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            getData(pagerIndex=1);
+        }
+    };
     /**
      * listView点击事件
      */
     AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            ToastUtil.showMessage(FastInfoActivity.this, "点击事件");
+            Intent intent = new Intent(FastInfoActivity.this, FastInfoDetailActivity.class);
+            intent.putExtra("date", dataList.get(position).getDate());
+            intent.putExtra("content", dataList.get(position).getContent());
+            startActivity(intent);
         }
     };
-    //加载更多时间
+
+    /**
+     * 加载更多事件
+     */
     BaseListView.OnLoadMoreListener loadMoreListener = new BaseListView.OnLoadMoreListener() {
         @Override
         public void onLoadMore() {
@@ -95,23 +117,31 @@ public class FastInfoActivity extends BaseActivity implements LoadView.OnTryList
                     public void onSuccess(JSONObject jsonObject) {
                         super.onSuccess(jsonObject);
                         loadView.setStatus(LoadView.SUCCESS);
+                        refreshLayout.setRefreshing(false);
+                        listView.onFinishLoad();
                         if(pageIndex!=1){//加载更多
                             dataList.addAll(parseData(jsonObject));
-                        }else {
-                            dataList = parseData(jsonObject);
+                        }else {//第一次进来和下拉刷新
+                            dataList.clear();
+                            dataList.addAll(parseData(jsonObject));
                         }
-                        showView(dataList);
+                        showView(dataList);//十条数据
                     }
 
                     @Override
                     public void onFailure(Throwable throwable, JSONObject jsonObject) {
                         super.onFailure(throwable, jsonObject);
                         loadView.setStatus(LoadView.ERROR);
+                        refreshLayout.setRefreshing(false);
                         listView.onFinishLoad();
                     }
                 });
     }
 
+    /**
+     * 配置适配器并显示
+     * @param dataList
+     */
     private void showView(ArrayList<FastInfoBean> dataList) {
         if(null != adapter) {
             adapter.notifyDataSetChanged();
@@ -128,6 +158,11 @@ public class FastInfoActivity extends BaseActivity implements LoadView.OnTryList
         }
     }
 
+    /**
+     * 解析数据
+     * @param jsonObject
+     * @return
+     */
     private ArrayList<FastInfoBean> parseData(JSONObject jsonObject) {
         JSONArray array = (JSONArray) jsonObject.opt("news");
         ArrayList<FastInfoBean> list = new ArrayList<FastInfoBean>();

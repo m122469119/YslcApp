@@ -42,6 +42,11 @@ public class BaseListView extends ListView implements OnScrollListener {
         setOnScrollListener(this);
     }
 
+    /**
+     * 设置数据数量
+     * <p>记住设置此数量，否则没法加载更多</p>
+     * @param refreshLength 获取数据的条数
+     */
     public void setRefreshLength(int refreshLength) {
         // 设置刷新条数
         this.refreshLength = refreshLength;
