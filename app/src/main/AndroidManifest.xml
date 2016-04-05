@@ -115,7 +115,10 @@
         <activity
             android:name=".ui.activity.CropImageActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.activity.StockMarketActivity" />
+
+        <activity android:name=".ui.activity.StockMarketActivity"
+            android:launchMode="singleTask"
+            />
         <activity
             android:name=".ui.activity.SearchStockActivity"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" />

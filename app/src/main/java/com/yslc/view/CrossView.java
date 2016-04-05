@@ -41,7 +41,7 @@ public class CrossView extends View implements View.OnTouchListener, View.OnLong
     private int currentDrawType = DRAW_TYPE_NONE;  //当前的移动事件
 
     private boolean isLongClick = false;
-    private float x = -2, y = -2;
+    private float x = -2, y = -2;//十字控件的x,y 坐标
     private int sceenWidth;
     private Paint paint;
     private float beforeLenght;  //两个触控点的距离
@@ -61,6 +61,10 @@ public class CrossView extends View implements View.OnTouchListener, View.OnLong
         init();
     }
 
+    /**
+     * 初始化
+     * <p>初始化画笔，设置点击事件</p>
+     */
     private void init() {
         sceenWidth = CommonUtil.getScreenWidth(getContext());
         setOnTouchListener(this);
@@ -69,6 +73,11 @@ public class CrossView extends View implements View.OnTouchListener, View.OnLong
         paint.setAntiAlias(true);
     }
 
+    /**
+     * 设置view的类型
+     * <p>分时图和k线图表现不一样</p>
+     * @param currentViewType 类型
+     */
     public void setViewType(int currentViewType) {
         this.currentViewType = currentViewType;
     }
@@ -101,7 +110,7 @@ public class CrossView extends View implements View.OnTouchListener, View.OnLong
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
                 isLongClick = false;
-                x = (int) event.getX();
+                x = (int) event.getX();//记下坐标
                 y = (int) event.getY();
                 return false;
 

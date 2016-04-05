@@ -15,7 +15,7 @@ public class KChartUtil {
 
     /**
      * 获取时分
-     *
+     * <p>格式时间</p>
      * @param minute：format(yyyy-mm hh:ss:mm)
      * @return : str
      */

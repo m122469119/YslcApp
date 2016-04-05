@@ -27,13 +27,13 @@ public abstract class StocyBaseView extends SurfaceView implements
     protected Canvas mCanvas;
     protected int left, right, kChartTop, KChartbottom;//走势图边界想
     protected int pillarsChartTop, pillarsChartbottom;//柱形图边界想
-    protected int totalWidth;
-    protected static final int NUM = 4;
-    protected int perWidth;
+    protected int totalWidth;//总宽度
+    protected static final int NUM = 4;//打竖四条虚线
+    protected int perWidth;//每格宽度
     protected Paint LineGrayPaint;
     protected Paint textGrayPaint;
     protected float textHeight;
-    public boolean isCreat = false;
+    public boolean isCreat = false;//surface创建的标志
 
     /**
      * 初始化

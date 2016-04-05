@@ -25,16 +25,20 @@ import java.util.List;
  */
 public class StocyKView extends StocyBaseView {
 
-    private List<SingleStockInfo> infos;
+    private List<SingleStockInfo> infos;//股票数据
     private float per; // 每一天数据所占的宽度，每天均线为一个点，所以点的坐标为正中间的位置
     private double highPrice, lowPrice, maxCount;// 最高价,最低价,最高的成交总手数
-    private int[] perXPoint;
+    private int[] perXPoint;//记录x坐标
     private PathEffect effects;
-    private float per16, per26, perHalf, per46, per56;
+    private float per16, per26, perHalf, per46, per56;//数据宽度的1/6,2/6,一半等等
     private final Object mLock = new Object();
-    private double heightScale;
-    private float kChartTopTemp;
+    private double heightScale;//单位价格的高度
+    private float kChartTopTemp;//k线顶端（k线通常不超出这条线）
 
+    /***
+     * k线背景图
+     * <p>5条打横虚线，打竖三条虚线</p>
+     */
     @Override
     protected void drawKChatBackGround() {
         LineGrayPaint.setPathEffect(effects);
@@ -44,14 +48,14 @@ public class StocyKView extends StocyBaseView {
         int y = kChartTop;
         path.moveTo(left, y);
         path.lineTo(right, y);
-        String text = getPriceText(highPrice);
+        String text = getPriceText(highPrice);//最高价格
         mCanvas.drawText(text, left, y + textHeight * 2, textGrayPaint);
 
         double max = highPrice - lowPrice;
         if (max > 10) {
             // 分成三等分,画中间的三根虚线
             int n = 4;
-            double sper = (highPrice - lowPrice) / 4;// 每一等分的价格宽度
+            double sper = (highPrice - lowPrice) / 4;// 每一等分的价格差
             for (int i = 1; i < n; i++) {
                 y = i * ((KChartbottom - kChartTop) / n) + kChartTop;
                 path.moveTo(left, y);
@@ -97,14 +101,18 @@ public class StocyKView extends StocyBaseView {
         Path path20 = new Path();
         float maStart = left;
         float maStartY;
-        path5.moveTo(maStart, (float) (kChartTopTemp + (highPrice - infos.get(0).getMaValue5()) * heightScale));
-        path10.moveTo(maStart, (float) (kChartTopTemp + (highPrice - infos.get(0).getMaValue10()) * heightScale));
-        path20.moveTo(maStart, (float) (kChartTopTemp + (highPrice - infos.get(0).getMaValue20()) * heightScale));
+        //三条均线起点
+        path5.moveTo(maStart, (float) (kChartTopTemp + (highPrice - infos.get(0)
+                .getMaValue5()) * heightScale));
+        path10.moveTo(maStart, (float) (kChartTopTemp + (highPrice - infos.get(0)
+                .getMaValue10()) * heightScale));
+        path20.moveTo(maStart, (float) (kChartTopTemp + (highPrice - infos.get(0)
+                .getMaValue20()) * heightScale));
 
         // 每一天实际所占的数据是4/6，左右边距各1/6
         for (SingleStockInfo info : infos) {
-            maStart += perHalf;
-
+            maStart += perHalf;//x等于数据宽度的中点
+            //y等于实际数据位置
             maStartY = (float) (kChartTopTemp + (highPrice - info.getMaValue5()) * heightScale);
             //path5.quadTo(maStart - perHalf, (float) (kChartTop + (highPrice - info.getMaValue5()) * heightScale) + 10, maStart, maStartY);  贝塞尔曲线方式
             path5.lineTo(maStart, maStartY);
@@ -119,7 +127,7 @@ public class StocyKView extends StocyBaseView {
 
             maStart += perHalf;
         }
-
+        //设置画笔
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setStrokeWidth(2);
@@ -153,13 +161,17 @@ public class StocyKView extends StocyBaseView {
         String text;
         for (SingleStockInfo info : infos) {
             cLeft += per16;
+            //画时间
             if (cLeft >= perPointX && position != perXPoint.length - 1) {
                 // 恰好画到第一条垂直虚线的地方，需要画下面的日期
                 text = info.getDate().substring(2);
-                mCanvas.drawText(text, perPointX - textGrayPaint.measureText(text) / 2, KChartbottom + textHeight + 5, textGrayPaint);
+                mCanvas.drawText(text, perPointX - textGrayPaint.measureText(text) / 2,
+                        KChartbottom + textHeight + 5, textGrayPaint);
                 perPointX = perXPoint[++position];
             }
-            cRight = (cLeft + per46);
+
+            cRight = (cLeft + per46);//即六分之5处
+            //通过数据颜色判断数据是上涨还是下跌
             if (info.getColor() == StockService.UP_COLOR) {
                 // 股价涨
                 cTop = (int) (kChartTopTemp + (highPrice - info.getOpen()) * heightScale);
@@ -179,7 +191,7 @@ public class StocyKView extends StocyBaseView {
                 mCanvas.drawLine(cLeft + per26, startY, cLeft + per26, cBottom, paint);
             }
             mCanvas.drawLine(cLeft + per26, cTop, cLeft + per26, stopY, paint);
-            cLeft += per56;
+            cLeft += per56;//移到下一数据起点
         }
     }
 
@@ -196,6 +208,7 @@ public class StocyKView extends StocyBaseView {
         for (SingleStockInfo info : infos) {
             cLeft += per16;
             x0 = cLeft + per26;
+            //x的范围在在3/12 到13/12 （x0在6/12)
             if ((x0 - (per16 + per26) / 2 < x && x < x0) || (x > x0 && x < x0
                     + ((per56 + per26) / 2))) {
                 return new float[]{x0, (float) (kChartTopTemp +
@@ -207,25 +220,30 @@ public class StocyKView extends StocyBaseView {
     }
 
     /**
-     * 画两条成交量均线（五日均，十日均）
+     * 柱形图画两条成交量均线（五日均，十日均）
      */
     @Override
     protected void drawTotalChart() {
         // 画均线
         Path path5 = new Path();
         Path path10 = new Path();
-        double heightScale = (pillarsChartbottom - pillarsChartTop) / maxCount;
+        double heightScale = (pillarsChartbottom - pillarsChartTop) / maxCount;//单位数据高度
         float maStart = left;
         float maStartY;
-        path5.moveTo(maStart, (float) (pillarsChartTop + (maxCount - infos.get(0).getMaValue5()) * heightScale));
-        path10.moveTo(maStart, (float) (pillarsChartTop + (maxCount - infos.get(0).getMaValue10()) * heightScale));
+        //起点
+        path5.moveTo(maStart, (float) (pillarsChartTop + (maxCount - infos.get(0)
+                .getMaValue5()) * heightScale));
+        path10.moveTo(maStart, (float) (pillarsChartTop + (maxCount - infos.get(0)
+                .getMaValue10()) * heightScale));
 
         // 每一天实际所占的数据是4/6，左右边距各1/6
         for (SingleStockInfo info : infos) {
             maStart += perHalf;
-            maStartY = (float) (pillarsChartTop + (maxCount - info.getTotalValue5()) * heightScale);
+            maStartY = (float) (pillarsChartTop + (maxCount - info.getTotalValue5())
+                    * heightScale);
             path5.lineTo(maStart, maStartY);
-            maStartY = (float) (pillarsChartTop + (maxCount - info.getTotalValue10()) * heightScale);
+            maStartY = (float) (pillarsChartTop + (maxCount - info.getTotalValue10())
+                    * heightScale);
             path10.lineTo(maStart, maStartY);
             maStart += perHalf;
         }
@@ -246,7 +264,7 @@ public class StocyKView extends StocyBaseView {
      */
     @Override
     protected void drawPillarsChart(int flag) {
-        // 画三条虚线
+        // 画两条条虚线
         Path path = new Path();
         path.moveTo(left, pillarsChartTop);
         path.lineTo(right, pillarsChartTop);
@@ -254,13 +272,15 @@ public class StocyKView extends StocyBaseView {
         path.lineTo(right, (pillarsChartTop + pillarsChartbottom) / 2);
         mCanvas.drawPath(path, LineGrayPaint);
 
-        // 上中下的成交手数值
-        mCanvas.drawText(getPriceText(maxCount / 10000) + "(万手)", left, pillarsChartTop + textHeight / 2, textGrayPaint);
-        mCanvas.drawText(getPriceText(maxCount / 2 / 10000), left, (pillarsChartbottom + pillarsChartTop) / 2 + textHeight / 2, textGrayPaint);
+        // 上中的成交手数值
+        mCanvas.drawText(getPriceText(maxCount / 10000) + "(万手)", left,
+                pillarsChartTop + textHeight / 2, textGrayPaint);
+        mCanvas.drawText(getPriceText(maxCount / 2 / 10000), left, (pillarsChartbottom
+                + pillarsChartTop) / 2 + textHeight / 2, textGrayPaint);
 
         float pStart = left;
         float pStartY;
-        double heightScale = (pillarsChartbottom - pillarsChartTop) / maxCount;
+        double heightScale = (pillarsChartbottom - pillarsChartTop) / maxCount;//单位高度
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setStrokeWidth(2);
@@ -269,9 +289,9 @@ public class StocyKView extends StocyBaseView {
             pStartY = (float) (pillarsChartTop + (maxCount - info.getTotalCount()) * heightScale);
             paint.setColor(ContextCompat.getColor(getContext(), info.getColor()));
             if (info.getColor() == R.color.stocyUp) {
-                paint.setStyle(Style.STROKE);
+                paint.setStyle(Style.STROKE);//红色设为空
             } else {
-                paint.setStyle(Style.FILL);
+                paint.setStyle(Style.FILL);//绿色充满
             }
             mCanvas.drawRect(pStart, pStartY, pStart + per46, pillarsChartbottom, paint);
             pStart += per56;
@@ -300,27 +320,30 @@ public class StocyKView extends StocyBaseView {
 
                         mCanvas = mSurfaceHolder.lockCanvas();
                         clearCanvas();
-                        per = (float) totalWidth / infos.size();// 每一根柱子的宽度
+                        per = (float) totalWidth / infos.size();// 数据宽度
                         per16 = per * 0.166666667f;
                         per26 = per * 0.333333333f;
                         per46 = per * 0.666666667f;
                         per56 = per * 0.833333333f;
                         perHalf = per * 0.5f;
-
+                        //初始化最高价格，最大交易手数
                         perWidth = totalWidth / NUM;// 每一格数据的额宽度
                         highPrice = infos.get(0).getHigh();// 最高价
                         lowPrice = infos.get(0).getLow();
-                        maxCount = infos.get(0).getTotalCount();
+                        maxCount = infos.get(0).getTotalCount();//交易手数
                         for (SingleStockInfo info : infos) {
-                            highPrice = KChartUtil.getMax(highPrice, info.getHigh(), info.getMaValue5(), info.getMaValue10(), info.getMaValue20());
-                            lowPrice = KChartUtil.getMin(lowPrice, info.getLow(), info.getMaValue5(), info.getMaValue10(), info.getMaValue20());
-                            maxCount = KChartUtil.getMax(maxCount, info.getTotalCount(), info.getTotalValue5(), info.getTotalValue10());
+                            highPrice = KChartUtil.getMax(highPrice, info.getHigh(),
+                                    info.getMaValue5(), info.getMaValue10(), info.getMaValue20());
+                            lowPrice = KChartUtil.getMin(lowPrice, info.getLow(),
+                                    info.getMaValue5(), info.getMaValue10(), info.getMaValue20());
+                            maxCount = KChartUtil.getMax(maxCount, info.getTotalCount(),
+                                    info.getTotalValue5(), info.getTotalValue10());
                         }
 
                         //显示区域为十分之八，因此heightScale*0.8
                         heightScale = (KChartbottom - kChartTop) / (highPrice - lowPrice) * 0.8;
-                        kChartTopTemp = kChartTop + (KChartbottom - kChartTop) / 10;
-                        drawChartType(StocyBaseView.DRAW_K_TYPE);
+                        kChartTopTemp = kChartTop + (KChartbottom - kChartTop) / 10;//空出上面的百分之10
+                        drawChartType(StocyBaseView.DRAW_K_TYPE);//开启线程绘图
                     } catch (Exception e) {
                         e.printStackTrace();
                     } finally {
@@ -354,7 +377,7 @@ public class StocyKView extends StocyBaseView {
     }
 
     private void inits() {
-        effects = new DashPathEffect(new float[]{5, 5, 5, 5}, 1);
+        effects = new DashPathEffect(new float[]{5, 5, 5, 5}, 1);//设置虚线
         perXPoint = new int[NUM];
     }
 
