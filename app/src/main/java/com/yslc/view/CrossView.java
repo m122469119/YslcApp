@@ -42,7 +42,7 @@ public class CrossView extends View implements View.OnTouchListener, View.OnLong
 
     private boolean isLongClick = false;
     private float x = -2, y = -2;//十字控件的x,y 坐标
-    private int sceenWidth;
+    private int sceenWidth;//屏宽
     private Paint paint;
     private float beforeLenght;  //两个触控点的距离
 
@@ -82,14 +82,20 @@ public class CrossView extends View implements View.OnTouchListener, View.OnLong
         this.currentViewType = currentViewType;
     }
 
+    /**
+     * 长按事件
+     * <p>震动并计算xy</p>
+     * @param v
+     * @return
+     */
     @Override
     public boolean onLongClick(View v) {
         if (currentDrawType == DRAW_TYPE_NONE) {
             //长按事件（移动显示每条信息的数据）
             isLongClick = true;
             currentDrawType = DRAW_TYPE_LONG;
-            onDrawCallback.onLongMove(x, y);
-            vibration();
+            onDrawCallback.onLongMove(x, y);//由客户端处理x,y值，并返回十字点数据
+            vibration();//震动
         }
 
         return false;
@@ -104,7 +110,6 @@ public class CrossView extends View implements View.OnTouchListener, View.OnLong
         long[] pattern = {100, 100};
         vibrator.vibrate(pattern, -1);
     }
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
@@ -113,33 +118,35 @@ public class CrossView extends View implements View.OnTouchListener, View.OnLong
                 x = (int) event.getX();//记下坐标
                 y = (int) event.getY();
                 return false;
-
             case MotionEvent.ACTION_POINTER_DOWN:
                 if (event.getPointerCount() >= 2) {
                     // 多点缩放事件
                     isLongClick = true;
-                    currentDrawType = DRAW_TYPE_SCAN;
+                    currentDrawType = DRAW_TYPE_SCAN;//缩放标记
                     // 获取两点的距离
-                    beforeLenght = getDistance(event);
+                    beforeLenght = getDistance(event);//记下初始距离
                 }
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                if ((int) event.getX() == x && (int) event.getY() == y) {
-                    return false;
-                }
+                //第一个点没有移动，不做处理（感觉是个bug)
+//                if ((int) event.getX() == x && (int) event.getY() == y) {
+//                    return false;
+//                }
+                //在屏幕两边滑动是ViewPager事件（本控件不做处理）
                 if ((x < SPLID_PADDING || x > sceenWidth - SPLID_PADDING) && !isLongClick) {
                     //左右两侧为父ViewPager的滑动事件
                     return false;
                 }
 
-                // 通知其父控件，现在进行的是本控件的操作，不允许拦截
+                // 通知其父控件，现在进行的是本控件的操作，不允许拦截（有用）
                 getParent().requestDisallowInterceptTouchEvent(true);
                 if (currentDrawType == DRAW_TYPE_NONE) {
                     //如果原来不是长按或者多点缩放，则修改模式为普通滑动事件
                     currentDrawType = DRAW_TYPE_DRAW;
                 }
-                move(event);
+                move(event);//根据标记处理移动事件
+
                 return isLongClick;
 
             case MotionEvent.ACTION_UP:
@@ -156,12 +163,12 @@ public class CrossView extends View implements View.OnTouchListener, View.OnLong
                 currentDrawType = DRAW_TYPE_NONE;
                 break;
         }
-
         return isLongClick;
     }
 
     /**
      * 移动事件处理
+     * <p>长按事件，缩放事件，移动事件</p>
      */
     private void move(MotionEvent event) {
         if (currentDrawType == DRAW_TYPE_LONG) {
@@ -185,7 +192,6 @@ public class CrossView extends View implements View.OnTouchListener, View.OnLong
                 onDrawCallback.onScan((int) (currentDistance - beforeLenght));
                 beforeLenght = currentDistance;
             }
-
         }
     }
 
@@ -208,17 +214,28 @@ public class CrossView extends View implements View.OnTouchListener, View.OnLong
      */
     private MinuteInfo info;
 
+    /**
+     * 长按后，客户端调用
+     * @param bean 当前点的位置
+     * @param x 十字坐标x
+     * @param y 十字坐标y
+     * @param <T>
+     */
     public <T> void longClickMove(T bean, float x, float y) {
-        if (currentViewType == VIEW_TYPE_H) {
+        if (currentViewType == VIEW_TYPE_H) {//分时图
             info = (MinuteInfo) bean;
         }
 
         //长按移动事件
         this.x = x;
         this.y = y;
-        invalidate();
+        invalidate();//显示十字控件
     }
 
+    /**
+     * 画十字，如果是分时图画出当前点的信息框
+     * @param canvas
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         if (x == -1) {
@@ -226,12 +243,14 @@ public class CrossView extends View implements View.OnTouchListener, View.OnLong
             return;
         }
 
-        drawTen(canvas);
+        drawTen(canvas);//画十字
 
-        if (currentViewType == VIEW_TYPE_H && null != info) {
-            int panelWidth = CommonUtil.dip2px(getContext(), 90);
+        if (currentViewType == VIEW_TYPE_H && null != info) {//分时图且得到数据
+            //TODO 这一部分需要删掉改进
+            int panelWidth = CommonUtil.dip2px(getContext(), 90);//数据框的宽度
             //分时图绘制
-            int tempx0;
+            int tempx0;//x坐标起点
+            //根据x位置左或右边显示信息框
             if (x > sceenWidth / 2) {
                 tempx0 = 0;
             } else {
@@ -240,16 +259,16 @@ public class CrossView extends View implements View.OnTouchListener, View.OnLong
             //绘制矩形背景
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(ContextCompat.getColor(getContext(), R.color.greyTrans3));
-            canvas.drawRect(tempx0, y, tempx0 + panelWidth, y + calHeight() * 5, paint);
+            canvas.drawRect(tempx0, y, tempx0 + panelWidth, y + calHeight() * 5, paint);//字高×5
 
             //绘制文本
-            float tempy0 = y + calHeight() + calHeight() / 3;
-            paint.setTextSize(CommonUtil.sp2px(getContext(), 13));
+            float tempy0 = y + calHeight() + calHeight() / 3;//文字y轴位置
+            paint.setTextSize(CommonUtil.sp2px(getContext(), 13));//文字大小
             paint.setColor(Color.WHITE);
             canvas.drawText(KChartUtil.getMinute(info.getMinute()), tempx0 + 10, tempy0, paint);
             paint.setColor(ContextCompat.getColor(getContext(), info.getColor()));
-            tempy0 += calHeight();
-            canvas.drawText(info.getNow() + "", tempx0 + 10, tempy0 + 5, paint);
+            tempy0 += calHeight();//换行
+            canvas.drawText(info.getNow() + "", tempx0 + 10, tempy0 + 5, paint);//行间隔5
             tempy0 += calHeight();
             canvas.drawText(info.getStocyGains() + "  " + info.getStocyAs(), tempx0 + 10, tempy0 + 5, paint);
             paint.setColor(Color.YELLOW);
@@ -296,6 +315,7 @@ public class CrossView extends View implements View.OnTouchListener, View.OnLong
         }
     }
 
+    //--------------回调接口----------------------
     private OnDrawCallback onDrawCallback;
 
     public void setOnDrawCallback(OnDrawCallback onDrawCallback) {
