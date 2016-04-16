@@ -114,6 +114,7 @@ public class NewFragmentActivity extends BaseFragment implements
      * 传递咨讯Id
      * <p>初始化fragment，每个fragment保存标题id</p>
      * <p>把建好的fragment列表放到适配器并设置好ViewPager的适配器</p>
+     * @param listTitle 副标题集合
      */
     private void initViewPager(ArrayList<ColnumBean> listTitle) {
         ArrayList<Fragment> listFragment = new ArrayList<>();
@@ -134,7 +135,7 @@ public class NewFragmentActivity extends BaseFragment implements
         }
 
         MyFragmentAdapter adapter = new MyFragmentAdapter(getChildFragmentManager(), listFragment);
-        mViewPager.setOffscreenPageLimit(1);//预加载
+        mViewPager.setOffscreenPageLimit(2);//预加载
         mViewPager.setAdapter(adapter);
         mViewPager.addOnPageChangeListener(this);
     }

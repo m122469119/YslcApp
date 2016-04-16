@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Intent;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -130,8 +131,8 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
             }
         };
         //开关图片显示在toolbar上
-        mDrawerToggle.syncState();
         drawer.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
     }
 
     @Override
@@ -180,7 +181,9 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
      */
     @Override
     public void onBackPressed() {
-        if (!mBackKeyPressed) {
+        if(drawer.isDrawerOpen(GravityCompat.START)){
+            drawer.closeDrawer(GravityCompat.START);
+        }else if (!mBackKeyPressed) {
             ToastUtil.showMessage(this, getString(R.string.aginClick));
             mBackKeyPressed = true;
             new Timer().schedule(new TimerTask() {
