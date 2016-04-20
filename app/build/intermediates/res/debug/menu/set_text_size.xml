@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:osc="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_settextsize"
+        android:icon="@drawable/set_textsize_btn"
+        android:title="@string/setTextSize"
+        android:visible="true"
+        android:enabled="false"
+        osc:showAsAction="always" />
+
+</menu>
+<!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/menu/set_text_size.xml -->

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true" android:drawable="@drawable/main_star_focus" />
+    <item android:drawable="@drawable/main_star_blur" />
+</selector>
+<!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/drawable/index_tab_star_btn_img_selector.xml -->

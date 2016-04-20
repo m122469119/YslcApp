@@ -29,6 +29,7 @@
     <string name="interactivesDetail"> 广播重温详情  </string>
     <string name="pay"> 支付 </string>
     <string name="fast_info"> 闪电情报 </string>
+    <string name="celebrity_com">投资快报</string>
 
     <!-- 新闻详情 -->
     <string name="newDetail"> 新闻详情  </string>
@@ -107,5 +108,8 @@
     <string name="search"> 搜索 </string>
     <string name="turnScreen"> 转屏 </string>
     <string name="stocyKey"> 输入股票代码或字母 </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

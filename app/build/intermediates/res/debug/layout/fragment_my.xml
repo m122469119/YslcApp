@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainGrayColor"
+    android:scrollbars="none">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+<!--第一项用户信息-->
+        <RelativeLayout
+            android:id="@+id/person"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dip"
+            android:background="@color/white"
+            android:padding="12dip">
+<!--头像-->
+            <ImageView
+                android:id="@+id/personImg"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:src="@drawable/login_login" />
+<!--用户状态-->
+            <TextView
+                android:id="@+id/account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="15dip"
+                android:layout_toRightOf="@id/personImg"
+                android:text="@string/goLogin"
+                android:textColor="@color/titleBg"
+                android:textSize="16sp" />
+        </RelativeLayout>
+<!--邀请好友-->
+        <TextView
+            android:id="@+id/valFriend"
+            style="@style/barTextStyle"
+            android:layout_width="match_parent"
+            android:layout_below="@id/person"
+            android:text="@string/valFriend" />
+<!--分隔线-->
+        <View
+            android:id="@+id/line2"
+            style="@style/line_h_style"
+            android:layout_below="@id/valFriend"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip" />
+<!--修改密码-->
+        <TextView
+            android:id="@+id/updatePass"
+            style="@style/barTextStyle"
+            android:layout_width="match_parent"
+            android:layout_below="@id/line2"
+            android:text="@string/updatePassword" />
+<!--设置-->
+        <TextView
+            android:id="@+id/set"
+            style="@style/barTextStyle"
+            android:layout_below="@id/updatePass"
+            android:text="@string/set" />
+<!--分隔线-->
+        <View
+            android:id="@+id/line1"
+            style="@style/line_h_style"
+            android:layout_below="@id/set"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip" />
+<!--关于-->
+        <TextView
+            android:id="@+id/about"
+            style="@style/barTextStyle"
+            android:layout_below="@id/line1"
+            android:layout_marginTop="0dip"
+            android:text="@string/about" />
+<!--隐藏按钮，退出登录-->
+        <Button
+            android:id="@+id/exitLogin"
+            style="@style/barTextStyle"
+            android:layout_below="@id/about"
+            android:drawableRight="@null"
+            android:gravity="left"
+            android:text="@string/exitLogin"
+            android:textColor="@color/titleBg"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+</ScrollView><!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/layout/fragment_my.xml -->

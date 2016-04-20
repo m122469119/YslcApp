@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="true">
+        <shape android:shape="oval">
+            <solid android:color="@color/statuBg" />
+            <stroke android:width="2dip" android:color="@color/textColor26" />
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/titleBg" />
+            <stroke android:width="2dip" android:color="@color/textColor26" />
+            <stroke android:width="2dip" android:color="@color/textColor26" />
+        </shape>
+    </item>
+
+</selector><!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/drawable/k_line_type_shape.xml -->

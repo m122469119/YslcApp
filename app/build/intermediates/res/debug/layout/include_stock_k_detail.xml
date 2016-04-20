@@ -1,0 +1,142 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/stocyTopHeight"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:paddingLeft="5dip"
+    android:paddingRight="5dip">
+
+    <LinearLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <!--股票时间-->
+        <TextView
+            android:id="@+id/stocyTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="----"
+            android:textSize="15sp" />
+        <!--股价-->
+        <TextView
+            android:id="@+id/stocyPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.00"
+            android:textColor="#00ff00"
+            android:textSize="20sp" />
+        <!--涨幅-->
+        <TextView
+            android:id="@+id/stocyGains"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="--  --"
+            android:textColor="#00ff00"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开盘:"
+                android:textColor="@color/textColor54"
+                android:textSize="15sp" />
+            <!--开盘价-->
+            <TextView
+                android:id="@+id/stocyOpen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="---"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dip"
+            android:layout_marginTop="2dip">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="最高:"
+                android:textColor="@color/textColor54"
+                android:textSize="15sp" />
+            <!--最高价-->
+            <TextView
+                android:id="@+id/stocyHeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="---"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="最底:"
+                android:textColor="@color/textColor54"
+                android:textSize="15sp" />
+            <!--最低价-->
+            <TextView
+                android:id="@+id/stocyLow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="---"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+        <!--5日均线-->
+        <TextView
+            android:id="@+id/stocyM5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="M5:  ---"
+            android:textColor="@color/stocyM5"
+            android:textSize="15sp" />
+        <!--10日均线-->
+        <TextView
+            android:id="@+id/stocyM10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dip"
+            android:layout_marginTop="2dip"
+            android:text="M10:---"
+            android:textColor="@color/stocyM10"
+            android:textSize="15sp" />
+        <!--20日均线-->
+        <TextView
+            android:id="@+id/stocyM20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="M20:---"
+            android:textColor="@color/stocyM20"
+            android:textSize="15sp" />
+    </LinearLayout>
+</LinearLayout><!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/layout/include_stock_k_detail.xml -->

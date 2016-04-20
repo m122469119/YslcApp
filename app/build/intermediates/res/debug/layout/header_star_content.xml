@@ -1,0 +1,67 @@
+<!--明星文章布局-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <!--图片-->
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="100dip"
+        android:layout_height="70dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="10dip"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:src="@drawable/test3" />
+    <!--文章名字-->
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="35dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="10dip"
+        android:layout_toRightOf="@id/img"
+        android:ellipsize="end"
+        android:gravity="bottom"
+        android:paddingBottom="2dip"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="17sp" />
+    <!--文章时间-->
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="35dip"
+        android:layout_below="@id/name"
+        android:layout_toRightOf="@id/img"
+        android:gravity="top"
+        android:paddingTop="2dip"
+        android:textColor="@color/gray"
+        android:textSize="15sp" />
+    <!--文章内容-->
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/img"
+        android:lineSpacingExtra="4dip"
+        android:padding="10dip"
+        android:textColor="@color/textColor87"
+        android:textSize="16sp" />
+<!--分隔线-->
+    <View
+        android:id="@+id/line3"
+        style="@style/line_h_width15_style"
+        android:layout_below="@id/content" />
+<!--显示没有评论或评论列表-->
+    <TextView
+        android:id="@+id/noComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line3"
+        android:gravity="center"
+        android:padding="10dip"
+        android:textColor="@color/gray"
+        android:textSize="16sp" />
+
+</RelativeLayout><!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/layout/header_star_content.xml -->

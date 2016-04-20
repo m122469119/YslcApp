@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--分时图汇总（股票）信息-->
+    <include layout="@layout/include_stock_h1_detail" />
+    <!--分时图汇总（指数）信息-->
+    <include layout="@layout/include_stock_h2_detail" />
+    <!--分时图-->
+    <com.yslc.view.StocyMinutesView
+        android:id="@+id/stocyMinutesView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/stocyMinTopHeight" />
+    <!--手势十字监听控件-->
+    <com.yslc.view.CrossView
+        android:id="@+id/crossView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/stocyMinTopHeight" />
+    <!--旋转圈圈-->
+    <include layout="@layout/include_loading" />
+
+</RelativeLayout>
+<!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/layout/fragment_stock_min.xml -->

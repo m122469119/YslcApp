@@ -64,7 +64,6 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
     @Override
     protected void onChanceFragment(String title) {
         super.onChanceFragment(title);
-
         titleTv.setText(title);
     }
 
@@ -109,6 +108,7 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
         findViewById(R.id.stockMarket).setOnClickListener(this);
         findViewById(R.id.radio).setOnClickListener(this);
         findViewById(R.id.fast_info).setOnClickListener(this);
+        findViewById(R.id.celebrity_comment).setOnClickListener(this);
         //点击事件
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle
                 (this, drawer, (Toolbar) findViewById(R.id.toolbar), R.string.empty, R.string.empty) {
@@ -166,6 +166,12 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
                 //闪电情报
                 startActivity(new Intent(this, FastInfoActivity.class));
                 break;
+
+            case R.id.celebrity_comment:
+                //投资快报
+                startActivity(new Intent(this, CelebrityComActivity.class));
+                break;
+
             case R.id.radio:
                 // 支付模块，预留
                 ToastUtil.showMessage(this, "支付");

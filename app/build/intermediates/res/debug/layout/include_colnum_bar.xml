@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/colnumbarSize"
+    android:background="@color/buttomWhite">
+<!--滑动副标题右边按钮-->
+    <ImageView
+        android:id="@+id/rightBtn"
+        android:layout_width="35dip"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@null"
+        android:src="@drawable/right_btn_pressed" />
+<!--滑动副标题-->
+    <com.yslc.view.ColumnHorizontalScrollView
+        android:id="@+id/columnView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@id/rightBtn">
+<!--具体副标题-->
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" />
+    </com.yslc.view.ColumnHorizontalScrollView>
+
+</RelativeLayout><!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/layout/include_colnum_bar.xml -->

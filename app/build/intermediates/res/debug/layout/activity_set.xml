@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?><!-- 个人中心设置界面 -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--标题栏-->
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/include_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/titlebarSize"
+        android:background="@color/mainGrayColor"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!--是否消息推送-->
+            <CheckBox
+                android:id="@+id/isPush"
+                style="@style/barTextStyle"
+                android:background="@color/white"
+                android:button="@null"
+                android:drawableRight="@drawable/setting_checked_selector"
+                android:text="@string/isPush" />
+            <!--分隔线-->
+            <View
+                style="@style/line_h_style"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip" />
+            <!--仅Wifi环境下载更新-->
+            <CheckBox
+                android:id="@+id/isWifi"
+                style="@style/barTextStyle"
+                android:layout_marginTop="0dip"
+                android:background="@color/white"
+                android:button="@null"
+                android:drawableRight="@drawable/setting_checked_selector"
+                android:text="@string/isWifi" />
+            <!--检测新版本-->
+            <TextView
+                android:id="@+id/checkVersion"
+                style="@style/barTextStyle"
+                android:drawableRight="@drawable/icon_right_litter"
+                android:padding="13dip"
+                android:text="@string/checkVersion" />
+        </LinearLayout>
+    </ScrollView>
+
+</merge><!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/layout/activity_set.xml -->

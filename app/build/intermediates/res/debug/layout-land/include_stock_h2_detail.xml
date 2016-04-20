@@ -1,0 +1,177 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/top2"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/stocyMinTopHeight"
+    android:background="@color/white"
+    android:gravity="center_vertical">
+
+    <LinearLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:orientation="vertical">
+        <!--指数股价-->
+        <TextView
+            android:id="@+id/current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="----"
+            android:textColor="@color/red"
+            android:textSize="22sp" />
+        <!--涨跌-->
+        <TextView
+            android:id="@+id/stocyAs3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="---  ---"
+            android:textColor="@color/red"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:orientation="vertical">
+        <!--开盘价-->
+        <TextView
+            android:id="@+id/textInfo1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dip"
+            android:text="今开"
+            android:textColor="@color/textColor54"
+            android:textSize="15sp" />
+        <!--开盘价数据-->
+        <TextView
+            android:id="@+id/toDayPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/textInfo1"
+            android:text="---"
+            android:textColor="@color/stocyDown"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textInfo2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textInfo1"
+            android:layout_marginRight="5dip"
+            android:text="昨收"
+            android:textColor="@color/textColor54"
+            android:textSize="15sp" />
+        <!--收盘价数据-->
+        <TextView
+            android:id="@+id/nightDayPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textInfo1"
+            android:layout_toRightOf="@id/textInfo2"
+            android:text="---"
+            android:textColor="@color/stocyDown"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textInfo3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dip"
+            android:text="最高"
+            android:textColor="@color/textColor54"
+            android:textSize="15sp" />
+        <!--最高价数据-->
+        <TextView
+            android:id="@+id/heigPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/textInfo3"
+            android:text="---"
+            android:textColor="@color/stocyDown"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textInfo4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textInfo3"
+            android:layout_marginRight="5dip"
+            android:text="最低"
+            android:textColor="@color/textColor54"
+            android:textSize="15sp" />
+        <!--最低价数据-->
+        <TextView
+            android:id="@+id/lowPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textInfo3"
+            android:layout_toRightOf="@id/textInfo4"
+            android:text="---"
+            android:textColor="@color/stocyDown"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textInfo5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dip"
+            android:text="成交量"
+            android:textColor="@color/textColor54"
+            android:textSize="15sp" />
+        <!--成交量数据-->
+        <TextView
+            android:id="@+id/totalNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/textInfo5"
+            android:text="---"
+            android:textColor="@color/stocyDown"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textInfo6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textInfo5"
+            android:layout_marginRight="5dip"
+            android:text="成交额"
+            android:textColor="@color/textColor54"
+            android:textSize="15sp" />
+        <!--成交额数据-->
+        <TextView
+            android:id="@+id/totalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textInfo5"
+            android:layout_toRightOf="@id/textInfo6"
+            android:text="---"
+            android:textColor="@color/stocyDown"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+
+</LinearLayout><!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/layout-land/include_stock_h2_detail.xml -->

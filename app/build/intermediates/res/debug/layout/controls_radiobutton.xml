@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioButton xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:button="@null"
+    android:drawableBottom="@drawable/information_colnum_tv_bg"
+    android:gravity="center"
+    android:padding="0dip"
+    android:textSize="17sp" />
+<!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/layout/controls_radiobutton.xml -->

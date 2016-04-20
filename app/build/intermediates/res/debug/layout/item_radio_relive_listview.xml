@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dip"
+    android:gravity="center_vertical"
+    android:paddingBottom="10dip"
+    android:background="@drawable/listview_selector"
+    android:paddingLeft="15dip"
+    android:paddingRight="15dip"
+    android:paddingTop="10dip">
+<!--节目名称-->
+    <TextView
+        android:id="@+id/radioName"
+        style="@style/listViewTextStyle"
+        android:maxLength="10"
+        android:textColor="@color/textColor87" />
+<!--日期-->
+    <TextView
+        android:id="@+id/radioDate"
+        style="@style/listViewTextStyle"
+        android:textColor="@color/textColor54"
+        android:layout_below="@id/radioName"
+        android:layout_marginTop="5dip"
+        android:textSize="14sp" />
+<!--节目重温-->
+    <TextView
+        android:id="@+id/radioTo"
+        style="@style/listViewTextStyle"
+        android:layout_height="50dip"
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical"
+        android:text="@string/showRelive"
+        android:textSize="14sp"
+        android:textColor="#3eade8" />
+
+</RelativeLayout><!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/layout/item_radio_relive_listview.xml -->

@@ -1,0 +1,122 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/top1"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/stocyMinTopHeight"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:paddingLeft="16dip">
+
+    <TextView
+        android:id="@+id/stocyNow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.00"
+        android:textColor="@color/red"
+        android:textSize="22sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dip"
+        android:text="跌涨:"
+        android:textColor="@color/textColor54"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/stocyAs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="--  --"
+        android:textColor="@color/red"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dip"
+        android:text="时间:"
+        android:textColor="@color/textColor54"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/stocyTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="---"
+        android:textColor="@color/red"
+        android:textSize="15sp" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dip"
+        android:text="现手:"
+        android:textColor="@color/textColor54"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/stocyHand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="---"
+        android:textColor="@color/red"
+        android:textSize="15sp" />
+
+
+    <TextView
+        android:id="@+id/stocyDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dip"
+        android:text="买卖详情>>"
+        android:textColor="@color/titleBg"
+        android:textSize="15sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/buginfo2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="卖①"
+            android:textColor="@color/textColor54"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/stocySell1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="-- --"
+            android:textColor="@color/stocyHAvg"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/buginfo1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="买①"
+            android:textColor="@color/textColor54"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/stocyBug1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="-- --"
+            android:textColor="@color/stocyHAvg"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+</LinearLayout><!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/layout-land/include_stock_h1_detail.xml -->

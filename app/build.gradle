@@ -29,8 +29,6 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:23.0.1'
-    compile 'com.android.support:appcompat-v7:23.0.1'
     compile files('libs/android-async-http-1.4.3.jar')
     compile files('libs/jpush-android-2.0.5.jar')
     compile files('libs/MobCommons.jar')
@@ -44,4 +42,7 @@ dependencies {
     compile files('libs/ShareSDK-Wechat-Core-2.6.4.jar')
     compile files('libs/ShareSDK-Wechat-Moments-2.6.4.jar')
     compile files('libs/universal-image-loader-1.9.3.jar')
+    compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:design:23.0.1'
 }

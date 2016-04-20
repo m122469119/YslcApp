@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="${relativePackage}.${activityClass}">
+<!--标题栏-->
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/include_toolbar" />
+<!--下拉刷新和加载更多组件-->
+    <include
+        android:id="@+id/refreshable_view"
+        layout="@layout/include_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/button"
+        android:layout_below="@id/toolbar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/button"
+        android:layout_below="@id/toolbar"
+        android:background="@drawable/view_shard" />
+<!--评论栏-->
+    <include
+        android:id="@+id/button"
+        layout="@layout/include_comment_input"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/titlebarSize"
+        android:layout_alignParentBottom="true" />
+<!--加载圈圈-->
+    <include
+        layout="@layout/include_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar" />
+
+</RelativeLayout><!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/layout/listview_comment.xml -->

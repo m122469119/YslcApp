@@ -94,6 +94,9 @@
         <activity
             android:name=".ui.activity.FastInfoActivity"
             android:screenOrientation="portrait" />
+        <!--名家评论-->
+        <activity android:name=".ui.activity.CelebrityComActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.FastInfoDetailActivity"
             android:screenOrientation="portrait" />
