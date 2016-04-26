@@ -1,6 +1,8 @@
 package com.yslc.ui.activity;
 
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -15,10 +17,17 @@ import com.yslc.ui.adapter.QuickAdapter;
 import com.yslc.ui.base.BaseActivity;
 import com.yslc.ui.fragment.CelebrityFragment;
 import com.yslc.util.HttpUtil;
+import com.yslc.view.CalendarView;
+import com.yslc.view.LoadView;
+
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -30,8 +39,8 @@ import java.util.ArrayList;
  * Created by Administrator on 2016/4/18.
  */
 public class CelebrityComActivity extends BaseActivity
-        implements AdapterView.OnItemClickListener,CelebrityFragment
-        .OnFragmentInteractionListener{
+        implements AdapterView.OnItemClickListener, CelebrityFragment
+        .OnFragmentInteractionListener, LoadView.OnTryListener{
     private MyFragmentAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private ArrayList<Fragment> fragmentList;//fragment
@@ -39,6 +48,8 @@ public class CelebrityComActivity extends BaseActivity
     private DrawerLayout drawer;
     private ListView navigationView;
     private QuickAdapter<CelebrityComment> adapter;
+    private LoadView loadView;
+    private PopupWindow dateView;
 
     @Override
     protected int getLayoutId() {
@@ -56,6 +67,7 @@ public class CelebrityComActivity extends BaseActivity
      * 开启线程下载数据
      */
     private void getData(String time){
+        loadView.setStatus(LoadView.LOADING);
         RequestParams params = new RequestParams();
         params.put("date", time);
         HttpUtil.originGet(HttpUtil.GET_CELEBRITY_COMMENT, this, params,
@@ -63,14 +75,20 @@ public class CelebrityComActivity extends BaseActivity
                     @Override
                     public void onSuccess(JSONObject jsonObject) {
                         super.onSuccess(jsonObject);
+                        loadView.setStatus(LoadView.SUCCESS);
                         data = parseData(jsonObject);
-                        showData(data);
+                        if (data.size() == 0) {
+                            loadView.setStatus(LoadView.EMPTY_DATA);
+                        } else {
+                            showData(data, time);
+                        }
                     }
 
 
                     @Override
                     public void onFailure(Throwable throwable, JSONObject jsonObject) {
                         super.onFailure(throwable, jsonObject);
+                        loadView.setStatus(LoadView.ERROR);
                     }
                 });
     }
@@ -79,10 +97,10 @@ public class CelebrityComActivity extends BaseActivity
      * 显示数据
      * @param data
      */
-    private void showData(ArrayList<CelebrityComment> data) {
+    private void showData(ArrayList<CelebrityComment> data,String time) {
         updateFragment(data);
         updateNavList(data);
-        showFirstTitle(data);//显示第一个fragment的标题
+        showFirstTitle(data,time);//显示第一个fragment的标题
     }
 
     /**
@@ -130,9 +148,13 @@ public class CelebrityComActivity extends BaseActivity
      * 显示第一个fragment标题
      * @param data
      */
-    private void showFirstTitle(ArrayList<CelebrityComment> data){
-        title.setText(data.get(0).getTitle());
-        no.setText(data.get(0).getNo());
+    private void showFirstTitle(ArrayList<CelebrityComment> data, String time){
+        if(data.size()!= 0){
+            title.setText(data.get(0).getTitle());
+            no.setText(data.get(0).getNo());
+        }
+        String[] strs = time.split("-");
+        date.setText(strs[2]);
     }
     /**
      * 根据数据生成fragment
@@ -173,6 +195,9 @@ public class CelebrityComActivity extends BaseActivity
     @Override
     protected void initView() {
         initTitle();//初始化标题
+        //loadview
+        loadView = (LoadView)findViewById(R.id.view);
+        loadView.setOnTryListener(this);
         //抽屉
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         //导航栏
@@ -183,8 +208,10 @@ public class CelebrityComActivity extends BaseActivity
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.addOnPageChangeListener(viewPagerListener);
 
-        getData("2016-04-01");//TODO 根据日期下载数据
+        getData("2016-04-01");
+//        getData(new SimpleDateFormat("yy-MM-dd").format(new Date()));
     }
+
 
     /**
      * viewPager监听
@@ -249,7 +276,44 @@ public class CelebrityComActivity extends BaseActivity
     View.OnClickListener dateEvent = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            //TODO 填出日期框
+            RelativeLayout layout = new RelativeLayout(CelebrityComActivity.this);
+            if(dateView == null){//初始化日历控件
+                layout.setBackgroundResource(R.color.greyTrans2);//设置阴影布局
+
+                CalendarView calendarView = new CalendarView(CelebrityComActivity.this);
+                RelativeLayout.LayoutParams params =new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        (int)navigationView.getHeight()*2/3);
+                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                calendarView.setLayoutParams(params);
+                calendarView.setOnCalendarClickListener(new CalendarView.OnCalendarClickListener() {
+                    @Override
+                    public void onCalendarClick(View v, String dateFormat) {
+                        dateView.dismiss();
+                        getData(dateFormat);
+//                        calendarView.addMarker((RelativeLayout)v);
+                    }
+                });
+
+                layout.addView(calendarView);
+                dateView = new PopupWindow(layout,
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        drawer.getHeight());
+                dateView.setAnimationStyle(R.style.AnimBottom);
+                dateView.setOutsideTouchable(true);
+                dateView.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                layout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dateView.dismiss();
+                    }
+                });
+                dateView.showAtLocation(layout,Gravity.BOTTOM,0,0);
+            }else if(!dateView.isShowing()){
+                dateView.showAtLocation(layout,Gravity.BOTTOM,0,0);
+            }else {
+//                dateView.dismiss();
+            }
         }
     };
 
@@ -261,10 +325,11 @@ public class CelebrityComActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
+        }else if(dateView != null && dateView.isShowing()){//判断日历控件是否弹出
+            dateView.dismiss();
         }else if(!webViewGoBack()){//判断webView是否能返回
             super.onBackPressed();
         }
-
     }
 
     /**
@@ -305,4 +370,10 @@ public class CelebrityComActivity extends BaseActivity
         this.no.setText(no);
     }
 
+    @Override
+    public void onTry() {
+        getData("2016-04-01");
+//        if(loadView.setStatus(LoadView.LOADING)){
+//        }
+    }
 }

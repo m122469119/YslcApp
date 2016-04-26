@@ -264,6 +264,7 @@
     <eat-comment/>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="calendar_title">12sp</dimen>
     <dimen name="colnumbarSize">40dip</dimen>
     <!-- From: file:/E:/android_studio/YslcApp/app/build/intermediates/exploded-aar/com.android.support/design/23.0.1/res/values/values.xml -->
     <eat-comment/>
@@ -304,6 +305,11 @@
     <item format="float" name="highlight_alpha_material_colored" type="dimen">0.26</item>
     <item format="float" name="highlight_alpha_material_dark" type="dimen">0.20</item>
     <item format="float" name="highlight_alpha_material_light" type="dimen">0.12</item>
+    <!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/values/dimens.xml -->
+    <eat-comment/>
+    <dimen name="history_tb">10dp</dimen>
+    <!-- From: file:/E:/android_studio/YslcApp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
+    <eat-comment/>
     <dimen name="notification_large_icon_height">64dp</dimen>
     <dimen name="notification_large_icon_width">64dp</dimen>
     <dimen name="notification_subtext_size">12dp</dimen>

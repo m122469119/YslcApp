@@ -37,10 +37,5 @@
         android:layout_below="@id/line"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <!--加载圈圈-->
-    <!--<include
-        layout="@layout/include_loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/titlebarSize" /-->>
+
 </RelativeLayout>
