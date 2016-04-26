@@ -100,7 +100,7 @@
             android:screenOrientation="portrait" />
         <!-- 名家评论 -->
         <activity
-            android:name="com.yslc.ui.activity.CelebrityComActivity"
+            android:name="com.yslc.ui.activity.InvestPaperActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.yslc.ui.activity.FastInfoDetailActivity"

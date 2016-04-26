@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -169,7 +168,7 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
 
             case R.id.celebrity_comment:
                 //投资快报
-                startActivity(new Intent(this, CelebrityComActivity.class));
+                startActivity(new Intent(this, InvestPaperActivity.class));
                 break;
 
             case R.id.radio:

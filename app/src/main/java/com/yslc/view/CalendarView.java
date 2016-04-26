@@ -582,13 +582,16 @@ public class CalendarView extends LinearLayout implements
 
     private void resetCellStyle(TextView prvSelect) {
         Calendar c = Calendar.getInstance();
-        c.setTime((Date)prvSelect.getTag());
+        c.setTime((Date) prvSelect.getTag());
         if(c.get(Calendar.MONTH) == calendarMonth){
             prvSelect.setTextColor(COLOR_TX_THIS_MONTH_DAY);
         }else{
             prvSelect.setTextColor(COLOR_TX_OTHER_MONTH_DAY);
         }
         prvSelect.setBackgroundColor(Color.parseColor("#eeeeee"));
+        if(isToday(c)){//设置今天样式
+            setTodayStyle(prvSelect);
+        }
     }
 
     private int[] findLocation(View v) {

@@ -99,7 +99,7 @@
             <RadioButton
                 android:id="@+id/celebrity_comment"
                 style="@style/slidingText.slidingLeftBtn"
-                android:drawableLeft="@drawable/fast_info_icon"
+                android:drawableLeft="@drawable/invest_paper_icon"
                 android:text="@string/celebrity_com" />
 
             <RadioButton

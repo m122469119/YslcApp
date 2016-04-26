@@ -33,14 +33,15 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Administrator on 2016/4/18.
  */
-public class CelebrityComActivity extends BaseActivity
-        implements AdapterView.OnItemClickListener, CelebrityFragment
-        .OnFragmentInteractionListener, LoadView.OnTryListener{
+public class InvestPaperActivity extends BaseActivity
+        implements LoadView.OnTryListener,AdapterView.OnItemClickListener{
     private MyFragmentAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private ArrayList<Fragment> fragmentList;//fragment
@@ -70,17 +71,19 @@ public class CelebrityComActivity extends BaseActivity
         loadView.setStatus(LoadView.LOADING);
         RequestParams params = new RequestParams();
         params.put("date", time);
+        String[] strs = time.split("-");
+        date.setText(strs[2]);
         HttpUtil.originGet(HttpUtil.GET_CELEBRITY_COMMENT, this, params,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(JSONObject jsonObject) {
                         super.onSuccess(jsonObject);
                         loadView.setStatus(LoadView.SUCCESS);
-                        data = parseData(jsonObject);
+                        parseData(jsonObject);
                         if (data.size() == 0) {
                             loadView.setStatus(LoadView.EMPTY_DATA);
                         } else {
-                            showData(data, time);
+                            showData(data);
                         }
                     }
 
@@ -97,10 +100,10 @@ public class CelebrityComActivity extends BaseActivity
      * 显示数据
      * @param data
      */
-    private void showData(ArrayList<CelebrityComment> data,String time) {
+    private void showData(ArrayList<CelebrityComment> data) {
         updateFragment(data);
         updateNavList(data);
-        showFirstTitle(data,time);//显示第一个fragment的标题
+        showFirstTitle(data);//显示第一个fragment的标题
     }
 
     /**
@@ -142,19 +145,19 @@ public class CelebrityComActivity extends BaseActivity
         }else {
             mSectionsPagerAdapter.notifyDataSetChanged();
         }
+        mViewPager.setCurrentItem(0);
     }
 
     /**
      * 显示第一个fragment标题
      * @param data
      */
-    private void showFirstTitle(ArrayList<CelebrityComment> data, String time){
+    private void showFirstTitle(ArrayList<CelebrityComment> data){
         if(data.size()!= 0){
             title.setText(data.get(0).getTitle());
             no.setText(data.get(0).getNo());
         }
-        String[] strs = time.split("-");
-        date.setText(strs[2]);
+
     }
     /**
      * 根据数据生成fragment
@@ -189,6 +192,13 @@ public class CelebrityComActivity extends BaseActivity
         }catch(Exception e){
             e.printStackTrace();
         }
+        if(this.data==null){
+            this.data = data;
+        }else{
+            this.data.clear();
+            this.data.addAll(data);
+        }
+
         return data;
     }
 
@@ -208,8 +218,8 @@ public class CelebrityComActivity extends BaseActivity
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.addOnPageChangeListener(viewPagerListener);
 
-        getData("2016-04-01");
-//        getData(new SimpleDateFormat("yy-MM-dd").format(new Date()));
+//        getData("2016-04-01");
+        getData(new SimpleDateFormat("yy-MM-dd").format(new Date()));
     }
 
 
@@ -227,7 +237,7 @@ public class CelebrityComActivity extends BaseActivity
         public void onPageSelected(int position) {
             //更改标题
             Fragment f =fragmentList.get(position);
-            ((CelebrityFragment)f).updateTitle();
+            setTitle(data.get(position).getNo(),data.get(position).getTitle());
         }
 
         @Override
@@ -276,11 +286,11 @@ public class CelebrityComActivity extends BaseActivity
     View.OnClickListener dateEvent = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            RelativeLayout layout = new RelativeLayout(CelebrityComActivity.this);
+            RelativeLayout layout = new RelativeLayout(InvestPaperActivity.this);
             if(dateView == null){//初始化日历控件
                 layout.setBackgroundResource(R.color.greyTrans2);//设置阴影布局
 
-                CalendarView calendarView = new CalendarView(CelebrityComActivity.this);
+                CalendarView calendarView = new CalendarView(InvestPaperActivity.this);
                 RelativeLayout.LayoutParams params =new RelativeLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         (int)navigationView.getHeight()*2/3);
@@ -337,10 +347,14 @@ public class CelebrityComActivity extends BaseActivity
      * @return 如果能返回成功，则true
      */
     private boolean webViewGoBack() {
-        Fragment fragment = mSectionsPagerAdapter.getCurrentFragment();
-        if(fragment instanceof CelebrityFragment){
-            return ((CelebrityFragment) fragment).goBack();
+        if(mSectionsPagerAdapter != null){
+            Fragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+
+            if(fragment!= null && fragment instanceof CelebrityFragment){
+                return ((CelebrityFragment) fragment).goBack();
+            }
         }
+
         return false;
     }
 
@@ -364,7 +378,6 @@ public class CelebrityComActivity extends BaseActivity
      * @param no 当前板块号
      * @param title 当前标题
      */
-    @Override
     public void setTitle(String no, String title) {
         this.title.setText(title);
         this.no.setText(no);

@@ -15,6 +15,7 @@
         android:layout_height="match_parent"/>
 
     <ListView
+        android:focusable="true"
         android:layout_marginTop="54dp"
         android:id="@+id/nav_view"
         android:layout_width="150dp"
@@ -24,11 +25,5 @@
         android:background="#ff0033"
         >
     </ListView>
-    <!--加载圈圈-->
-    <include
-        layout="@layout/include_loading"
-        android:layout_marginTop="54dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-         />
+
 </android.support.v4.widget.DrawerLayout><!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/layout/celebrity_comment_content.xml -->

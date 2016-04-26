@@ -234,7 +234,7 @@ ADDED from AndroidManifest.xml:94:9
 		ADDED from AndroidManifest.xml:96:13
 	android:name
 		ADDED from AndroidManifest.xml:95:13
-activity#com.yslc.ui.activity.CelebrityComActivity
+activity#com.yslc.ui.activity.InvestPaperActivity
 ADDED from AndroidManifest.xml:98:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:99:13

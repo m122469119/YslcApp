@@ -32,7 +32,7 @@ public class CelebrityFragment extends Fragment {
     private String title, no;
     private WebView webView;
 
-    private OnFragmentInteractionListener mListener;
+//    private OnFragmentInteractionListener mListener;
 
     public CelebrityFragment() {
         // Required empty public constructor
@@ -110,10 +110,10 @@ public class CelebrityFragment extends Fragment {
 //        }
 //    }
 
-    public void updateTitle(){
-        if (mListener != null) {
-            mListener.setTitle(no, title);
-        }
+
+    public String[] getTitle(){
+        String[] t = {no,title};
+        return t;
     }
 
     @Override
@@ -124,18 +124,18 @@ public class CelebrityFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+//        if (context instanceof OnFragmentInteractionListener) {
+//            mListener = (OnFragmentInteractionListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+//        mListener = null;
     }
 
     /**
@@ -148,8 +148,8 @@ public class CelebrityFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void setTitle(String no, String title);
-    }
+//    public interface OnFragmentInteractionListener {
+//        // TODO: Update argument type and name
+//        void setTitle(String no, String title);
+//    }
 }
