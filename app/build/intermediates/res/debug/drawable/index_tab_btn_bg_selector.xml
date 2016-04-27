@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_checked="true" android:drawable="@drawable/main_bg_focus" />
-    <item android:drawable="@drawable/main_bg_blur" />
-</selector>
-<!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/drawable/index_tab_btn_bg_selector.xml -->
