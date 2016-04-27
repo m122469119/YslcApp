@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:drawable="@drawable/set_true" android:state_checked="true" />
-    <item android:drawable="@drawable/set_false" />
-
-</selector><!-- From: file:/E:/android_studio/YslcApp/app/src/main/res/drawable/setting_checked_selector.xml -->
