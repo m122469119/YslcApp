@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.yslc.bean.ColnumBean;
+import com.yslc.bean.ColumnBean;
 import com.yslc.inf.GetDataCallback;
 import com.yslc.data.service.RadioModelService;
 import com.yslc.ui.base.BaseFragment;
@@ -33,7 +33,7 @@ public class RadioReliveFragment extends BaseFragment implements OnTryListener,
     private BaseListView listView;
     private LoadView loadView;
     private Context context;
-    private ColnumBean colnumBean;
+    private ColumnBean columnBean;
     private List<RadioBean> infoItemList;
     private RadioModelService radioModelService;
 
@@ -46,7 +46,7 @@ public class RadioReliveFragment extends BaseFragment implements OnTryListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
-        colnumBean = (ColnumBean) getArguments().getSerializable("bean");
+        columnBean = (ColumnBean) getArguments().getSerializable("bean");
         infoItemList = new ArrayList<>();
     }
 
@@ -94,7 +94,7 @@ public class RadioReliveFragment extends BaseFragment implements OnTryListener,
      * <p>下载数据，成功后刷新列表</p>
      */
     private void loadData() {
-        radioModelService.getRadioReliveListData(colnumBean.getId(), new GetDataCallback() {
+        radioModelService.getRadioReliveListData(columnBean.getId(), new GetDataCallback() {
             @Override
             public <T> void success(T data) {
                 loadView.setStatus(LoadView.SUCCESS);
@@ -142,7 +142,7 @@ public class RadioReliveFragment extends BaseFragment implements OnTryListener,
         // 进入广播重温详情
         Intent intent = new Intent(context, RadioReliveDetialActivity.class);
         intent.putExtra("RadP_Id", infoItemList.get(position).getRadioId());
-        intent.putExtra("Date", colnumBean.getName());
+        intent.putExtra("Date", columnBean.getName());
         context.startActivity(intent);
     }
 

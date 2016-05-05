@@ -1,7 +1,5 @@
 package com.yslc.ui.fragment;
 
-import java.util.ArrayList;
-
 import android.support.v4.app.Fragment;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -11,24 +9,22 @@ import com.yslc.util.HttpUtil;
 import com.yslc.util.ParseUtil;
 import com.yslc.view.LoadView;
 
+import java.util.ArrayList;
+
 /**
- * 资讯Fragment
- * 获取所有咨讯标题以及Id
- * 使用ViewPager装载，包括不同类型的Fragment
- * 传递不同类型的咨讯Id给Framgent，Fragment通过Id获取资讯内容
- *
+ * 视频Fragment
+ * 思路同咨讯Fragmetn,没有使用ViewPager装载子Fragment
+ * 此Fragment跟NewFragmentActivity太过相识，没有注释的方法请参考NewFragmentActivity同类方法
  * @author HH
  */
-public class NewFragmentActivity extends ViewPagerFragment {
+public class VideoFragmentActivity extends ViewPagerFragment {
 
-    /**
-     * 获取咨讯栏目数据
-     */
+    //参数不同
+    @Override
     protected void getTitle() {
-//        newModelService = new NewModelService(getContext());
         //请求参数
         RequestParams params = new RequestParams();
-        params.put("btid", HttpUtil.PARAMS_INFO_BTID);
+        params.put("btid", HttpUtil.PARAMS_VEDIO_BTID);
         HttpUtil.get(HttpUtil.GET_COLNUM, getActivity(), params,
                 new AsyncHttpResponseHandler() {
 
@@ -41,6 +37,7 @@ public class NewFragmentActivity extends ViewPagerFragment {
                     @Override
                     public void onSuccess(String arg0) {
                         super.onSuccess(arg0);
+
                         if (arg0.equals(HttpUtil.ERROR_CODE)) {
                             // 获取失败
                             loadView.setStatus(LoadView.ERROR);
@@ -59,18 +56,11 @@ public class NewFragmentActivity extends ViewPagerFragment {
                     }
 
                 });
-    }
 
+    }
 
     @Override
     protected Fragment createFragment(int position) {
-        if (position == 0) {//快讯和头版头条布局不同一般，所以单独创建
-            return  new NewFragmentFast();
-        } else if (position == 1) {
-            return new NewFragmentOne();
-        } else {
-            return  new NewFragmentTwo();
-        }
+        return new VideoFragment();
     }
-
 }

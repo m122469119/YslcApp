@@ -67,6 +67,8 @@ public class HttpUtil {
     public static final String GET_STOCY_H_DATA = "/AppJson/stock/getMinuteData.ashx";  //获取分时数据
     public static final String GET_STOCY_K_DATA = "/AppJson/stock/getKLine.ashx";  //获取K线数据
     /** ---------------所有接口配置结束------------- **/
+    public static final String PARAMS_INFO_BTID = "C879A54D-7605-4619-A0F8-3F2516D87C05";//获取资讯副标题的参数
+    public static final String PARAMS_VEDIO_BTID = "2C430AF1-FD0E-433D-B40D-F51BDB99FEC0";//获取Vedio副标题的参数
 
     /**
      * 发送post请求

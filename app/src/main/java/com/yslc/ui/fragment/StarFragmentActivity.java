@@ -1,22 +1,11 @@
 package com.yslc.ui.fragment;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.view.View;
-import android.view.View.OnClickListener;
 
-import com.yslc.R;
-import com.yslc.bean.ColnumBean;
-import com.yslc.data.service.NewModelService;
+import com.yslc.bean.ColumnBean;
 import com.yslc.data.service.StarModelService;
 import com.yslc.inf.GetDataCallback;
-import com.yslc.ui.adapter.MyFragmentAdapter;
-import com.yslc.ui.base.BaseFragment;
-import com.yslc.view.ColumnHorizontalScrollView;
-import com.yslc.view.ColumnHorizontalScrollView.OnSelecterCallback;
 import com.yslc.view.LoadView;
-import com.yslc.view.LoadView.OnTryListener;
 
 import java.util.ArrayList;
 
@@ -35,7 +24,7 @@ public class StarFragmentActivity extends ViewPagerFragment  {
         starModelService.getStarColumnData(new GetDataCallback() {
             @Override
             public <T> void success(T data) {
-                ArrayList<ColnumBean> listTitle = (ArrayList<ColnumBean>) data;
+                ArrayList<ColumnBean> listTitle = (ArrayList<ColumnBean>) data;
                 if (listTitle.size() == 0) {
                     loadView.setStatus(LoadView.EMPTY_DATA);
                 } else {

@@ -10,18 +10,18 @@ import java.io.Serializable;
  *
  * @author HH
  */
-public class ColnumBean implements Serializable {
+public class ColumnBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String id;
     private String name;
     private String stOrder;
 
-    public ColnumBean() {
+    public ColumnBean() {
 
     }
 
-    public ColnumBean(String id, String name, String stOrder) {
+    public ColumnBean(String id, String name, String stOrder) {
         this.id = id;
         this.name = name;
         this.stOrder = stOrder;

@@ -15,7 +15,7 @@ import android.view.View;
 import com.yslc.ui.base.BaseActivity;
 import com.yslc.R;
 import com.yslc.ui.adapter.MyFragmentAdapter;
-import com.yslc.bean.ColnumBean;
+import com.yslc.bean.ColumnBean;
 import com.yslc.bean.StockCodeBean;
 import com.yslc.ui.fragment.StockKFragment;
 import com.yslc.ui.fragment.StockMinFragment;
@@ -85,9 +85,9 @@ public class StockMarketActivity extends BaseActivity implements ViewPager.OnPag
      * <p>副标题数据</p>
      */
     private void initDate() {
-        ArrayList<ColnumBean> beans = new ArrayList<>();
-        ColnumBean bean1 = new ColnumBean("", "分时图", "");
-        ColnumBean bean2 = new ColnumBean("", "K线图", "");
+        ArrayList<ColumnBean> beans = new ArrayList<>();
+        ColumnBean bean1 = new ColumnBean("", "分时图", "");
+        ColumnBean bean2 = new ColumnBean("", "K线图", "");
         beans.add(bean1);
         beans.add(bean2);
 

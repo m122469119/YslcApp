@@ -1,8 +1,6 @@
 package com.yslc.ui.fragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
@@ -20,10 +18,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yslc.bean.StockInfo;
-import com.yslc.data.service.NewModelService;
-import com.yslc.inf.GetDataCallback;
 import com.yslc.ui.base.BaseFragment;
 import com.yslc.R;
 import com.yslc.ui.activity.WebActivity;
@@ -32,6 +30,7 @@ import com.yslc.ui.adapter.QuickAdapter;
 import com.yslc.bean.AdBean;
 import com.yslc.bean.NewBean;
 import com.yslc.util.HttpUtil;
+import com.yslc.util.ParseUtil;
 import com.yslc.util.TimerUtil;
 import com.yslc.util.ToastUtil;
 import com.yslc.view.BaseIndicator;
@@ -65,8 +64,9 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
     private List<AdBean> titleImgList; // 图片列表
     private ArrayList<NewBean> infoItemList; // 咨讯内容列表
     private boolean isRefersh = false; // 是否刷新
+    private int pageIndex, pageSize;
 
-    private NewModelService service;
+//    private NewModelService service;
 
     /**
      * 初始化Activity</br>
@@ -79,10 +79,11 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
         super.onCreate(savedInstanceState);
 
         context = getActivity();
+        pageIndex = 1;
         //副标题号
         colnumBeanId = getArguments().getString("id");
         imageLoader = ImageLoader.getInstance();
-        service = new NewModelService(context);//业务逻辑类
+//        service = new NewModelService(context);//业务逻辑类
         imgTimer = new TimerUtil(TIME_IMG);
         imgTimer.setOnTimerCallback(new TimerUtil.OnTimerCallback() {
             @Override
@@ -193,72 +194,100 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
      * 加载数据
      */
     private void loadData() {
-        service.loadMoreNewData(new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {//data 包含轮播数据和内容数据
-                refreshableView.setRefreshing(false);
-                loadView.setStatus(LoadView.SUCCESS);
-                infoItemList.clear();//清除内容
-                //拆分数据
-                HashMap<ArrayList<AdBean>, ArrayList<NewBean>> map = (HashMap<ArrayList<AdBean>, ArrayList<NewBean>>) data;
-                Iterator iterator = map.keySet().iterator();
-                ArrayList<AdBean> adList = null;
-                ArrayList<NewBean> newList = null;
-                while (iterator.hasNext()) {
-                    adList = (ArrayList<AdBean>) iterator.next();
-                    newList = map.get(adList);
-                }
+        HttpUtil.get(HttpUtil.GET_MAIN, context, null,
+                new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onFailure(Throwable arg0, String arg1) {
+                        super.onFailure(arg0, arg1);
+                        failure();
+//                        callback.failer(null);
+                    }
 
-                //下拉刷新只刷新列表部分（大盘信息由定时器自动刷新）
-                if (!isRefersh) {//不是下拉刷新
-                    // 显示广告,获取大盘信息
-                    titleImgList.clear();
-                    titleImgList.addAll(adList);
-                    getComposite();//大盘数据
-                    showAd();
-                } else {
-                    listView.onFinishLoad();
-                }
+                    @Override
+                    public void onSuccess(String arg0) {
+                        super.onSuccess(arg0);
+                        if (arg0.equals(HttpUtil.ERROR_CODE)) {
+                            failure();
+                        } else {
+                            //解析咨讯
+                            ArrayList<NewBean> newList = ParseUtil.parseNewBean(arg0);
+                            ArrayList<AdBean> imgList = ParseUtil.parseAdBean(arg0);
 
-                // 显示列表
-                infoItemList.addAll(newList);
-                showListView();//刷新列表
-                isRefersh = false;
-            }
+                            refreshableView.setRefreshing(false);
+                            loadView.setStatus(LoadView.SUCCESS);
+                            infoItemList.clear();//清除内容
 
-            @Override
-            public <T> void failer(T data) {
-                isRefersh = false;
-                refreshableView.setRefreshing(false);
-                loadView.setStatus(LoadView.ERROR);
-            }
-        });
+                            //下拉刷新只刷新列表部分（大盘信息由定时器自动刷新）
+                            if (!isRefersh) {//不是下拉刷新
+                                // 显示广告,获取大盘信息
+                                titleImgList.clear();
+                                titleImgList.addAll(imgList);
+                                getComposite();//大盘数据
+                                showAd();
+                            } else {
+                                listView.onFinishLoad();
+                            }
+
+                            // 显示列表
+                            infoItemList.addAll(newList);
+                            showListView();//刷新列表
+                            isRefersh = false;
+                        }
+                    }
+
+                    private void failure() {
+                        isRefersh = false;
+                        refreshableView.setRefreshing(false);
+                        loadView.setStatus(LoadView.ERROR);
+                    }
+                });
     }
 
     /**
      * 加载更多数据
      */
     private void loadMore() {
-        service.loadMoreNewData(false, colnumBeanId, new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {
-                listView.onFinishLoad();
+        if(pageSize < 15){
+            listView.noMoreData();
+            return;
+        }
+        pageIndex++;
+        RequestParams params = new RequestParams();
+        params.put("sstid", colnumBeanId);
+        params.put("pageSize", String.valueOf(15));
+        params.put("pageIndex", String.valueOf(pageIndex));
+        HttpUtil.get(HttpUtil.GET_MAIN, context, params,
+                new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onFailure(Throwable arg0, String arg1) {
+                        super.onFailure(arg0, arg1);
+                        listView.onFinishLoad();
+                        ToastUtil.showMessage(context, HttpUtil.ERROR_INFO);
+                    }
 
-                ArrayList<NewBean> list = (ArrayList<NewBean>) data;
-                // 是否加载到了最后一页...
-                if (list.size() < service.getPageSize()) {
-                    listView.noMoreData();
-                }
-                infoItemList.addAll(list);
-                showListView();
-            }
+                    @Override
+                    public void onSuccess(String arg0) {
+                        super.onSuccess(arg0);
+                        listView.onFinishLoad();
+//
+                        if (arg0.equals(HttpUtil.ERROR_CODE)) {
+                            listView.onFinishLoad();
+                            ToastUtil.showMessage(context, HttpUtil.ERROR_INFO);
+                        } else {
+                            refreshableView.setRefreshing(false);
+                            listView.onFinishLoad();
+                            loadView.setStatus(LoadView.SUCCESS);
+                            if(pageIndex == 1){
+                                infoItemList.clear();
+                            }
+                            ArrayList<NewBean> list = ParseUtil.parseNewBean(arg0);
+                            pageSize = list.size();
+                            infoItemList.addAll(list);
+                            showListView();
+                        }
+                    }
+                });
 
-            @Override
-            public <T> void failer(T data) {
-                listView.onFinishLoad();
-                ToastUtil.showMessage(context, HttpUtil.ERROR_INFO);
-            }
-        });
     }
 
     /**
@@ -308,27 +337,42 @@ public class NewFragmentOne extends BaseFragment implements OnTryListener {
      * <p>获取去成功后刷新大盘</p>
      */
     private void getComposite() {
-        service.getStockInfo(new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {
-                ArrayList<StockInfo> list = (ArrayList<StockInfo>) data;
-                shTv1.setText(list.get(0).getName());//上海大盘
-                showColor(shTv2, list.get(0).getNow(), list.get(0).getProportion(), shTv3);
-                shTv3.setText(list.get(0).getDiffer() + "  " + list.get(0).getProportion() + "%");
+        HttpUtil.get(HttpUtil.GET_STOCK, context, null,
+                new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onFailure(Throwable arg0, String arg1) {
+                        super.onFailure(arg0, arg1);
+                        ToastUtil.showMessage(context, "获取大盘信息失败");
+                    }
 
-                szTv1.setText(list.get(1).getName());//深圳大盘
-                showColor(szTv2, list.get(1).getNow(), list.get(1).getProportion(), szTv3);
-                szTv3.setText(list.get(1).getDiffer() + "  " + list.get(1).getProportion() + "%");
+                    @Override
+                    public void onSuccess(String arg0) {
+                        super.onSuccess(arg0);
+                        if (arg0.equals(HttpUtil.ERROR_CODE)) {
+                            ToastUtil.showMessage(context, "获取大盘信息失败");
+                            return;
+                        }
 
-                // 开启大盘信息更新定时操作
-                infoTimer.startTimer();
-            }
+                        ArrayList<StockInfo> list = ParseUtil.parseStockInfo(arg0);
+                        showComposite(list);
 
-            @Override
-            public <T> void failer(T data) {
-                ToastUtil.showMessage(context, "获取大盘信息失败");
-            }
-        });
+                    }
+
+                });
+
+    }
+
+    private void showComposite(ArrayList<StockInfo> list) {
+        shTv1.setText(list.get(0).getName());//上海大盘
+        showColor(shTv2, list.get(0).getNow(), list.get(0).getProportion(), shTv3);
+        shTv3.setText(list.get(0).getDiffer() + "  " + list.get(0).getProportion() + "%");
+
+        szTv1.setText(list.get(1).getName());//深圳大盘
+        showColor(szTv2, list.get(1).getNow(), list.get(1).getProportion(), szTv3);
+        szTv3.setText(list.get(1).getDiffer() + "  " + list.get(1).getProportion() + "%");
+
+        // 开启大盘信息更新定时操作
+        infoTimer.startTimer();
     }
 
     /**

@@ -3,7 +3,7 @@ package com.yslc.view;
 import java.util.ArrayList;
 
 import com.yslc.R;
-import com.yslc.bean.ColnumBean;
+import com.yslc.bean.ColumnBean;
 import com.yslc.util.CommonUtil;
 
 import android.content.Context;
@@ -121,7 +121,7 @@ public class ColumnHorizontalScrollView extends HorizontalScrollView {
      * 设置栏目数据
      * <p>设置副标题</p>
      */
-    public void setColumnData(ArrayList<ColnumBean> listTitle) {
+    public void setColumnData(ArrayList<ColumnBean> listTitle) {
         dataSize = listTitle.size();
         calcultorItemWidth(listTitle.size());
         radioGroup = (RadioGroup) getChildAt(0);

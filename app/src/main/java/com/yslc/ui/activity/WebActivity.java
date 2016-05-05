@@ -25,8 +25,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.yslc.data.service.NewModelService;
-import com.yslc.inf.GetDataCallback;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.yslc.ui.base.BaseActivity;
 import com.yslc.R;
 import com.yslc.ui.dialog.SetTextSizeDialog;
@@ -34,9 +34,13 @@ import com.yslc.ui.dialog.SetTextSizeDialog.OnTextSize;
 import com.yslc.ui.dialog.SetTextSizeDialog.TextSizeEnum;
 import com.yslc.util.CommonUtil;
 import com.yslc.util.HttpUtil;
+import com.yslc.util.SharedPreferencesUtil;
 import com.yslc.util.ToastUtil;
 import com.yslc.view.LoadView;
 import com.yslc.view.LoadView.OnTryListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * 新闻WebView页面(咨讯详情，视频详情)
@@ -216,14 +220,14 @@ public class WebActivity extends BaseActivity implements OnClickListener,
             super.onReceivedHttpError(view, request, errorResponse);
         }
 
-        @Override
-        public void onReceivedError(WebView view, int errorCode,
-                                    String description, String failingUrl) {
-            super.onReceivedError(view, errorCode, description, failingUrl);
-
-            // 加载错误
-            loadView.setStatus(LoadView.ERROR);
-        }
+//        @Override
+//        public void onReceivedError(WebView view, int errorCode,
+//                                    String description, String failingUrl) {
+//            super.onReceivedError(view, errorCode, description, failingUrl);
+//
+//            // 加载错误
+//            loadView.setStatus(LoadView.ERROR);
+//        }
 
         @Override
         public void onPageFinished(WebView view, String url) {
@@ -382,7 +386,7 @@ public class WebActivity extends BaseActivity implements OnClickListener,
         super.onResume();
 
         if (null != webView) {
-            webView.onResume();
+//            webView.onResume();
             webView.resumeTimers();
         }
     }
@@ -392,7 +396,7 @@ public class WebActivity extends BaseActivity implements OnClickListener,
         super.onPause();
 
         if (null != webView) {
-            webView.onPause();
+//            webView.onPause();
             webView.pauseTimers();
         }
     }
@@ -421,21 +425,63 @@ public class WebActivity extends BaseActivity implements OnClickListener,
      */
     private void commitComment() {
         showWaitDialogs(R.string.doCommentInfo, true);
-        new NewModelService(this).doNewComment(getIntent().getStringExtra("nid"),
-                contentInput.getText().toString().trim(), new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {
-                hideWaitDialog();
-                contentInput.setText("");//清空
-                ToastUtil.showMessage(WebActivity.this, data.toString());//评论成功
-            }
+        if(checkCondition()){
+            RequestParams params = new RequestParams();
+            params.put("UiID", SharedPreferencesUtil.getUserId(this));
+            params.put("NiId", getIntent().getStringExtra("nid"));
+            params.put("NcContent", contentInput.getText().toString().trim());
+            HttpUtil.post(HttpUtil.POST_COMMENT, this, params,
+                    new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onFailure(Throwable arg0, String arg1) {
+                            super.onFailure(arg0, arg1);
+                            hideWaitDialog();
+                            ToastUtil.showMessage(WebActivity.this, "发表评论失败");
+//                            callback.failer("发表评论失败");
+                        }
 
-            @Override
-            public <T> void failer(T data) {
-                hideWaitDialog();
-                ToastUtil.showMessage(WebActivity.this, data.toString());
-            }
-        });
+                        @Override
+                        public void onSuccess(String arg0) {
+                            super.onSuccess(arg0);
+
+                            try {
+                                JSONObject jo = new JSONObject(arg0);
+                                if (jo.optString("Status").equals(
+                                        HttpUtil.ERROR_CODE)) {
+                                    hideWaitDialog();
+                                    ToastUtil.showMessage(WebActivity.this, jo.optString("msg"));
+//                                    callback.failer(jo.optString("msg"));
+                                } else {
+                                    // 发表成功
+                                    hideWaitDialog();
+                                    contentInput.setText("");//清空
+                                    ToastUtil.showMessage(WebActivity.this, jo.optString("msg"));//评论成功
+//                                    callback.success(jo.optString("msg"));
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+        }
+
+    }
+
+    private boolean checkCondition() {
+        //判断是否有网络
+        if (!CommonUtil.isNetworkAvalible(this)) {
+            ToastUtil.showMessage(this, HttpUtil.NO_INTERNET_INFO);
+            return false;
+        }
+
+        //判断是否登录
+        if (!SharedPreferencesUtil.isLogin(this)) {
+            ToastUtil.showMessage(this, "请先登录");
+            this.startActivity(new Intent(this, LoginActivity.class));
+            return false;
+        }
+        return true;
     }
 
     /**

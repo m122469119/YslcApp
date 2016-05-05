@@ -20,7 +20,7 @@ import com.yslc.app.Constant;
 import com.yslc.ui.fragment.MyFragment;
 import com.yslc.ui.fragment.NewFragmentActivity;
 import com.yslc.ui.fragment.StarFragmentActivity;
-import com.yslc.ui.fragment.VedioFragmentActivity;
+import com.yslc.ui.fragment.VideoFragmentActivity;
 import com.yslc.util.SharedPreferencesUtil;
 import com.yslc.util.ToastUtil;
 
@@ -93,7 +93,7 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
     private void initFragment() {
         // 初始化Fragment
         addFragment(new NewFragmentActivity(), getText(R.string.yslcNew).toString());
-        addFragment(new VedioFragmentActivity(), getText(R.string.vedio).toString());
+        addFragment(new VideoFragmentActivity(), getText(R.string.vedio).toString());
         addFragment(new StarFragmentActivity(), getText(R.string.star).toString());
         addFragment(new MyFragment(), getText(R.string.my).toString());
         showFragment(R.id.fragment);

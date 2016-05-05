@@ -1,22 +1,16 @@
 package com.yslc.data.impl;
 
 import android.content.Context;
-import android.view.View;
-import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.yslc.R;
-import com.yslc.bean.ColnumBean;
+import com.yslc.bean.ColumnBean;
 import com.yslc.bean.CommentBean;
 import com.yslc.bean.StarBean;
 import com.yslc.data.inf.IStarModel;
 import com.yslc.inf.GetDataCallback;
 import com.yslc.util.HttpUtil;
-import com.yslc.util.SharedPreferencesUtil;
-import com.yslc.util.ToastUtil;
-import com.yslc.view.LoadView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,14 +51,14 @@ public class StarModelImpl implements IStarModel {
                         super.onSuccess(arg0);
 
                         // 获取栏目成功并解析
-                        ArrayList<ColnumBean> listTitle = new ArrayList<>();
+                        ArrayList<ColumnBean> listTitle = new ArrayList<>();
                         try {
                             JSONArray ja = new JSONArray(arg0);
-                            ColnumBean cb;
+                            ColumnBean cb;
                             JSONObject jo;
                             for (int i = 0, len = ja.length(); i < len; i++) {
                                 jo = ja.getJSONObject(i);
-                                cb = new ColnumBean();
+                                cb = new ColumnBean();
                                 cb.setId(jo.optString("St_Id"));
                                 cb.setName(jo.optString("St_Name"));
                                 listTitle.add(cb);

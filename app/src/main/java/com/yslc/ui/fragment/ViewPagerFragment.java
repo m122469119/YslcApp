@@ -8,9 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.yslc.R;
-import com.yslc.bean.ColnumBean;
-import com.yslc.data.service.NewModelService;
-import com.yslc.inf.GetDataCallback;
+import com.yslc.bean.ColumnBean;
 import com.yslc.ui.adapter.MyFragmentAdapter;
 import com.yslc.ui.base.BaseFragment;
 import com.yslc.view.ColumnHorizontalScrollView;
@@ -92,7 +90,7 @@ public abstract class ViewPagerFragment extends BaseFragment implements
      * <p>把建好的fragment列表放到适配器并设置好ViewPager的适配器</p>
      * @param listTitle 副标题集合
      */
-    protected void initViewPager(ArrayList<ColnumBean> listTitle) {
+    protected void initViewPager(ArrayList<ColumnBean> listTitle) {
         ArrayList<Fragment> listFragment = new ArrayList<>();
         Fragment fragment;
         Bundle bundler;

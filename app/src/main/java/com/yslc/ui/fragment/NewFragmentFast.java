@@ -13,8 +13,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
-import com.yslc.inf.GetDataCallback;
-import com.yslc.data.service.NewModelService;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.yslc.ui.base.BaseFragment;
 import com.yslc.R;
 import com.yslc.ui.activity.WebActivity;
@@ -22,7 +22,7 @@ import com.yslc.ui.adapter.BaseAdapterHelper;
 import com.yslc.ui.adapter.QuickAdapter;
 import com.yslc.bean.NewBean;
 import com.yslc.util.HttpUtil;
-import com.yslc.util.ToastUtil;
+import com.yslc.util.ParseUtil;
 import com.yslc.view.BaseListView;
 import com.yslc.view.LoadView;
 import com.yslc.view.BaseListView.OnLoadMoreListener;
@@ -40,7 +40,9 @@ public class NewFragmentFast extends BaseFragment implements OnTryListener {
     private QuickAdapter<NewBean> adapter;//适配器
     private Context context;
     private ArrayList<NewBean> infoItemList;//list数据
-    private NewModelService newModelService;
+//    private NewModelService newModelService;
+    private int pageIndex, pageSize;//当前下载页面大少
+    private String columnBeanId;
 
     /**
      * <p>获取上下文</p>
@@ -50,7 +52,8 @@ public class NewFragmentFast extends BaseFragment implements OnTryListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        columnBeanId = getArguments().getString("id");
+        pageIndex = 1;
         context = getActivity();
         infoItemList = new ArrayList<>();
     }
@@ -96,7 +99,7 @@ public class NewFragmentFast extends BaseFragment implements OnTryListener {
                 R.color.refreshViewColor2, R.color.refreshViewColor3);
         //设置点击事件
         listViewSetEvent();
-        newModelService = new NewModelService(context);
+//        newModelService = new NewModelService(context);
     }
 
     /**
@@ -136,26 +139,45 @@ public class NewFragmentFast extends BaseFragment implements OnTryListener {
     /**
      * 第一次加载或者刷新
      * <p>成功后加载停止，把数据添加到数据列表</p>
+     * 成功pagerIndex =2
      */
     private void oneLoad() {
-        newModelService.fristLoadFastNewData(new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {
-                loadView.setStatus(LoadView.SUCCESS);
-                refreshableView.setRefreshing(false);
-                listView.onFinishLoad();
-                infoItemList.clear();
+        RequestParams params = new RequestParams();
+        params.put("pageSize", String.valueOf(15));
+        params.put("pageIndex", String.valueOf(pageIndex));
+        HttpUtil.get(HttpUtil.GET_MAIN_FAST, context, params,
+                new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onFailure(Throwable arg0, String arg1) {
+                        super.onFailure(arg0, arg1);
+                        refreshableView.setRefreshing(false);
+                        loadView.setStatus(LoadView.ERROR);
+                    }
 
-                infoItemList.addAll((ArrayList<NewBean>) data);
-                listRefersh();
-            }
+                    @Override
+                    public void onSuccess(String arg0) {
+                        super.onSuccess(arg0);
 
-            @Override
-            public <T> void failer(T data) {
-                refreshableView.setRefreshing(false);
-                loadView.setStatus(LoadView.ERROR);
-            }
-        });
+                        if (arg0.equals(HttpUtil.ERROR_CODE)) {
+                            // 加载失败
+                            refreshableView.setRefreshing(false);
+                            loadView.setStatus(LoadView.ERROR);
+                        } else {
+//                            pageIndex = 2;
+                            loadView.setStatus(LoadView.SUCCESS);
+                            refreshableView.setRefreshing(false);
+                            listView.onFinishLoad();
+                            if(pageIndex==1){//加载第一页清空
+                                infoItemList.clear();
+                            }
+                            ArrayList<NewBean> list = ParseUtil.parseNewBean(arg0);
+                            pageSize = list.size();
+                            infoItemList.addAll(list);
+                            listRefersh();
+
+                        }
+                    }
+                });
     }
 
     /**
@@ -163,28 +185,12 @@ public class NewFragmentFast extends BaseFragment implements OnTryListener {
      * <p>如果成功获取更多数据，把数据追加到数据列表，并刷新list</p>
      */
     private void loadMore() {
-        newModelService.loadMoreNewData(false, null, new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {
-                ArrayList<NewBean> list = (ArrayList<NewBean>) data;
-
-                listView.onFinishLoad();
-                if (list.size() < newModelService.getPageSize()) {
-                    //没有更多数据了，不可以再进行下拉刷新（FooterView显示没有更多了）
-                    listView.noMoreData();
-                }
-
-                // 添加更多数据并刷新列表
-                infoItemList.addAll((ArrayList<NewBean>) data);
-                listRefersh();
-            }
-
-            @Override
-            public <T> void failer(T data) {
-                listView.onFinishLoad();
-                ToastUtil.showMessage(context, HttpUtil.ERROR_INFO);
-            }
-        });
+        if(pageSize<15){
+            listView.noMoreData();
+        }else{
+            pageIndex++;//加载下一页
+            oneLoad();
+        }
     }
 
     /**

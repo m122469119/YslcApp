@@ -2,16 +2,19 @@ package com.yslc.ui.activity;
 
 import java.util.ArrayList;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yslc.data.service.NewModelService;
-import com.yslc.inf.GetDataCallback;
 import com.yslc.ui.base.BaseActivity;
 import com.yslc.R;
 import com.yslc.ui.adapter.BaseAdapterHelper;
 import com.yslc.ui.adapter.QuickAdapter;
 import com.yslc.bean.CommentBean;
 import com.yslc.util.CommonUtil;
+import com.yslc.util.HttpUtil;
+import com.yslc.util.ParseUtil;
+import com.yslc.util.SharedPreferencesUtil;
 import com.yslc.util.ToastUtil;
 import com.yslc.util.ViewUtil;
 import com.yslc.view.BaseListView;
@@ -19,6 +22,7 @@ import com.yslc.view.LoadView;
 import com.yslc.view.BaseListView.OnLoadMoreListener;
 import com.yslc.view.LoadView.OnTryListener;
 
+import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -30,6 +34,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * 评论列表页面Activity
@@ -46,7 +53,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
     private ImageLoader imageLoader;
     private QuickAdapter<CommentBean> adapter;
     private ArrayList<CommentBean> listData = null;
-    private NewModelService service;
+//    private NewModelService service;
 
     /**
      * 设置布局
@@ -74,6 +81,8 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
      */
     @Override
     protected void initView() {
+        pageIndex =1;
+        pageSize = 15;
         //发送评论按钮
         send = (Button) findViewById(R.id.send);
         send.setText("发送");
@@ -119,7 +128,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
         loadView = (LoadView) findViewById(R.id.view);
         loadView.setOnTryListener(this);
         listViewOnEvent();//listview监听事件
-        service = new NewModelService(this);//业务逻辑类
+//        service = new NewModelService(this);//业务逻辑类
         listData = new ArrayList<>();//评论数据
         if (loadView.setStatus(LoadView.LOADING)) {
             getData(true);
@@ -134,6 +143,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
+                pageIndex = 1;
                 getData(true);
             }
         });
@@ -142,50 +152,71 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
         listView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
+                if(pageSize < 15){
+                    listView.noMoreData();
+                    return;
+                }
+                pageIndex++;
                 getData(false);
             }
         });
     }
 
+    private int pageIndex,pageSize;
     /**
      * 获取评论数据
      * <p>成功后设置数据</p>
      * @param isFrist 是否加载第一页数据
      */
     private void getData(boolean isFrist) {
-        service.getNewCommentList(isFrist, getIntent().getStringExtra("nid"), new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {
-                refreshLayout.setRefreshing(false);
-                listView.onFinishLoad();
-                loadView.setStatus(LoadView.SUCCESS);
+        RequestParams params = new RequestParams();
+        params.put("NiId", getIntent().getStringExtra("nid"));
+        params.put("pagesize", "15");
+        params.put("pageindex", String.valueOf(pageIndex));
+        HttpUtil.get(HttpUtil.GET_COMMENT, this, params,
+                new AsyncHttpResponseHandler() {
 
-                ArrayList<CommentBean> list = (ArrayList<CommentBean>) data;
-                if (list.size() == 0 && service.getPageIndex() == 2) {//没有数据
-                    loadView.setStatus(LoadView.EMPTY_DATA);
-                    return;
-                }
-                //加载更多
-                if (list.size() < service.getPageSize() && service.getPageIndex() > 2) {
-                    // 加载更多时没有更多了...
-                    listView.noMoreData();
-                }
+                    @Override
+                    public void onFailure(Throwable arg0, String arg1) {
+                        super.onFailure(arg0, arg1);
+                        refreshLayout.setRefreshing(false);
+                        loadView.setStatus(LoadView.ERROR);
+//                        callback.failer(null);
+                    }
 
-                if (service.getPageIndex() == 2) {
-                    //下拉刷新
-                    listData.clear();
-                }
+                    @Override
+                    public void onSuccess(String arg0) {
+                        super.onSuccess(arg0);
 
-                listData.addAll(list);
-                setData();
-            }
+                        if (arg0.equals(HttpUtil.ERROR_CODE)) {
+                            refreshLayout.setRefreshing(false);
+                            loadView.setStatus(LoadView.ERROR);
+//                            callback.failer(null);
+                            return;
+                        }
 
-            @Override
-            public <T> void failer(T data) {
-                refreshLayout.setRefreshing(false);
-                loadView.setStatus(LoadView.ERROR);
-            }
-        });
+                        ArrayList<CommentBean> list = ParseUtil.parseCommentBean(arg0);
+                        refreshLayout.setRefreshing(false);
+                        listView.onFinishLoad();
+                        loadView.setStatus(LoadView.SUCCESS);
+                        pageSize = list.size();
+
+//                        ArrayList<CommentBean> list = (ArrayList<CommentBean>) data;
+                        if (list.size() == 0 && pageIndex == 1) {//没有数据
+                            loadView.setStatus(LoadView.EMPTY_DATA);
+                            return;
+                        }
+
+                        if (pageIndex == 1) {
+                            //下拉刷新
+                            listData.clear();
+                        }
+
+                        listData.addAll(list);
+                        setData();
+                    }
+                });
+
     }
 
     /**
@@ -223,26 +254,67 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
         }
     }
 
+    private boolean checkCondition() {
+        //判断是否有网络
+        if (!CommonUtil.isNetworkAvalible(this)) {
+            ToastUtil.showMessage(this, HttpUtil.NO_INTERNET_INFO);
+            return false;
+        }
+
+        //判断是否登录
+        if (!SharedPreferencesUtil.isLogin(this)) {
+            ToastUtil.showMessage(this, "请先登录");
+            this.startActivity(new Intent(this, LoginActivity.class));
+            return false;
+        }
+        return true;
+    }
     /**
      * 提交评论
      */
     private void commitComment() {
-        service.doNewComment(getIntent().getStringExtra("nid"),
-                contentInput.getText().toString().trim(), new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {
-                hideWaitDialog();
-                ToastUtil.showMessage(CommentActivity.this, data.toString());
-                contentInput.setText("");
-                getData(true);//刷新评论列表
-            }
+        showWaitDialogs(R.string.doCommentInfo, true);
+        if(checkCondition()) {
+            RequestParams params = new RequestParams();
+            params.put("UiID", SharedPreferencesUtil.getUserId(this));
+            params.put("NiId", getIntent().getStringExtra("nid"));
+            params.put("NcContent", contentInput.getText().toString().trim());
+            HttpUtil.post(HttpUtil.POST_COMMENT, this, params,
+                    new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onFailure(Throwable arg0, String arg1) {
+                            super.onFailure(arg0, arg1);
+                            hideWaitDialog();
+                            ToastUtil.showMessage(CommentActivity.this, "发表评论失败");
+//                            callback.failer("发表评论失败");
+                        }
 
-            @Override
-            public <T> void failer(T data) {
-                hideWaitDialog();
-                ToastUtil.showMessage(CommentActivity.this, data.toString());
-            }
-        });
+                        @Override
+                        public void onSuccess(String arg0) {
+                            super.onSuccess(arg0);
+
+                            try {
+                                JSONObject jo = new JSONObject(arg0);
+                                if (jo.optString("Status").equals(
+                                        HttpUtil.ERROR_CODE)) {
+                                    hideWaitDialog();
+                                    ToastUtil.showMessage(CommentActivity.this, jo.optString("msg"));
+//                                    callback.failer(jo.optString("msg"));
+                                } else {
+                                    // 发表成功
+                                    hideWaitDialog();
+                                    contentInput.setText("");//清空
+                                    ToastUtil.showMessage(CommentActivity.this, jo.optString("msg"));//评论成功
+                                    getData(true);
+//                                    callback.success(jo.optString("msg"));
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+        }
     }
 
     /**

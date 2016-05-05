@@ -8,10 +8,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 
+import com.yslc.bean.ColumnBean;
 import com.yslc.ui.base.BaseActivity;
 import com.yslc.R;
 import com.yslc.ui.adapter.MyFragmentAdapter;
-import com.yslc.bean.ColnumBean;
 import com.yslc.ui.fragment.RadioReliveFragment;
 import com.yslc.view.ColumnHorizontalScrollView;
 import com.yslc.view.ColumnHorizontalScrollView.OnSelecterCallback;
@@ -72,12 +72,12 @@ public class RadioReliveActivity extends BaseActivity implements
      * <p>此副标题不用联网加载</p>
      * @return 副标题数据
      */
-    private ArrayList<ColnumBean> initRadioDate() {
-        ArrayList<ColnumBean> beans = new ArrayList<>();
+    private ArrayList<ColumnBean> initRadioDate() {
+        ArrayList<ColumnBean> beans = new ArrayList<>();
 
-        beans.add(new ColnumBean("1-5", "周一至周五", ""));
-        beans.add(new ColnumBean("6", "周六", ""));
-        beans.add(new ColnumBean("7", "周日", ""));
+        beans.add(new ColumnBean("1-5", "周一至周五", ""));
+        beans.add(new ColumnBean("6", "周六", ""));
+        beans.add(new ColumnBean("7", "周日", ""));
 
         // 设置栏目数据
         mColumnView.setColumnData(beans);
@@ -90,7 +90,7 @@ public class RadioReliveActivity extends BaseActivity implements
      * <p>设置适配器并监听</p>
      * @param beans 副标题数据
      */
-    private void initViewPager(ArrayList<ColnumBean> beans) {
+    private void initViewPager(ArrayList<ColumnBean> beans) {
         ArrayList<Fragment> listFragment = new ArrayList<>();
         Fragment fragment;
         Bundle bundler;
