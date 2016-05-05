@@ -5,6 +5,7 @@ import java.util.List;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 /**
  * 咨讯页面ViewPager FragmentAdapter
@@ -13,6 +14,7 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 public class MyFragmentAdapter extends FragmentPagerAdapter {
     private List<Fragment> list;
+    private Fragment currentFragment;
 
     public MyFragmentAdapter(FragmentManager fm) {
         super(fm);
@@ -22,6 +24,16 @@ public class MyFragmentAdapter extends FragmentPagerAdapter {
                              List<Fragment> list) {
         super(fragmentManager);
         this.list = list;
+    }
+
+    public Fragment getCurrentFragment(){
+        return currentFragment;
+    }
+
+    @Override
+    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+        currentFragment = (Fragment)object;
+        super.setPrimaryItem(container, position, object);
     }
 
     @Override

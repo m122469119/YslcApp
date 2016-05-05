@@ -97,6 +97,12 @@
                 android:text="@string/fast_info" />
 
             <RadioButton
+                android:id="@+id/celebrity_comment"
+                style="@style/slidingText.slidingLeftBtn"
+                android:drawableLeft="@drawable/invest_paper_icon"
+                android:text="@string/celebrity_com" />
+
+            <RadioButton
                 android:id="@+id/radio"
                 style="@style/slidingText.slidingLeftBtn"
                 android:drawableLeft="@drawable/sliding_pay"

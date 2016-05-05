@@ -43,6 +43,7 @@ public class HttpUtil {
     public static final String POST_COMMENT = "/AppJson/news/AddNews_Comment.ashx";// 提交评论
     public static final String GET_NEW = IP + "/AppJson/news/news.aspx"; // 获取新闻详细页面（Web页面）
     public static final String GET_FAST_INFO = "/AppJson/news/getsdqb.ashx";//获取闪电情报
+    public static final String GET_CELEBRITY_COMMENT = "http://tzkb.etz927.com/tzkbJson/GetSection.ashx";//名家评论
 
     public static final String POST_LOGIN = "/AppJson/Users_AppJson/Post_Users_Info_Login.ashx"; // 用户登录
     public static final String POST_REGISTER = "/AppJson/Users_AppJson/Post_Users_Info_Registration.ashx"; // 用户注册
@@ -107,6 +108,17 @@ public class HttpUtil {
         }
 
         client.get(getHostUrl(url), params, responseHandler);
+    }
+
+    public static void originGet(String url, Context context, RequestParams params,
+                           AsyncHttpResponseHandler responseHandler) {
+        // 判断是否连接网络
+        if (!CommonUtil.isNetworkAvalible(context)) {
+            ToastUtil.showMessage(context, HttpUtil.NO_INTERNET_INFO);
+            return;
+        }
+
+        client.get(url, params, responseHandler);
     }
 
     /**
