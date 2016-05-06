@@ -4,19 +4,15 @@ import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.yslc.R;
 import com.yslc.bean.FastInfoBean;
-import com.yslc.data.service.StarModelService;
 import com.yslc.ui.adapter.BaseAdapterHelper;
 import com.yslc.ui.adapter.QuickAdapter;
 import com.yslc.ui.base.BaseActivity;
 import com.yslc.util.HttpUtil;
-import com.yslc.util.ToastUtil;
 import com.yslc.view.BaseListView;
 import com.yslc.view.LoadView;
 

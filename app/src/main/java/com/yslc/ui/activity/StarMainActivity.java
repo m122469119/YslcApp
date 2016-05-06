@@ -1,8 +1,6 @@
 package com.yslc.ui.activity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
 import android.content.Intent;
 import android.view.View;
@@ -12,20 +10,24 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yslc.inf.GetDataCallback;
-import com.yslc.data.service.StarModelService;
 import com.yslc.ui.base.BaseActivity;
 import com.yslc.R;
 import com.yslc.ui.adapter.BaseAdapterHelper;
 import com.yslc.ui.adapter.QuickAdapter;
 import com.yslc.bean.StarBean;
+import com.yslc.util.HttpUtil;
+import com.yslc.util.ParseUtil;
 import com.yslc.util.ToastUtil;
 import com.yslc.util.ViewUtil;
 import com.yslc.view.BaseListViewForTitleBar;
 import com.yslc.view.LoadView;
 import com.yslc.view.BaseListViewForTitleBar.OnLoadMoreListener;
 import com.yslc.view.LoadView.OnTryListener;
+
+import org.json.JSONObject;
 
 /**
  * 明星主页Activity 查看明星博文列表
@@ -43,7 +45,7 @@ public class StarMainActivity extends BaseActivity implements OnClickListener,
     private View titleBar;
     private LoadView loadView;
     private ArrayList<StarBean> dataList;
-    private StarModelService starModelService;
+    private int pageSize, pageIndex;
 
     /**
      * 包含加载更多listView，加载圈圈,标题栏
@@ -70,6 +72,7 @@ public class StarMainActivity extends BaseActivity implements OnClickListener,
      */
     @Override
     protected void initView() {
+        pageIndex = 1;
         headerView = View.inflate(this, R.layout.header_star_main, null);//明星简介
         imageLoader = ImageLoader.getInstance();
         dataList = new ArrayList<>();//数据类
@@ -83,7 +86,6 @@ public class StarMainActivity extends BaseActivity implements OnClickListener,
         loadView.setOnTryListener(this);
 
         // 获取明星基本信息
-        starModelService = new StarModelService(this);//业务处理类
         if (loadView.setStatus(LoadView.LOADING)) {
             getData();//下载数据
         }
@@ -112,9 +114,18 @@ public class StarMainActivity extends BaseActivity implements OnClickListener,
             @Override
             public void onLoadMore() {
                 // 加载更多
-                getData();
+                getMoreData();
             }
         });
+    }
+
+    private void getMoreData() {
+        if(pageSize < 15){
+            listView.noMoreData();
+            return;
+        }
+        pageIndex++;
+        getData();
     }
 
     @Override
@@ -132,50 +143,63 @@ public class StarMainActivity extends BaseActivity implements OnClickListener,
      * <p>成功后显示明星信息和明星文章列表信息</p>
      */
     private void getData() {
-        starModelService.getStarArticleList(getIntent().getStringExtra("sifId"), new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {
-                loadView.setStatus(LoadView.SUCCESS);
-                HashMap<StarBean, ArrayList<StarBean>> map =
-                        (HashMap<StarBean, ArrayList<StarBean>>) data;
-                Iterator iter = map.keySet().iterator();
-                StarBean mode = null;//明星信息数据
-                ArrayList<StarBean> list = null;//文章列表数据
-                if (iter.hasNext()) {
-                    mode = (StarBean) iter.next();
-                    list = map.get(mode);
-                }
-                // 设置个人资料
-                setStarInfo(mode);
+        RequestParams params = new RequestParams();
+        params.put("Sif_Id", getIntent().getStringExtra("sifId"));
+        params.put("pageSize", "15");
+        params.put("pageIndex", String.valueOf(pageIndex));
+        HttpUtil.get(HttpUtil.GET_STAR_CONTENT_LIST, this, params,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onFailure(Throwable arg0, JSONObject arg1) {
+                        super.onFailure(arg0, arg1);
+                        loadView.setStatus(LoadView.ERROR);
+                        listView.onFinishLoad();
+                    }
 
-                //如果该明星没有发表信息，则显示暂未发表文章
-                if (list.size() <= 0 && starModelService.getPageIndex() == 2) {
-                    // 暂无文章
-                    View view = View.inflate(
-                            StarMainActivity.this,
-                            R.layout.include_nodata, null);
-                    ((TextView) view.findViewById(R.id.infoTv))
-                            .setText("暂未发表文章");
-                    listView.addHeaderView(view);
-                }
+                    @Override
+                    public void onSuccess(JSONObject jo) {
+                        super.onSuccess(jo);
+                        if (jo.optString("Status").equals(HttpUtil.ERROR_CODE)) {
+                            loadView.setStatus(LoadView.ERROR);
+                            listView.onFinishLoad();
+                        } else {//成功
+                            StarBean mode = ParseUtil.parseSingleStarBean(jo);
+                            // 解析文章列表
+                            ArrayList<StarBean> list = ParseUtil.parseStarBean2(jo);
 
-                //没有更多文章处理
-                listView.onFinishLoad();
-                if (list.size() < starModelService.getPageSize() && starModelService.getPageIndex() > 2) {
-                    listView.noMoreData();
-                }
+                            loadView.setStatus(LoadView.SUCCESS);
+                            // 设置个人资料
+                            setStarInfo(mode);
 
-                // 设置文章列表
-                dataList.addAll(list);
-                setStarList();//设置文章
-            }
+                            //如果该明星没有发表信息，则显示暂未发表文章
+                            if (list.size() <= 0 && pageIndex == 1) {
+                                // 暂无文章
+                                showNoArtical();
+                            }
 
-            @Override
-            public <T> void failer(T data) {
-                loadView.setStatus(LoadView.ERROR);
-                listView.onFinishLoad();
-            }
-        });
+                            listView.onFinishLoad();
+                            pageSize = list.size();
+
+                            if(pageIndex == 1){
+                                dataList.clear();
+                            }
+                            // 设置文章列表
+                            dataList.addAll(list);
+                            setStarList();//设置文章
+                        }
+                    }
+
+                });
+
+    }
+
+    private void showNoArtical() {
+        View view = View.inflate(
+                StarMainActivity.this,
+                R.layout.include_nodata, null);
+        ((TextView) view.findViewById(R.id.infoTv))
+                .setText("暂未发表文章");
+        listView.addHeaderView(view);
     }
 
     /**
@@ -241,26 +265,43 @@ public class StarMainActivity extends BaseActivity implements OnClickListener,
      * 点赞事件
      */
     private void doPraise(final TextView tv) {
-        starModelService.doPraiseForArticle(((StarBean) tv.getTag()).getSif_Id(), new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {//"msg"数据
-                tv.setEnabled(false);
-                ToastUtil.showMessage(StarMainActivity.this, data.toString());//点赞成功
+        RequestParams params = new RequestParams();
+        params.put("Sn_Id", ((StarBean) tv.getTag()).getSif_Id());
+        HttpUtil.get(HttpUtil.DO_PRAISE, this, params,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onFailure(Throwable arg0, JSONObject arg1) {
+                        super.onFailure(arg0, arg1);
+                        tv.setEnabled(true);
+                        ToastUtil.showMessage(StarMainActivity.this, "点赞失败");
+//                        callback.failer("点赞失败");
+                    }
 
-                ((StarBean) tv.getTag()).setPraise(false);//不可重复点赞
-                //点赞加一（转来转去有点煞笔）
-                String praise = String.valueOf(Integer.parseInt(((StarBean) tv.getTag())
-                        .getSif_Praise()) + 1);
-                ((StarBean) tv.getTag()).setSif_Praise(praise);
-                tv.setText(praise);
-            }
+                    @Override
+                    public void onSuccess(JSONObject arg0) {
+                        super.onSuccess(arg0);
 
-            @Override
-            public <T> void failer(T data) {
-                tv.setEnabled(true);
-                ToastUtil.showMessage(StarMainActivity.this, data.toString());
-            }
-        });
+                        if (!arg0.optString("Status").equals(
+                                HttpUtil.ERROR_CODE)) {
+                            tv.setEnabled(false);
+                            ToastUtil.showMessage(StarMainActivity.this, arg0.optString("msg"));//点赞成功
+
+                            ((StarBean) tv.getTag()).setPraise(false);//不可重复点赞
+                            //点赞加一（转来转去有点煞笔）
+                            String praise = String.valueOf(Integer.parseInt(((StarBean) tv.getTag())
+                                    .getSif_Praise()) + 1);
+                            ((StarBean) tv.getTag()).setSif_Praise(praise);
+                            tv.setText(praise);
+//                            callback.success(arg0.optString("msg"));//成功
+                        } else {
+                            tv.setEnabled(true);
+                            ToastUtil.showMessage(StarMainActivity.this, arg0.optString("msg"));
+//                            callback.failer(arg0.optString("msg"));
+                        }
+                    }
+                });
+
+
     }
 
     /**

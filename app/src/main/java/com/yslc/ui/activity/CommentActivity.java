@@ -253,7 +253,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
                 break;
         }
     }
-
+    public final int LOGIN_REQUEST_CODE = 1;
     private boolean checkCondition() {
         //判断是否有网络
         if (!CommonUtil.isNetworkAvalible(this)) {
@@ -264,11 +264,20 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
         //判断是否登录
         if (!SharedPreferencesUtil.isLogin(this)) {
             ToastUtil.showMessage(this, "请先登录");
-            this.startActivity(new Intent(this, LoginActivity.class));
+            this.startActivityForResult(new Intent(this, LoginActivity.class),LOGIN_REQUEST_CODE );
             return false;
         }
         return true;
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == LOGIN_REQUEST_CODE && resultCode == RESULT_OK){
+            //登录成功
+            commitComment();
+        }
+    }
+
     /**
      * 提交评论
      */

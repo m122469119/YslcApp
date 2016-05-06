@@ -1,9 +1,9 @@
 package com.yslc.ui.activity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,10 +14,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yslc.inf.GetDataCallback;
-import com.yslc.data.service.StarModelService;
 import com.yslc.ui.base.BaseActivity;
 import com.yslc.R;
 import com.yslc.ui.adapter.BaseAdapterHelper;
@@ -25,12 +26,18 @@ import com.yslc.ui.adapter.QuickAdapter;
 import com.yslc.bean.CommentBean;
 import com.yslc.bean.StarBean;
 import com.yslc.util.CommonUtil;
+import com.yslc.util.HttpUtil;
+import com.yslc.util.ParseUtil;
+import com.yslc.util.SharedPreferencesUtil;
 import com.yslc.util.ToastUtil;
 import com.yslc.util.ViewUtil;
 import com.yslc.view.BaseListView;
 import com.yslc.view.LoadView;
 import com.yslc.view.BaseListView.OnLoadMoreListener;
 import com.yslc.view.LoadView.OnTryListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * 明星文章内容详情页，内容+评论
@@ -48,7 +55,7 @@ public class StarContentActivity extends BaseActivity implements
     private TextView noComment;
     private ArrayList<CommentBean> dataList;
     private boolean noData = false;
-    private StarModelService starModelService;
+    private int pageSize,pageIndex;
 
     /**
      * 设置布局
@@ -76,6 +83,7 @@ public class StarContentActivity extends BaseActivity implements
      */
     @Override
     protected void initView() {
+        pageIndex = 1;
         dataList = new ArrayList<>();//数据类
         imageLoader = ImageLoader.getInstance();
 
@@ -122,7 +130,6 @@ public class StarContentActivity extends BaseActivity implements
         loadView.setOnTryListener(this);
 
         // 获取文章详情
-        starModelService = new StarModelService(this);//实例化逻辑类
         if (loadView.setStatus(LoadView.LOADING)) {
             getComment(false);//获取评论
         }
@@ -145,54 +152,57 @@ public class StarContentActivity extends BaseActivity implements
      * @param isRefresh 是否刷新
      */
     private void getComment(boolean isRefresh) {
-        starModelService.getStarArticleDetail(isRefresh, getIntent().getStringExtra("snId"),
-                new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {
-                loadView.setStatus(LoadView.SUCCESS);
-                listView.onFinishLoad();
+        RequestParams params = new RequestParams();
+        params.put("Sn_Id", getIntent().getStringExtra("snId"));
+        params.put("pageSize", "15");
+        params.put("pageIndex", String.valueOf(pageIndex));
+        HttpUtil.get(HttpUtil.GET_STAR_COMTENT_COMMENT, this, params,
+                new JsonHttpResponseHandler() {
 
-                if (isRefresh) {
-                    // 表示刷新
-                    dataList.clear();
-                }
-                //拆分数据
-                HashMap<CommentBean, ArrayList<CommentBean>> map =
-                        (HashMap<CommentBean, ArrayList<CommentBean>>) data;
-                Iterator iterator = map.keySet().iterator();
-                StarBean mode = null;
-                ArrayList<CommentBean> list = null;
-                if (iterator.hasNext()) {
-                    mode = (StarBean) iterator.next();//文章内容
-                    list = map.get(mode);//评论列表
-                }
-                //没有评论
-                if (list.size() == 0 && starModelService.getPageIndex() == 2) {
-                    noData = true;
-                }
+                    @Override
+                    public void onFailure(Throwable arg0, JSONObject arg1) {
+                        super.onFailure(arg0, arg1);
+                        listView.onFinishLoad();
+                        loadView.setStatus(LoadView.ERROR);
+                    }
 
-                // 是否到了最后一页
-                if (list.size() < starModelService.getPageSize() && starModelService
-                        .getPageIndex() > 2) {
-                    listView.noMoreData();
-                }
+                    @Override
+                    public void onSuccess(JSONObject jo) {
+                        super.onSuccess(jo);
 
-                //加载评论和详情
-                dataList.addAll(list);
-                if (mode != null) {
-                    setHeaderData(mode);//显示文章
-                }
-                setCommentData();//显示评论
+                        if (jo.optString("Status").equals(HttpUtil.ERROR_CODE)) {
+                            listView.onFinishLoad();
+                            loadView.setStatus(LoadView.ERROR);
+                            return;
+                        }
 
-            }
+                        ArrayList<CommentBean> list = ParseUtil.parseCommentBean(jo);
+                        StarBean mode = ParseUtil.parseSingleStarBean2(jo);
 
-            @Override
-            public <T> void failer(T data) {
-                listView.onFinishLoad();
-                loadView.setStatus(LoadView.ERROR);
-            }
-        });
+                        loadView.setStatus(LoadView.SUCCESS);
+                        listView.onFinishLoad();
 
+                        if (pageIndex ==1 ) {
+                            // 表示刷新
+                            dataList.clear();
+                        }
+                        //没有评论
+                        if (list.size() == 0 && pageIndex ==1 ) {
+                            noData = true;
+                        }
+
+                        // 是否到了最后一页
+                        pageSize  = list.size();
+
+                        //加载评论和详情
+                        dataList.addAll(list);
+                        if (mode != null) {
+                            setHeaderData(mode);//显示文章
+                        }
+                        setCommentData();//显示评论
+
+                    }
+                });
 
     }
 
@@ -248,6 +258,11 @@ public class StarContentActivity extends BaseActivity implements
      */
     @Override
     public void onLoadMore() {
+        if(pageSize < 15){
+            listView.noMoreData();
+            return;
+        }
+        pageIndex++;
         getComment(false);
     }
 
@@ -257,26 +272,63 @@ public class StarContentActivity extends BaseActivity implements
      */
     private void commitComment() {
         showWaitDialogs(R.string.doCommentInfo, true);//等待对话框，可取消
-        starModelService.doStarArticleComment(getIntent().getStringExtra("snId"),
-                CommonUtil.inputFilter(contentInput), new GetDataCallback() {
+        if(!checkLogin(StarContentActivity.this)){
+            return;
+        }
+        RequestParams params = new RequestParams();
+        params.put("Ui_Id", SharedPreferencesUtil.getUserId(this));
+        params.put("Sn_Id", getIntent().getStringExtra("snId"));
+        params.put("Snc_Content", CommonUtil.inputFilter(contentInput));
+        HttpUtil.post(HttpUtil.GET_STAR_COMMENT_COMMINT, this, params,
+                new AsyncHttpResponseHandler() {
                     @Override
-                    public <T> void success(T data) {
-                        hideWaitDialog();//隐藏对话框
-                        ToastUtil.showMessage(StarContentActivity.this, data.toString());//成功
-                        contentInput.setText("");
-                        if (null != noComment) {
-                            noComment.setText("评论列表");
-                        }
-                        // 刷新评论
-                        getComment(true);
+                    public void onFailure(Throwable arg0, String arg1) {
+                        super.onFailure(arg0, arg1);
+                        hideWaitDialog();
+                        ToastUtil.showMessage(StarContentActivity.this, "发表评论失败");
+//                        callback.failer("发表评论失败");
                     }
 
                     @Override
-                    public <T> void failer(T data) {
-                        hideWaitDialog();
-                        ToastUtil.showMessage(StarContentActivity.this, data.toString());
+                    public void onSuccess(String arg0) {
+                        super.onSuccess(arg0);
+
+                        try {
+                            JSONObject jo = new JSONObject(arg0);
+                            if (jo.optString("Status").equals(
+                                    HttpUtil.ERROR_CODE)) {
+                                hideWaitDialog();
+                                ToastUtil.showMessage(StarContentActivity.this, jo.optString("msg"));
+                                // 发表失败
+//                                callback.failer(jo.optString("msg"));
+                            } else {
+                                // 发表成功
+//                                callback.success(jo.optString("msg"));
+                                hideWaitDialog();//隐藏对话框
+                                ToastUtil.showMessage(StarContentActivity.this, jo.optString("msg"));//成功
+                                contentInput.setText("");
+                                if (null != noComment) {
+                                    noComment.setText("评论列表");
+                                }
+                                // 刷新评论
+                                getComment(true);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
+    }
+
+    private boolean checkLogin(Context context) {
+        // 判断是否登录
+        if (!SharedPreferencesUtil.isLogin(context)) {
+            ToastUtil.showMessage(context, "请先登录");
+            context.startActivity(new Intent(context, LoginActivity.class));
+            return false;
+        }
+        return true;
     }
 
     /**

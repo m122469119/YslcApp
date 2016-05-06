@@ -13,22 +13,25 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yslc.inf.GetDataCallback;
-import com.yslc.data.service.StarModelService;
 import com.yslc.ui.base.BaseFragment;
 import com.yslc.R;
 import com.yslc.ui.activity.StarMainActivity;
 import com.yslc.ui.adapter.BaseAdapterHelper;
 import com.yslc.ui.adapter.QuickAdapter;
 import com.yslc.bean.StarBean;
-import com.yslc.util.ToastUtil;
+import com.yslc.util.HttpUtil;
+import com.yslc.util.ParseUtil;
 import com.yslc.util.ViewUtil;
 import com.yslc.view.BaseListView;
 import com.yslc.view.LoadView;
 import com.yslc.view.BaseListView.OnLoadMoreListener;
 import com.yslc.view.LoadView.OnTryListener;
+
+import org.json.JSONObject;
 
 /**
  * 明星Fragment
@@ -44,12 +47,13 @@ public class StarFragment extends BaseFragment implements OnTryListener {
     private Context context;
     private String colnumBeanId;
     private ArrayList<StarBean> infoItemList;
-    private StarModelService starModelService;
+//    private StarModelService starModelService;
+    private int pageIndex,pageSize;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        pageIndex = 1;
         context = getActivity();
         colnumBeanId = getArguments().getString("id");
         imageLoader = ImageLoader.getInstance();
@@ -74,7 +78,7 @@ public class StarFragment extends BaseFragment implements OnTryListener {
         refreshableView = (SwipeRefreshLayout) views.findViewById(R.id.refreshable_view);
         refreshableView.setColorSchemeResources(R.color.refreshViewColor1, R.color.refreshViewColor2, R.color.refreshViewColor3);
 
-        starModelService = new StarModelService(context);
+//        starModelService = new StarModelService(context);
         listViewSetEvent();
     }
 
@@ -85,6 +89,7 @@ public class StarFragment extends BaseFragment implements OnTryListener {
         refreshableView.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
+                pageIndex = 1;
                 loadData();
             }
         });
@@ -120,59 +125,61 @@ public class StarFragment extends BaseFragment implements OnTryListener {
         }
     }
 
+
     /**
      * 第一次加载或者刷新
      */
     private void loadData() {
-        starModelService.getStarListData(colnumBeanId, new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {
-                refreshableView.setRefreshing(false);
-                listView.onFinishLoad();
+        RequestParams params = new RequestParams();
+        params.put("St_Id", colnumBeanId);
+        params.put("pageSize", "15");
+        params.put("pageIndex", String.valueOf(pageIndex));
 
-                ArrayList<StarBean> list = (ArrayList<StarBean>) data;
-                if (list.size() == 0) {
-                    loadView.setStatus(LoadView.EMPTY_DATA);
-                } else {
-                    loadView.setStatus(LoadView.SUCCESS);
-                    infoItemList.clear();
-                    infoItemList.addAll(list);
-                    listRefersh();
-                }
-            }
+        HttpUtil.get(HttpUtil.GET_STAR_LIST, context, params,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onFailure(Throwable arg0, JSONObject arg1) {
+                        super.onFailure(arg0, arg1);
+                        refreshableView.setRefreshing(false);
+                        loadView.setStatus(LoadView.ERROR);
+                    }
 
-            @Override
-            public <T> void failer(T data) {
-                refreshableView.setRefreshing(false);
-                loadView.setStatus(LoadView.ERROR);
-            }
-        });
+                    @Override
+                    public void onSuccess(JSONObject jo) {
+                        super.onSuccess(jo);
+                        refreshableView.setRefreshing(false);
+                        listView.onFinishLoad();
+
+                        ArrayList<StarBean> list = ParseUtil.parseStarBean(jo);
+//                                (ArrayList<StarBean>) data;
+                        if (list.size() == 0) {
+                            loadView.setStatus(LoadView.EMPTY_DATA);
+                        } else {
+                            loadView.setStatus(LoadView.SUCCESS);
+                            if(pageIndex == 1){
+                                infoItemList.clear();
+                            }
+                            pageSize = list.size();
+                            infoItemList.addAll(list);
+                            listRefersh();
+                        }
+//                        callback.success(parseStarJson(jo));
+
+                    }
+                });
+
     }
 
     /**
      * 加载更多
      */
     private void loadMoreData() {
-        starModelService.getStarMoreListData(colnumBeanId, new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {
-                listView.onFinishLoad();
+        if(pageSize < 15){
+            listView.noMoreData();
+        }
+        pageIndex++;
+        loadData();
 
-                ArrayList<StarBean> list = (ArrayList<StarBean>) data;
-                if (list.size() < starModelService.getPageSize()) {
-                    listView.noMoreData();
-                }
-
-                infoItemList.addAll(list);
-                listRefersh();
-            }
-
-            @Override
-            public <T> void failer(T data) {
-                refreshableView.setRefreshing(false);
-                ToastUtil.showMessage(context, LoadView.ERROR);
-            }
-        });
     }
 
     /**

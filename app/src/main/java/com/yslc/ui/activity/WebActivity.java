@@ -1,5 +1,6 @@
 package com.yslc.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -369,6 +370,7 @@ public class WebActivity extends BaseActivity implements OnClickListener,
     public void setTextSize(TextSizeEnum ts) {
         if (ts == TextSizeEnum.TYPE_SMALL) {
             webView.getSettings().setTextSize(TextSize.SMALLER);
+//            webView.getSettings().setTextZoom(75);
         } else if (ts == TextSizeEnum.TYPE_MEDIUM) {
             webView.getSettings().setTextSize(TextSize.NORMAL);
         } else {
@@ -467,7 +469,7 @@ public class WebActivity extends BaseActivity implements OnClickListener,
         }
 
     }
-
+    public final int LOGIN_REQUEST_CODE = 1;
     private boolean checkCondition() {
         //判断是否有网络
         if (!CommonUtil.isNetworkAvalible(this)) {
@@ -478,10 +480,18 @@ public class WebActivity extends BaseActivity implements OnClickListener,
         //判断是否登录
         if (!SharedPreferencesUtil.isLogin(this)) {
             ToastUtil.showMessage(this, "请先登录");
-            this.startActivity(new Intent(this, LoginActivity.class));
+            this.startActivityForResult(new Intent(this, LoginActivity.class), LOGIN_REQUEST_CODE);
             return false;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == LOGIN_REQUEST_CODE && resultCode == RESULT_OK){
+            //登录成功
+            commitComment();
+        }
     }
 
     /**

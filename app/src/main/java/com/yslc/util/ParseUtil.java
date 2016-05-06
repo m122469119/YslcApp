@@ -4,6 +4,7 @@ import com.yslc.bean.AdBean;
 import com.yslc.bean.ColumnBean;
 import com.yslc.bean.CommentBean;
 import com.yslc.bean.NewBean;
+import com.yslc.bean.StarBean;
 import com.yslc.bean.StockInfo;
 
 import org.json.JSONArray;
@@ -18,6 +19,10 @@ import java.util.ArrayList;
 public class ParseUtil {
 
     public static ArrayList<ColumnBean> parseColumnBean(String arg0){
+        return parseColumnBean(arg0,"StID", "StName");
+    }
+
+    public static ArrayList<ColumnBean> parseColumnBean(String arg0,String id_key,String name_key){
 //         获取栏目成功
         ArrayList listTitle = new ArrayList<>();
         try {
@@ -28,16 +33,14 @@ public class ParseUtil {
             for (int i = 0, len = ja.length(); i < len; i++) {
                 jo = ja.getJSONObject(i);
                 cb = new ColumnBean();
-                cb.setId(jo.optString("StID"));
-                cb.setName(jo.optString("StName"));
+                cb.setId(jo.optString(id_key));
+                cb.setName(jo.optString(name_key));
                 cb.setStOrder(jo.optString("StOrder"));
                 listTitle.add(cb);
             }
 
-//                                callback.success(listTitle);
         } catch (JSONException e) {
             // 暂无数据
-//                                callback.failer(null);
             e.printStackTrace();
         }
         return listTitle;
@@ -116,6 +119,34 @@ public class ParseUtil {
         }
     }
 
+    /**
+     * StarContentActivity评论
+     * @param json
+     * @return
+     */
+    public static ArrayList<CommentBean> parseCommentBean(JSONObject json) {
+        // 解析评论列表
+        ArrayList<CommentBean> list = new ArrayList<>();
+        try{
+            JSONArray ja = json.getJSONArray("CommentList");
+            JSONObject tempJo;
+            CommentBean mode;
+            for (int i = 0, len = ja.length(); i < len; i++) {
+                tempJo = ja.getJSONObject(i);
+                mode = new CommentBean();
+                mode.setNcikName(tempJo.optString("Ui_Nickname"));
+                mode.setUiImg(tempJo.optString("Ui_Img"));
+                mode.setTime(tempJo.optString("Snc_Time"));
+                mode.setContent(tempJo.optString("Snc_Content"));
+                list.add(mode);
+            }
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public static ArrayList<CommentBean> parseCommentBean(String json) {
         ArrayList<CommentBean> listData = new ArrayList<>();
         try {
@@ -137,5 +168,115 @@ public class ParseUtil {
             e.printStackTrace();
         }
         return listData;
+    }
+
+    public static ArrayList<StarBean> parseStarBean(JSONObject jo) {
+        ArrayList<StarBean> list = new ArrayList<>();
+        try {
+            JSONArray infoJa = jo.getJSONArray("StarList");
+            JSONObject tempJo;
+            StarBean infoItem;
+            for (int i = 0, len = infoJa.length(); i < len; i++) {
+                tempJo = infoJa.getJSONObject(i);
+                infoItem = new StarBean();
+                infoItem.setSif_Id(tempJo.optString("Sif_Id"));
+                infoItem.setSif_Name(tempJo.optString("Sif_Name"));
+                infoItem.setSif_Title(tempJo.optString("Sif_Title"));
+                infoItem.setSif_Img(tempJo.optString("Sif_Img"));
+                infoItem.setContent(tempJo.optString("content"));
+                infoItem.setSn_Time(tempJo.optString("Sn_Time"));
+                list.add(infoItem);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            return list;
+        }
+    }
+
+    /**
+     * 解析StarMainActivity数据
+     * @param jo
+     * @return
+     */
+    public static ArrayList<StarBean> parseStarBean2(JSONObject jo) {
+        ArrayList<StarBean> list = new ArrayList<StarBean>();
+        try{
+            JSONArray ja = jo.getJSONArray("StarNewsList");
+            for (int i = 0, len = ja.length(); i < len; i++) {
+                JSONObject tempJo = ja.getJSONObject(i);
+                StarBean modes = new StarBean();
+                modes.setSif_Id(tempJo.optString("Sn_Id"));
+                modes.setSif_Title(tempJo
+                        .optString("Sn_Title"));
+                modes.setContent(tempJo
+                        .optString("Sn_Content"));
+                modes.setSn_Time(tempJo.optString("Sn_Time"));
+                modes.setSif_ComNumber(tempJo
+                        .optString("ComNumber"));
+                modes.setSif_Praise(tempJo
+                        .optString("Sn_Praise"));
+
+                list.add(modes);
+            }
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }finally{
+            return list;
+        }
+
+    }
+
+    /**
+     * 明星头部信息
+     * @param jo
+     * @return
+     */
+    public static StarBean parseSingleStarBean(JSONObject jo) {
+        StarBean mode = new StarBean();
+        try {
+            // 解析明星个人资料
+            JSONObject starJo = jo.getJSONObject("StarInfo");
+            if (null != starJo) {
+                mode.setSif_Id(starJo.optString("Sif_Id"));
+                mode.setSif_Img(starJo.optString("Sif_Img"));
+                mode.setSif_Name(starJo
+                        .optString("Sif_Name"));
+                mode.setSif_Relation(starJo
+                        .optString("Sif_Relation"));
+                mode.setSif_Degree(starJo
+                        .optString("Sif_Degree"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }finally {
+            return mode;
+        }
+    }
+
+    /**
+     * StarContentActivity
+     * @param jo
+     * @return
+     */
+    public static StarBean parseSingleStarBean2(JSONObject jo) {
+        StarBean modes = new StarBean();
+        try{
+            JSONObject articalJo = jo.getJSONObject("StarNews");
+            if (null != articalJo) {
+                // 解析文章详情
+                modes.setSif_Title(articalJo
+                        .optString("Sn_Title"));
+                modes.setSn_Time(articalJo.optString("Sn_Time"));
+                modes.setContent(articalJo
+                        .optString("Sn_Content"));
+                modes.setSif_Img(articalJo.optString("Sn_Img"));
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        return modes;
     }
 }
