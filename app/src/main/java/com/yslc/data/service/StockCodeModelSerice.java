@@ -3,13 +3,16 @@ package com.yslc.data.service;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.yslc.app.Constant;
 import com.yslc.bean.StockCodeBean;
-import com.yslc.data.impl.StockCodeModelImpl;
-import com.yslc.data.inf.IStockCodeModel;
 import com.yslc.db.StocyCodeSQLHandle;
 import com.yslc.inf.GetDataCallback;
+import com.yslc.util.HttpUtil;
+import com.yslc.util.ParseUtil;
 import com.yslc.util.SharedPreferencesUtil;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -21,7 +24,6 @@ import java.util.ArrayList;
 public class StockCodeModelSerice {
     private static final long STOCK_UPDATE_TIME = 86400000;       // 股票代码数据导入更新时间（24h）
     private Context context;
-    private IStockCodeModel stockMarketModel;
     private StocyCodeSQLHandle stocyCodeSQLHandle;
     private ArrayList<StockCodeBean> filterCodeList;
     private ArrayList<StockCodeBean> codeAllList;
@@ -30,7 +32,6 @@ public class StockCodeModelSerice {
     public StockCodeModelSerice(Context context) {
         this.context = context;
         stocyCodeSQLHandle = new StocyCodeSQLHandle(context);
-        stockMarketModel = new StockCodeModelImpl(context);
     }
 
     /**
@@ -42,18 +43,25 @@ public class StockCodeModelSerice {
      */
     public void getStockCodeList() {
         if (intoStocyCode()) {//判断是否需要更新
-            stockMarketModel.getStockCodeList(new GetDataCallback() {
+            HttpUtil.post(HttpUtil.GET_STOCK_CODElIST, context, null, new JsonHttpResponseHandler() {
                 @Override
-                public <T> void success(T data) {
-                    //强转并插入数据库
-                    intoStocyDB((ArrayList<StockCodeBean>) data);
+                public void onSuccess(JSONObject arg0) {
+                    super.onSuccess(arg0);
+                    if (arg0.optString("Status").equals("-2")) {
+                        return;
+                    }
+                    //解析数据
+                    ArrayList<StockCodeBean> list = ParseUtil.parseStockCodeBean(arg0);
+
+                    intoStocyDB(list);
                 }
 
                 @Override
-                public <T> void failer(T data) {
-
+                public void onFailure(Throwable throwable, JSONObject jsonObject) {
+                    super.onFailure(throwable, jsonObject);
                 }
             });
+
         }
     }
 
@@ -63,18 +71,27 @@ public class StockCodeModelSerice {
      * @param callback 回调
      */
     public void intoStockCodeList(GetDataCallback callback) {
-        stockMarketModel.getStockCodeList(new GetDataCallback() {
+        HttpUtil.post(HttpUtil.GET_STOCK_CODElIST, context, null, new JsonHttpResponseHandler() {
             @Override
-            public <T> void success(T data) {
-                intoStocyDB((ArrayList<StockCodeBean>) data);
+            public void onSuccess(JSONObject arg0) {
+                super.onSuccess(arg0);
+                if (arg0.optString("Status").equals("-2")) {
+                    return;
+                }
+                //解析数据
+                ArrayList<StockCodeBean> list = ParseUtil.parseStockCodeBean(arg0);
+
+                intoStocyDB(list);
                 callback.success(null);
             }
 
             @Override
-            public <T> void failer(T data) {
+            public void onFailure(Throwable throwable, JSONObject jsonObject) {
+                super.onFailure(throwable, jsonObject);
                 callback.failer(null);
             }
         });
+
     }
 
     /**

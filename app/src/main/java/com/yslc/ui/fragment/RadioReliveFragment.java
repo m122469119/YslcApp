@@ -10,15 +10,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.yslc.bean.ColumnBean;
-import com.yslc.inf.GetDataCallback;
-import com.yslc.data.service.RadioModelService;
 import com.yslc.ui.base.BaseFragment;
 import com.yslc.R;
 import com.yslc.ui.activity.RadioReliveDetialActivity;
 import com.yslc.ui.adapter.BaseAdapterHelper;
 import com.yslc.ui.adapter.QuickAdapter;
 import com.yslc.bean.RadioBean;
+import com.yslc.util.HttpUtil;
+import com.yslc.util.ParseUtil;
 import com.yslc.view.BaseListView;
 import com.yslc.view.LoadView;
 import com.yslc.view.LoadView.OnTryListener;
@@ -35,7 +37,6 @@ public class RadioReliveFragment extends BaseFragment implements OnTryListener,
     private Context context;
     private ColumnBean columnBean;
     private List<RadioBean> infoItemList;
-    private RadioModelService radioModelService;
 
     /**
      * 创建fragment
@@ -74,7 +75,6 @@ public class RadioReliveFragment extends BaseFragment implements OnTryListener,
         loadView.setOnTryListener(this);
         listView = (BaseListView) views.findViewById(R.id.listview);
         listView.setOnItemClickListener(this);
-        radioModelService = new RadioModelService(context);
     }
 
     /**
@@ -94,23 +94,37 @@ public class RadioReliveFragment extends BaseFragment implements OnTryListener,
      * <p>下载数据，成功后刷新列表</p>
      */
     private void loadData() {
-        radioModelService.getRadioReliveListData(columnBean.getId(), new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {
-                loadView.setStatus(LoadView.SUCCESS);
-                infoItemList = (ArrayList<RadioBean>) data;
-                if (infoItemList.size() == 0) {
-                    loadView.setStatus(LoadView.EMPTY_DATA);
-                } else {
-                    listRefersh();//刷新列表
-                }
-            }
+        RequestParams params = new RequestParams();
+        params.put("WeekDate", columnBean.getId());
+        HttpUtil.get(HttpUtil.PLAY_VEDIO_RELIVE, context, params,
+                new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onFailure(Throwable arg0, String arg1) {
+                        super.onFailure(arg0, arg1);
+                        loadView.setStatus(LoadView.ERROR);
+                    }
 
-            @Override
-            public <T> void failer(T data) {
-                loadView.setStatus(LoadView.ERROR);
-            }
-        });
+                    @Override
+                    public void onSuccess(String arg0) {
+                        super.onSuccess(arg0);
+
+                        if (arg0.equals(HttpUtil.ERROR_CODE)) {
+                             loadView.setStatus(LoadView.ERROR);
+                        } else {//成功
+                            ArrayList<RadioBean> list = ParseUtil.parseRadioBean(arg0);
+                            loadView.setStatus(LoadView.SUCCESS);
+                            infoItemList = list;
+                            if (infoItemList.size() == 0) {
+                                loadView.setStatus(LoadView.EMPTY_DATA);
+                            } else {
+                                listRefersh();//刷新列表
+                            }
+                        }
+                    }
+
+                });
+
+
     }
 
     /**

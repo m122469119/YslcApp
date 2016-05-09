@@ -4,7 +4,9 @@ import com.yslc.bean.AdBean;
 import com.yslc.bean.ColumnBean;
 import com.yslc.bean.CommentBean;
 import com.yslc.bean.NewBean;
+import com.yslc.bean.RadioBean;
 import com.yslc.bean.StarBean;
+import com.yslc.bean.StockCodeBean;
 import com.yslc.bean.StockInfo;
 
 import org.json.JSONArray;
@@ -278,5 +280,89 @@ public class ParseUtil {
         }
 
         return modes;
+    }
+
+    public static ArrayList<StockCodeBean> parseStockCodeBean(JSONObject arg0) {
+
+        ArrayList<StockCodeBean> list = new ArrayList<StockCodeBean>();
+        try{
+            JSONArray ja = arg0.getJSONArray("stock");
+            StockCodeBean bean;
+            JSONObject jo;
+            for (int i = 0, len = ja.length(); i < len; i++) {
+                bean = new StockCodeBean();
+                jo = ja.getJSONObject(i);
+                bean.setStock_Code(jo.optString("Stock_Code"));
+                bean.setStock_Name(jo.optString("Stock_Name"));
+                bean.setStock_Abbreviation(jo.optString("Stock_Abbreviation"));
+                list.add(bean);
+            }
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static RadioBean parseSingleRadioBean(JSONObject json) {
+        RadioBean mode = new RadioBean();
+        mode.setRadioUrl(json.optString("Url"));
+        mode.setRadioName(json.optString("RadP_Name"));
+        mode.setRadioTime(json.optString("TimeSpan"));
+        mode.setRadioHostUrl(json.optString("RadP_Img"));
+        mode.setRadioHost(json.optString("RadP_Compere"));
+
+        return mode;
+    }
+
+    public static RadioBean parseHeadRadioBean(JSONObject json) {
+        RadioBean detailBean = new RadioBean();
+        detailBean.setRadioName(json.optString("RadP_Name"));
+        detailBean.setRadioHost(json.optString("RadP_Compere"));
+        detailBean.setRadioHostUrl(json.optString("RadP_Img"));
+        detailBean.setRadioTime(json.optString("RadP_Time"));
+
+        return detailBean;
+    }
+
+    public static ArrayList<RadioBean> parseRadioBean(JSONObject arg0){
+        ArrayList<RadioBean> list = new ArrayList<>();
+        try {
+            JSONArray ja = arg0.getJSONArray("list");
+            RadioBean bean;
+            JSONObject jo;
+            for (int i = 0, len = ja.length(); i < len; i++) {
+                jo = ja.getJSONObject(i);
+                bean = new RadioBean();
+                bean.setRadioId(jo.optString("DbId"));
+                bean.setRadioName(jo.getString("title"));
+                bean.setRadioUrl(jo.optString("song"));
+                bean.setRadioTime(jo.getString("time"));
+                list.add(bean);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static ArrayList<RadioBean> parseRadioBean(String arg0) {
+        ArrayList<RadioBean> list = new ArrayList<>();
+        try {
+            // 解析广播重温界面列表
+            JSONArray infoJa = new JSONArray(arg0);
+            RadioBean infoItem;
+            JSONObject tempJo;
+            for (int i = 0, len = infoJa.length(); i < len; i++) {
+                tempJo = infoJa.getJSONObject(i);
+                infoItem = new RadioBean();
+                infoItem.setRadioId(tempJo.optString("RadP_Id"));
+                infoItem.setRadioName(tempJo.optString("RadP_Name"));
+                infoItem.setRadioDate(tempJo.optString("RadP_Time"));
+                list.add(infoItem);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

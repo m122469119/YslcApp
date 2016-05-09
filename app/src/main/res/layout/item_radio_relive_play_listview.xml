@@ -7,6 +7,7 @@
     android:paddingBottom="10dip"
     android:paddingLeft="15dip"
     android:paddingRight="15dip"
+    android:id="@+id/radioTo"
     android:paddingTop="10dip">
 <!--节目名称-->
     <TextView
@@ -23,7 +24,6 @@
         android:textSize="14sp" />
 <!--播放按钮图片-->
     <ImageView
-        android:id="@+id/radioTo"
         android:layout_width="50dip"
         android:layout_height="50dip"
         android:layout_alignParentRight="true"

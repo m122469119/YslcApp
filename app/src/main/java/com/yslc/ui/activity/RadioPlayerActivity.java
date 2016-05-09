@@ -1,13 +1,13 @@
 package com.yslc.ui.activity;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yslc.bean.RadioBean;
-import com.yslc.inf.GetDataCallback;
-import com.yslc.data.service.RadioModelService;
 import com.yslc.ui.base.BaseActivity;
 import com.yslc.R;
 import com.yslc.util.CommonUtil;
 import com.yslc.util.HttpUtil;
+import com.yslc.util.ParseUtil;
 import com.yslc.util.PlayerUtil;
 import com.yslc.util.TimerUtil;
 import com.yslc.util.ToastUtil;
@@ -23,6 +23,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 /**
  * 广播播放Activity(直播)
  * <p>股市广播Activity</p>
@@ -35,7 +37,6 @@ public class RadioPlayerActivity extends BaseActivity implements
     private Animation animation;
     private boolean isPlay = true;
     private TimerUtil timerUtil;
-    private RadioModelService radioModelService;
     private boolean isPrepared = false;
 
     /**
@@ -72,8 +73,6 @@ public class RadioPlayerActivity extends BaseActivity implements
         //计时器设置
         timerUtil = new TimerUtil(0);
         timerUtil.setOnTimerCallback(this);
-        //业务逻辑类
-        radioModelService = new RadioModelService(this);
 
         getData();
     }
@@ -126,21 +125,36 @@ public class RadioPlayerActivity extends BaseActivity implements
             return;
         }
 
-        refreshImg.startAnimation(animation);//为刷新按钮设置动画
-        playImg.setEnabled(false);
-        radioModelService.getRadioData(new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {
-                setData((RadioBean) data);
-            }
+        showGetDataView();
 
-            @Override
-            public <T> void failer(T data) {
-                refreshImg.clearAnimation();
-                ToastUtil.showMessage(RadioPlayerActivity.this, data.toString());
-            }
-        });
+        HttpUtil.get(HttpUtil.PLAY_VEDIO, this, null,
+                new JsonHttpResponseHandler() {
+
+                    @Override
+                    public void onFailure(Throwable arg0, JSONObject json) {
+                        super.onFailure(arg0, json);
+                        refreshImg.clearAnimation();
+                        ToastUtil.showMessage(RadioPlayerActivity.this, "加载失败,请刷新");
+//                        callback.failer("加载失败,请刷新");
+                    }
+
+                    @Override
+                    public void onSuccess(JSONObject json) {
+                        super.onSuccess(json);
+                        //解析数据
+                        RadioBean mode = ParseUtil.parseSingleRadioBean(json);
+                        setData(mode);
+                    }
+
+                });
+
     }
+
+    private void showGetDataView() {
+        refreshImg.startAnimation(animation);//为刷新按钮设置动画
+        playImg.setEnabled(false);//播放按钮
+    }
+
 
     /**
      * 定时获取数据

@@ -6,20 +6,25 @@ import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yslc.inf.GetDataCallback;
-import com.yslc.data.service.RadioModelService;
 import com.yslc.ui.base.BaseActivity;
 import com.yslc.R;
 import com.yslc.ui.adapter.BaseAdapterHelper;
 import com.yslc.ui.adapter.QuickAdapter;
 import com.yslc.bean.RadioBean;
+import com.yslc.util.HttpUtil;
+import com.yslc.util.ParseUtil;
 import com.yslc.util.ViewUtil;
 import com.yslc.view.BaseListView;
 import com.yslc.view.BaseListView.OnLoadMoreListener;
 import com.yslc.view.LoadView;
+
+import org.json.JSONObject;
 
 /**
  * 股市重温节目详情界面
@@ -27,13 +32,14 @@ import com.yslc.view.LoadView;
  * @author HH
  */
 public class RadioReliveDetialActivity extends BaseActivity implements
-        OnClickListener, LoadView.OnTryListener {//TODO 好像没有必要实现onClickListener
+        OnClickListener, LoadView.OnTryListener {
     private BaseListView listView;
     private LoadView loadView;
     private ArrayList<RadioBean> listData;//列表数据
     private QuickAdapter<RadioBean> adapter;
     private RadioBean detailBean = null;
-    private RadioModelService radioModelService;
+//    private RadioModelService radioModelService;
+    private int pageIndex, pageSize;
 
     /**
      * 设置布局
@@ -51,7 +57,7 @@ public class RadioReliveDetialActivity extends BaseActivity implements
      */
     @Override
     protected String getToolbarTitle() {
-        return getString(R.string.interactivesDetail);//TODO 使用String资源
+        return getString(R.string.interactivesDetail);
     }
 
     /**
@@ -62,6 +68,7 @@ public class RadioReliveDetialActivity extends BaseActivity implements
      */
     @Override
     protected void initView() {
+        pageIndex = 1;
         //加载圈圈
         loadView = (LoadView) findViewById(R.id.view);
         loadView.setOnTryListener(this);
@@ -72,12 +79,17 @@ public class RadioReliveDetialActivity extends BaseActivity implements
         listView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
+                if(pageSize < 15){
+                    listView.noMoreData();
+                    return;
+                }
+                pageIndex++;
                 getListDate(detailBean.getRadioName());
             }
         });
 
         listData = new ArrayList<>();
-        radioModelService = new RadioModelService(this);//业务类
+//        radioModelService = new RadioModelService(this);//业务类
         if (loadView.setStatus(LoadView.LOADING)) {//开始下载数据
             getHostDetail();
         }
@@ -89,6 +101,7 @@ public class RadioReliveDetialActivity extends BaseActivity implements
     @Override
     public void onTry() {
         if (loadView.setStatus(LoadView.LOADING)) {
+            pageIndex = 1;
             getHostDetail();
         }
     }
@@ -99,19 +112,34 @@ public class RadioReliveDetialActivity extends BaseActivity implements
      * <p>成功后再根据节目名称下载往期节目列表</p>
      */
     private void getHostDetail() {
-        radioModelService.getRadioReliveDetail(getIntent().getStringExtra("RadP_Id"),
-                new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {
-                detailBean = (RadioBean) data;
-                getListDate(detailBean.getRadioName());//下载往期列表
-            }
+        RequestParams params = new RequestParams();
+        params.put("RadP_Id", getIntent().getStringExtra("RadP_Id"));
+        HttpUtil.get(HttpUtil.PLAY_VEDIO_RELIVE_DETAILS, this, params,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onFailure(Throwable arg0, JSONObject arg1) {
+                        super.onFailure(arg0, arg1);
+                        loadView.setStatus(LoadView.ERROR);
+                    }
 
-            @Override
-            public <T> void failer(T data) {
-                loadView.setStatus(LoadView.ERROR);
-            }
-        });
+                    @Override
+                    public void onSuccess(int arg0, JSONObject arg1) {
+                        super.onSuccess(arg0, arg1);
+                        if (arg1.optString("Status").equals(HttpUtil.ERROR_CODE)) {
+                            loadView.setStatus(LoadView.ERROR);
+                            return;
+                        }
+                        // 成功
+                        // 解析详情
+                        RadioBean detialBean = ParseUtil.parseHeadRadioBean(arg1);
+                        detailBean = detialBean;
+                        getListDate(detailBean.getRadioName());//下载往期列表
+
+                    }
+
+                });
+
+
     }
 
     /**
@@ -121,31 +149,45 @@ public class RadioReliveDetialActivity extends BaseActivity implements
      * @param dbName 广播名称（作为网络请求参数）
      */
     private void getListDate(String dbName) {
-        radioModelService.getReliveListForHost(dbName, new GetDataCallback() {
-            @Override
-            public <T> void success(T data) {
-                listView.onFinishLoad();
-                loadView.setStatus(LoadView.SUCCESS);
+        RequestParams params = new RequestParams();
+        params.put("dbname", dbName);
+        params.put("pagesize", "15");
+        params.put("pageindex", String.valueOf(pageIndex));
+        HttpUtil.get(HttpUtil.PLAY_VEDIO_RELIVE_DETAILS_LIST, this, params,
+                new JsonHttpResponseHandler() {
 
-                //加载更多
-                ArrayList<RadioBean> list = (ArrayList<RadioBean>) data;
-                if (list.size() < radioModelService.getPageSize() && radioModelService.getPageIndex() > 2) {
-                    listView.noMoreData();
-                }
-                //保存数据
-                listData.addAll(list);
-                if (listData.size() > 0) {
-                    setHeaderView(detailBean, listData.get(0));//设置第一项布局
-                    setAdapterData();//设置其他项
-                }
-            }
+                    @Override
+                    public void onFailure(Throwable arg0, JSONObject arg1) {
+                        super.onFailure(arg0, arg1);
+                        listView.onFinishLoad();
+                        loadView.setStatus(LoadView.ERROR);
+                    }
 
-            @Override
-            public <T> void failer(T data) {
-                listView.onFinishLoad();
-                loadView.setStatus(LoadView.ERROR);
-            }
-        });
+                    @Override
+                    public void onSuccess(int arg0, JSONObject arg1) {
+                        super.onSuccess(arg0, arg1);
+                        //解析数据
+                        ArrayList<RadioBean> list = ParseUtil.parseRadioBean(arg1);
+
+                        listView.onFinishLoad();
+                        loadView.setStatus(LoadView.SUCCESS);
+
+                        pageSize = list.size();
+
+                        //保存数据
+                        if(pageIndex == 1){
+                            listData.clear();
+                        }
+                        listData.addAll(list);
+                        if (listData.size() > 0) {
+                            setHeaderView(detailBean, listData.get(0));//设置第一项布局
+                            setAdapterData();//设置其他项
+                        }
+                    }
+
+                });
+
+
     }
 
     /**
@@ -181,11 +223,11 @@ public class RadioReliveDetialActivity extends BaseActivity implements
                     .setText(getIntent().getStringExtra("Date") + "\n" + DetailBean.getRadioTime());
 
             //最新一期的item
-            View view = headerView.findViewById(R.id.newRadio);
+            View view = headerView.findViewById(R.id.radioTo);
             //设置名字和播放时间
             ((TextView) view.findViewById(R.id.radioName)).setText(newBean.getRadioName());
             ((TextView) view.findViewById(R.id.radioDate)).setText(newBean.getRadioTime());
-            ImageView btn = (ImageView) view.findViewById(R.id.radioTo);//播放按钮图片
+            RelativeLayout btn = (RelativeLayout) view;//播放按钮图片
             newBean.setRadioHost(DetailBean.getRadioHost());//注册人名字
             btn.setTag(newBean);//播放按钮设置标签，内容是最新一期的数据
             btn.setOnClickListener(this);
@@ -230,7 +272,7 @@ public class RadioReliveDetialActivity extends BaseActivity implements
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v) {//最新一期
         switch (v.getId()) {
             case R.id.radioTo:
                 Intent intent = new Intent(RadioReliveDetialActivity.this, RadioRelivePlayerActivity.class);
