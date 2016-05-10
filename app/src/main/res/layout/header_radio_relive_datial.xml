@@ -74,40 +74,5 @@
         android:layout_marginRight="5dip"
         android:contentDescription="@null"
         android:src="@drawable/new_date" />
-<!--最新一期内容-->
-    <include
-        layout="@layout/item_radio_relive_play_listview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-<!--以下是三天水平分隔线同上-->
-    <View style="@style/line_h_style" />
-
-    <View
-        style="@style/line_h_style"
-        android:layout_height="15dip"
-        android:background="@color/buttomWhite" />
-
-    <View
-        style="@style/line_h_style"
-        android:layout_marginBottom="10dip" />
-<!--往期回顾图标-->
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="18dip"
-        android:layout_marginLeft="5dip"
-        android:layout_marginRight="5dip"
-        android:contentDescription="@null"
-        android:src="@drawable/old_date" />
-<!--隐藏文字——无往期内容-->
-    <TextView
-        android:id="@+id/listIsEmpty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:gravity="center_horizontal"
-        android:text="@string/showReliveInfo"
-        android:textColor="@color/textColor54"
-        android:textSize="16sp"
-        android:visibility="gone" />
 
 </LinearLayout>

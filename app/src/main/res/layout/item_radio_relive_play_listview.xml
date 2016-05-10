@@ -1,35 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--电台列表的item布局-->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="70dip"
-    android:gravity="center_vertical"
-    android:paddingBottom="10dip"
-    android:paddingLeft="15dip"
-    android:paddingRight="15dip"
-    android:id="@+id/radioTo"
-    android:paddingTop="10dip">
-<!--节目名称-->
-    <TextView
-        android:id="@+id/radioName"
-        style="@style/listViewTextStyle"
-        android:textColor="@color/textColor87" />
-<!--节目播出时间-->
-    <TextView
-        android:id="@+id/radioDate"
-        style="@style/listViewTextStyle"
-        android:layout_below="@id/radioName"
-        android:layout_marginTop="5dip"
-        android:textColor="@color/textColor54"
-        android:textSize="14sp" />
-<!--播放按钮图片-->
-    <ImageView
-        android:layout_width="50dip"
-        android:layout_height="50dip"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:contentDescription="@null"
-        android:padding="12dip"
-        android:src="@drawable/icon_play_little" />
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dip"
+        android:gravity="center_vertical"
+        android:paddingBottom="10dip"
+        android:paddingLeft="15dip"
+        android:paddingRight="15dip"
+        android:id="@+id/radioTo"
+        android:paddingTop="10dip">
+
+        <!--节目名称-->
+        <TextView
+            android:id="@+id/radioName"
+            style="@style/listViewTextStyle"
+            android:textColor="@color/textColor87" />
+        <!--节目播出时间-->
+        <TextView
+            android:id="@+id/radioDate"
+            style="@style/listViewTextStyle"
+            android:layout_below="@id/radioName"
+            android:layout_marginTop="5dip"
+            android:textColor="@color/textColor54"
+            android:textSize="14sp" />
+        <!--播放按钮图片-->
+        <ImageView
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:padding="12dip"
+            android:src="@drawable/icon_play_little" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/prv_head"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="18dip"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:contentDescription="@null"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/old_date" />
+
+    <TextView
+        android:id="@+id/listIsEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:gravity="center_horizontal"
+        android:text="@string/showReliveInfo"
+        android:textColor="@color/textColor54"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+</LinearLayout>

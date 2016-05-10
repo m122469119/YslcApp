@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 <!--标题-->
@@ -16,12 +16,21 @@
         android:divider="@drawable/line_dotted" />-->
 
     <!--下拉刷新和加载更多组件-->
+    <!--listView标题-->
     <include
+        android:id = "@+id/list_head"
+        layout="@layout/header_radio_relive_datial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        />
+
+    <include
+        android:layout_below="@+id/list_head"
         android:id="@+id/refreshable_view"
         layout="@layout/include_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/titlebarSize"
          />
 <!--加载圈圈-->
     <include
@@ -30,4 +39,4 @@
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/titlebarSize" />
 
-</merge>
+</RelativeLayout>

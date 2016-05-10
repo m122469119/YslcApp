@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,13 +33,12 @@ import org.json.JSONObject;
  * @author HH
  */
 public class RadioReliveDetialActivity extends BaseActivity implements
-        OnClickListener, LoadView.OnTryListener {
+        LoadView.OnTryListener {
     private BaseListView listView;
     private LoadView loadView;
     private ArrayList<RadioBean> listData;//列表数据
     private QuickAdapter<RadioBean> adapter;
     private RadioBean detailBean = null;
-//    private RadioModelService radioModelService;
     private int pageIndex, pageSize;
 
     /**
@@ -68,14 +68,11 @@ public class RadioReliveDetialActivity extends BaseActivity implements
      */
     @Override
     protected void initView() {
-        pageIndex = 1;
         //加载圈圈
         loadView = (LoadView) findViewById(R.id.view);
         loadView.setOnTryListener(this);
         //listView
         listView = (BaseListView) findViewById(R.id.listview);
-        listView.setFooterDividersEnabled(true);
-        listView.setRefreshLength(14); // 除去最新的一条，14条数据即可刷新
         listView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
@@ -88,12 +85,26 @@ public class RadioReliveDetialActivity extends BaseActivity implements
             }
         });
 
+        listView.setOnItemClickListener(itemListener);
+
+
         listData = new ArrayList<>();
-//        radioModelService = new RadioModelService(this);//业务类
         if (loadView.setStatus(LoadView.LOADING)) {//开始下载数据
+            pageIndex = 1;
             getHostDetail();
         }
     }
+
+    AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent intent = new Intent(RadioReliveDetialActivity.this, RadioRelivePlayerActivity.class);
+            RadioBean bean = listData.get(position);
+            bean.setRadioHost(detailBean.getRadioHost());
+            intent.putExtra("RadioBean", bean);
+            RadioReliveDetialActivity.this.startActivity(intent);
+        }
+    };
 
     /**
      * 重写加载
@@ -134,11 +145,10 @@ public class RadioReliveDetialActivity extends BaseActivity implements
                         RadioBean detialBean = ParseUtil.parseHeadRadioBean(arg1);
                         detailBean = detialBean;
                         getListDate(detailBean.getRadioName());//下载往期列表
-
+                        setHeaderView(detailBean);//设置第一项布局
                     }
 
                 });
-
 
     }
 
@@ -175,14 +185,11 @@ public class RadioReliveDetialActivity extends BaseActivity implements
                         pageSize = list.size();
 
                         //保存数据
-                        if(pageIndex == 1){
+                        if (pageIndex == 1) {
                             listData.clear();
                         }
                         listData.addAll(list);
-                        if (listData.size() > 0) {
-                            setHeaderView(detailBean, listData.get(0));//设置第一项布局
-                            setAdapterData();//设置其他项
-                        }
+                        setAdapterData();//设置其他项
                     }
 
                 });
@@ -194,45 +201,22 @@ public class RadioReliveDetialActivity extends BaseActivity implements
      * 设置HeaderView
      * <p>包含电台的设置和最新一期的设置</p>
      * @param DetailBean 节目描述数据
-     * @param newBean 节目列表数据的第一项数据（最新一期信息）
      */
-    private void setHeaderView(RadioBean DetailBean, RadioBean newBean) {
-        if (listView.getHeaderViewsCount() == 0) {//没有列表头
-            // 将第一条最新一期的数据移除，因为往期列表不需要用到它
-            listData.remove(0);
-
-            View headerView = View.inflate(this,
-                    R.layout.header_radio_relive_datial, null);
-
-            if (listData.size() < 2) {//显示没有数据
-                headerView.findViewById(R.id.listIsEmpty).setVisibility(View.VISIBLE);
-            }
-
+    private void setHeaderView(RadioBean DetailBean) {
             //主持人头像
             ImageLoader.getInstance().displayImage(DetailBean.getRadioHostUrl(),
-                    (ImageView) headerView.findViewById(R.id.radioHostImg),
+                    (ImageView) findViewById(R.id.radioHostImg),
                     ViewUtil.getCircleOptions());
             //主持人名字
-            ((TextView) headerView.findViewById(R.id.radioHostName))
+            ((TextView) findViewById(R.id.radioHostName))
                     .setText(DetailBean.getRadioHost());
             //节目名字
-            ((TextView) headerView.findViewById(R.id.radioNames))
+            ((TextView) findViewById(R.id.radioNames))
                     .setText(DetailBean.getRadioName());
             //节目播出时间
-            ((TextView) headerView.findViewById(R.id.radioDates))
+            ((TextView)findViewById(R.id.radioDates))
                     .setText(getIntent().getStringExtra("Date") + "\n" + DetailBean.getRadioTime());
 
-            //最新一期的item
-            View view = headerView.findViewById(R.id.radioTo);
-            //设置名字和播放时间
-            ((TextView) view.findViewById(R.id.radioName)).setText(newBean.getRadioName());
-            ((TextView) view.findViewById(R.id.radioDate)).setText(newBean.getRadioTime());
-            RelativeLayout btn = (RelativeLayout) view;//播放按钮图片
-            newBean.setRadioHost(DetailBean.getRadioHost());//注册人名字
-            btn.setTag(newBean);//播放按钮设置标签，内容是最新一期的数据
-            btn.setOnClickListener(this);
-            listView.addHeaderView(headerView);
-        }
     }
 
     /**
@@ -245,41 +229,26 @@ public class RadioReliveDetialActivity extends BaseActivity implements
             return;
         }
 
-        if (listData.size() < 2) {//第二条数据开始才是适配器的数据
-            return;
-        }
-
         adapter = new QuickAdapter<RadioBean>(this,
                 R.layout.item_radio_relive_play_listview, listData) {
             @Override
             protected void convert(BaseAdapterHelper helper, RadioBean item) {
                 helper.setText(R.id.radioName, item.getRadioName());
                 helper.setText(R.id.radioDate, item.getRadioTime());
-                helper.getView(R.id.radioTo).setTag(item);//播放图片标签数据
-                helper.setOnClickListener(R.id.radioTo, new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(RadioReliveDetialActivity.this, RadioRelivePlayerActivity.class);
-                        RadioBean bean = (RadioBean) v.getTag();
-                        bean.setRadioHost(detailBean.getRadioHost());
-                        intent.putExtra("RadioBean", bean);
-                        RadioReliveDetialActivity.this.startActivity(intent);
+                if(helper.getPosition() == 0){//显示往期
+                    helper.setVisible(R.id.prv_head,true);
+                    if(listData.size() == 1){//无往期内容
+                        helper.setVisible(R.id.prv_head,true);
+                        helper.setVisible(R.id.listIsEmpty, true);
+                    }else {
+                        helper.setVisible(R.id.listIsEmpty, false);
                     }
-                });
+                }else{
+                    helper.setVisible(R.id.prv_head, false);
+                }
             }
         };
         listView.setAdapter(adapter);
-    }
-
-    @Override
-    public void onClick(View v) {//最新一期
-        switch (v.getId()) {
-            case R.id.radioTo:
-                Intent intent = new Intent(RadioReliveDetialActivity.this, RadioRelivePlayerActivity.class);
-                intent.putExtra("RadioBean", ((RadioBean) v.getTag()));
-                startActivity(intent);
-                break;
-        }
     }
 
 }
