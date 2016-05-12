@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,7 +29,8 @@ import android.widget.TextView;
 public class RadioRelivePlayerActivity extends BaseActivity implements
         OnClickListener, PlayerUtil.OnPlayListener {
     private PlayerUtil pv;
-    private ImageButton playImg, refreshImg;
+    private CheckBox playImg;
+    private ImageButton  refreshImg;
     private Animation animation;
     private RadioBean bean;
     private boolean isPlay = true;
@@ -56,7 +58,7 @@ public class RadioRelivePlayerActivity extends BaseActivity implements
         //标题
         ((TextView) findViewById(R.id.titleText)).setText(getString(R.string.interactives));
         findViewById(R.id.backBtn).setOnClickListener(this);//返回键
-        playImg = (ImageButton) findViewById(R.id.paly_pouse);//播放/停止按钮
+        playImg = (CheckBox) findViewById(R.id.paly_pouse);//播放/停止按钮
         playImg.setOnClickListener(this);
         refreshImg = (ImageButton) findViewById(R.id.refreshBtn);//刷新按钮
         refreshImg.setOnClickListener(this);
@@ -78,12 +80,12 @@ public class RadioRelivePlayerActivity extends BaseActivity implements
                 // 暂停或播放
                 if (isPlay) {
                     // 原来是播放的，改为暂停
-                    playImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_play));
+//                    playImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_play));
                     pv.pause();
                     isPlay = false;
                 } else {
                     // 原来是暂停的，改为播放
-                    playImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_pause));
+//                    playImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_pause));
                     pv.start();
                     isPlay = true;
                 }
@@ -92,7 +94,7 @@ public class RadioRelivePlayerActivity extends BaseActivity implements
             case R.id.refreshBtn:
                 if (!isPlay) {
                     // 原来是暂停的，改为播放
-                    playImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_pause));
+//                    playImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_pause));
                     isPlay = true;
                 }
                 playImg.setEnabled(false);

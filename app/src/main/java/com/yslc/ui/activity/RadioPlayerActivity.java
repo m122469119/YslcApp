@@ -5,6 +5,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yslc.bean.RadioBean;
 import com.yslc.ui.base.BaseActivity;
 import com.yslc.R;
+import com.yslc.ui.service.PlayBroadcastService;
 import com.yslc.util.CommonUtil;
 import com.yslc.util.HttpUtil;
 import com.yslc.util.ParseUtil;
@@ -14,6 +15,10 @@ import com.yslc.util.ToastUtil;
 import com.yslc.util.PlayerUtil.OnPlayListener;
 import com.yslc.util.ViewUtil;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,6 +26,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -33,11 +39,25 @@ import org.json.JSONObject;
 public class RadioPlayerActivity extends BaseActivity implements
         OnClickListener, OnPlayListener, TimerUtil.OnTimerCallback {
     private PlayerUtil pv;
-    private ImageButton playImg, refreshImg;
+    private RadioButton playImg;
+    private ImageButton refreshImg;
     private Animation animation;
     private boolean isPlay = true;
     private TimerUtil timerUtil;
     private boolean isPrepared = false;
+//    private PlayBroadcastService.BroadcastConsole console;
+//    private ServiceConnection connection = new ServiceConnection() {
+//        @Override
+//        public void onServiceConnected(ComponentName name, IBinder service) {
+//            console = (PlayBroadcastService.BroadcastConsole)service;
+//
+//        }
+//
+//        @Override
+//        public void onServiceDisconnected(ComponentName name) {
+//
+//        }
+//    };
 
     /**
      * 设置布局
@@ -61,7 +81,7 @@ public class RadioPlayerActivity extends BaseActivity implements
         ViewUtil.TranslucentStatusBar(this);//状态栏透明
 
         findViewById(R.id.backBtn).setOnClickListener(this);//返回
-        playImg = (ImageButton) findViewById(R.id.paly_pouse);//播放
+        playImg = (RadioButton) findViewById(R.id.paly_pouse);//播放
         playImg.setOnClickListener(this);
         refreshImg = (ImageButton) findViewById(R.id.refreshBtn);//刷新
         refreshImg.setOnClickListener(this);
@@ -69,10 +89,14 @@ public class RadioPlayerActivity extends BaseActivity implements
         animation = AnimationUtils.loadAnimation(this, R.anim.load_progress_anim);
         //播放设置
         pv = new PlayerUtil();
-        pv.setOnPlayListener(this);
+        pv.setOnPlayListener(this);//播放回调
         //计时器设置
         timerUtil = new TimerUtil(0);
         timerUtil.setOnTimerCallback(this);
+        //开启服务
+//        Intent bindIntent = new Intent(this, PlayBroadcastService.class);
+//        bindService(bindIntent,connection,BIND_AUTO_CREATE);
+//        unbindService(connection);
 
         getData();
     }
@@ -86,17 +110,20 @@ public class RadioPlayerActivity extends BaseActivity implements
         switch (v.getId()) {
             case R.id.backBtn:
                 onFinishActivity();
+                //TODO 询问是否停止播放
                 break;
 
             case R.id.paly_pouse:
                 if (isPlay) {
                     // 原来是播放的，改为暂停
-                    playImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_play));
+                    playImg.setChecked(true);
+//                    playImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_play));
                     pv.pause();
                     isPlay = false;
                 } else {
                     // 原来是暂停的，改为播放
-                    playImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_pause));
+//                    playImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_pause));
+                    playImg.setChecked(false);
                     pv.start();
                     isPlay = true;
                 }
@@ -105,7 +132,8 @@ public class RadioPlayerActivity extends BaseActivity implements
             case R.id.refreshBtn:
                 if (!isPlay) {
                     // 原来是暂停的，改为播放
-                    playImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_pause));
+//                    playImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_pause));
+                    playImg.setChecked(false);
                     isPlay = true;
                 }
 
@@ -145,7 +173,6 @@ public class RadioPlayerActivity extends BaseActivity implements
                         RadioBean mode = ParseUtil.parseSingleRadioBean(json);
                         setData(mode);
                     }
-
                 });
 
     }
@@ -234,7 +261,7 @@ public class RadioPlayerActivity extends BaseActivity implements
             pv.stop();
         }
 
-        timerUtil.destroyTimer();
+//        timerUtil.destroyTimer();
     }
 
     /**

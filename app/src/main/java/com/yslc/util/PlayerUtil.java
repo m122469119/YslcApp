@@ -45,7 +45,7 @@ public class PlayerUtil implements OnBufferingUpdateListener,
             }
             mp.reset();
             mp.setDataSource(videoUrl);
-            mp.prepareAsync();
+            mp.prepareAsync();//播放流的话，不使用prepare
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,15 +93,15 @@ public class PlayerUtil implements OnBufferingUpdateListener,
         onPlayListener.startPlay();
 
         // 开始播放
-        mp.start();
+        mp.start();//TODO 应该放到上面startplay
     }
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-
+        //TODO 为什么不用
     }
 
     @Override
-    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+    public void onBufferingUpdate(MediaPlayer mp, int percent) {//播放流更新监听
     }
 }

@@ -90,6 +90,9 @@
         <activity
             android:name=".ui.activity.RadioPlayerActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.RadioPlayerActivity2"
+            android:screenOrientation="portrait" />
         <!--闪电情报-->
         <activity
             android:name=".ui.activity.FastInfoActivity"
@@ -182,6 +185,8 @@
                 <category android:name="com.yslc" />
             </intent-filter>
         </service>
+
+        <service android:name=".ui.service.PlayBroadcastService"/>
 
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"

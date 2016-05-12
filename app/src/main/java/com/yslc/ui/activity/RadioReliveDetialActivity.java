@@ -98,7 +98,7 @@ public class RadioReliveDetialActivity extends BaseActivity implements
     AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Intent intent = new Intent(RadioReliveDetialActivity.this, RadioRelivePlayerActivity.class);
+            Intent intent = new Intent(RadioReliveDetialActivity.this, RadioPlayerActivity2.class);
             RadioBean bean = listData.get(position);
             bean.setRadioHost(detailBean.getRadioHost());
             intent.putExtra("RadioBean", bean);
