@@ -66,7 +66,6 @@ public class RadioPlayerActivity extends BaseActivity implements
             if(style.equals("play")){//开始播放广播（更新UI）
                 startPlay();
             }else if(style.equals("next")){//播放完成广播
-                ToastUtil.showMessage(RadioPlayerActivity.this, "下一首");
                 if(isOnline){
                     getData();//下一首
                 }else {
@@ -119,7 +118,6 @@ public class RadioPlayerActivity extends BaseActivity implements
 
         //注册监听器
         registerReceiver();
-//        unbindService(connection);
 
     }
 
