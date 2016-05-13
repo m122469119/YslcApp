@@ -90,9 +90,6 @@
         <activity
             android:name=".ui.activity.RadioPlayerActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.RadioPlayerActivity2"
-            android:screenOrientation="portrait" />
         <!--闪电情报-->
         <activity
             android:name=".ui.activity.FastInfoActivity"
@@ -108,9 +105,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.RadioReliveDetialActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.RadioRelivePlayerActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.ShowNoticationActivity"
@@ -185,7 +179,7 @@
                 <category android:name="com.yslc" />
             </intent-filter>
         </service>
-
+        <!--播放广播的后台-->
         <service android:name=".ui.service.PlayBroadcastService"/>
 
         <receiver

@@ -1,33 +1,32 @@
 package com.yslc.ui.activity;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yslc.bean.RadioBean;
-import com.yslc.ui.base.BaseActivity;
-import com.yslc.R;
-import com.yslc.ui.service.PlayBroadcastService;
-import com.yslc.util.CommonUtil;
-import com.yslc.util.HttpUtil;
-import com.yslc.util.ParseUtil;
-import com.yslc.util.PlayerUtil;
-import com.yslc.util.TimerUtil;
-import com.yslc.util.ToastUtil;
-import com.yslc.util.PlayerUtil.OnPlayListener;
-import com.yslc.util.ViewUtil;
-
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
+
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yslc.R;
+import com.yslc.bean.RadioBean;
+import com.yslc.ui.base.BaseActivity;
+import com.yslc.ui.service.PlayBroadcastService;
+import com.yslc.util.CommonUtil;
+import com.yslc.util.HttpUtil;
+import com.yslc.util.ParseUtil;
+import com.yslc.util.ToastUtil;
+import com.yslc.util.ViewUtil;
 
 import org.json.JSONObject;
 
@@ -37,28 +36,45 @@ import org.json.JSONObject;
  * @author HH
  */
 public class RadioPlayerActivity extends BaseActivity implements
-        OnClickListener, OnPlayListener, TimerUtil.OnTimerCallback {
-    private PlayerUtil pv;
-    private RadioButton playImg;
-    private ImageButton refreshImg;
+        OnClickListener {
+    private CheckBox playImg;
+    private ImageButton  refreshImg;
     private Animation animation;
-    private boolean isPlay = true;
-    private TimerUtil timerUtil;
-    private boolean isPrepared = false;
-//    private PlayBroadcastService.BroadcastConsole console;
-//    private ServiceConnection connection = new ServiceConnection() {
-//        @Override
-//        public void onServiceConnected(ComponentName name, IBinder service) {
-//            console = (PlayBroadcastService.BroadcastConsole)service;
-//
-//        }
-//
-//        @Override
-//        public void onServiceDisconnected(ComponentName name) {
-//
-//        }
-//    };
+    private PlayBroadcastService.BroadcastConsole console;
+    private BroadcastReceiver receiver;
+    private boolean isOnline = false;//是否直播
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            console = (PlayBroadcastService.BroadcastConsole)service;//
+            getData();
+        }
 
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
+    /**
+     * 内部类，广播监听器
+     */
+    public class LocateReceive extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String style = intent.getStringExtra("style");
+            if(style.equals("play")){//开始播放广播（更新UI）
+                startPlay();
+            }else if(style.equals("next")){//播放完成广播
+                ToastUtil.showMessage(RadioPlayerActivity.this, "下一首");
+                if(isOnline){
+                    getData();//下一首
+                }else {
+                    finish();
+                }
+            }
+        }
+    }
     /**
      * 设置布局
      * @return
@@ -78,27 +94,43 @@ public class RadioPlayerActivity extends BaseActivity implements
      */
     @Override
     protected void initView() {
+        mode = (RadioBean)getIntent().getSerializableExtra("RadioBean");
+        if(null == mode){
+            isOnline = true;
+        }else{
+            isOnline = false;
+            //股市重播
+            ((TextView) findViewById(R.id.titleText)).setText(getString(R.string.interactives));
+        }
+
         ViewUtil.TranslucentStatusBar(this);//状态栏透明
 
         findViewById(R.id.backBtn).setOnClickListener(this);//返回
-        playImg = (RadioButton) findViewById(R.id.paly_pouse);//播放
+        playImg = (CheckBox) findViewById(R.id.paly_pouse);//播放
         playImg.setOnClickListener(this);
         refreshImg = (ImageButton) findViewById(R.id.refreshBtn);//刷新
         refreshImg.setOnClickListener(this);
         //关联animation(刷新旋转）
         animation = AnimationUtils.loadAnimation(this, R.anim.load_progress_anim);
         //播放设置
-        pv = new PlayerUtil();
-        pv.setOnPlayListener(this);//播放回调
-        //计时器设置
-        timerUtil = new TimerUtil(0);
-        timerUtil.setOnTimerCallback(this);
         //开启服务
-//        Intent bindIntent = new Intent(this, PlayBroadcastService.class);
-//        bindService(bindIntent,connection,BIND_AUTO_CREATE);
+        Intent bindIntent = new Intent(this, PlayBroadcastService.class);
+        bindService(bindIntent, connection, BIND_AUTO_CREATE);
+
+        //注册监听器
+        registerReceiver();
 //        unbindService(connection);
 
-        getData();
+    }
+
+    /**
+     * 注册监听器
+     */
+    private void registerReceiver() {
+        receiver = new LocateReceive();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(PlayBroadcastService.BROADCAST_INTENT);
+        registerReceiver(receiver, intentFilter);
     }
 
     /**
@@ -114,27 +146,16 @@ public class RadioPlayerActivity extends BaseActivity implements
                 break;
 
             case R.id.paly_pouse:
-                if (isPlay) {
-                    // 原来是播放的，改为暂停
-                    playImg.setChecked(true);
-//                    playImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_play));
-                    pv.pause();
-                    isPlay = false;
+                if (playImg.isChecked()) {//当前为播放状态
+                    console.pause();
                 } else {
-                    // 原来是暂停的，改为播放
-//                    playImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_pause));
-                    playImg.setChecked(false);
-                    pv.start();
-                    isPlay = true;
+                    console.start();
                 }
                 break;
 
             case R.id.refreshBtn:
-                if (!isPlay) {
-                    // 原来是暂停的，改为播放
-//                    playImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_pause));
-                    playImg.setChecked(false);
-                    isPlay = true;
+                if (console.isPlay()) {
+                    console.stop();
                 }
 
                 // 重新刷新
@@ -148,13 +169,18 @@ public class RadioPlayerActivity extends BaseActivity implements
      * <p>获取数据成功则设置数据</p>
      */
     private void getData() {
+
         if (!CommonUtil.isNetworkAvalible(this)) {//判断网络
             ToastUtil.showMessage(this, HttpUtil.NO_INTERNET_INFO);
             return;
         }
 
-        showGetDataView();
+        refreshUI();
 
+        if(!isOnline){//有数据证明是重播
+            setData(mode);
+            return;
+        }
         HttpUtil.get(HttpUtil.PLAY_VEDIO, this, null,
                 new JsonHttpResponseHandler() {
 
@@ -170,63 +196,40 @@ public class RadioPlayerActivity extends BaseActivity implements
                     public void onSuccess(JSONObject json) {
                         super.onSuccess(json);
                         //解析数据
-                        RadioBean mode = ParseUtil.parseSingleRadioBean(json);
+                        mode = ParseUtil.parseSingleRadioBean(json);
                         setData(mode);
                     }
                 });
 
     }
 
-    private void showGetDataView() {
-        refreshImg.startAnimation(animation);//为刷新按钮设置动画
-        playImg.setEnabled(false);//播放按钮
-    }
-
+    private RadioBean mode;
 
     /**
-     * 定时获取数据
+     * 刷新是的ui设置
      */
-    @Override
-    public void onTimer() {
-        // 再次获取数据
-        getData();
+    private void refreshUI() {
+        refreshImg.startAnimation(animation);//为刷新按钮设置动画
+        playImg.setClickable(false);
     }
+
+
 
     /**
      * 设置数据
      */
     private void setData(RadioBean mode) {
         // 设置头像和标题
-        ImageLoader.getInstance().displayImage(mode.getRadioHostUrl(), (ImageView) findViewById(R.id.starImg),
-                ViewUtil.getCircleOptions());
+        ImageLoader.getInstance().displayImage(mode.getRadioHostUrl(), (ImageView)
+                findViewById(R.id.starImg), ViewUtil.getCircleOptions());
         ((TextView) findViewById(R.id.text_time)).setText(mode.getRadioName());
         ((TextView) findViewById(R.id.text_info)).setText("主持人:" + mode.getRadioHost());
 
-        playImg.setEnabled(true);
         refreshImg.setEnabled(true);
 
-        if (!pv.isPlay()) {
-            // 开始播放广播
-            pv.playUrl(mode.getRadioUrl());
-        } else {//已经在播放则停止刷新圆圈
-            startPlay();
-        }
-
-        startTimeThread(Integer.parseInt(mode.getRadioTime()));
+        console.play(mode.getRadioUrl());
     }
 
-    /**
-     * 设置计时器时间，播放完成后，再次获取数据
-     *
-     * @param time
-     */
-    private void startTimeThread(int time) {
-        // 下一次访问定时
-        time = time < 0 ? 10000 : time * 1000;//3416*1000毫秒
-        timerUtil.stopTimer();//停止计时
-        timerUtil.setTime(time);//设置计时器时间
-        timerUtil.startTimer();//开始计时
-    }
 
     /**
      * 播放音乐
@@ -235,9 +238,9 @@ public class RadioPlayerActivity extends BaseActivity implements
     protected void onResume() {
         super.onResume();
 
-        if (null != pv && isPrepared) {
-            pv.start();
-        }
+//        if (null != pv && isPrepared) {
+//            pv.start();
+//        }
     }
 
     /**
@@ -247,34 +250,33 @@ public class RadioPlayerActivity extends BaseActivity implements
     protected void onPause() {
         super.onPause();
 
-        if (null != pv && pv.isPlay()) {
-            pv.pause();
-        }
+//        if (null != pv && pv.isPlay()) {
+//            pv.pause();
+//        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(receiver);//注销广播监听
+        unbindService(connection);//解绑服务
+//        if (null != pv) {
+//            // 释放MedioPlay空间
+//            pv.stop();
+//        }
 
-        if (null != pv) {
-            // 释放MedioPlay空间
-            pv.stop();
-        }
-
-//        timerUtil.destroyTimer();
     }
 
     /**
-     * 播放监听回调（注意不是开始播放的方法）
+     * 开始播放时的ui设置
      * <p>停止刷新圆圈</p>
      * <p>改变播放按钮状态</p>
      */
-    @Override
     public void startPlay() {
-        isPrepared = true;
         refreshImg.clearAnimation();
         // 可以进行播放暂停控制
-        playImg.setEnabled(true);
+        playImg.setClickable(true);
+        playImg.setChecked(false);
     }
 
 }

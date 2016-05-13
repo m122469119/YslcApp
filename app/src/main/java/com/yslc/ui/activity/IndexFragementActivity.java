@@ -149,7 +149,7 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
         switch (id) {
             case R.id.magazine:
                 // 显示股市广播直播节目
-                startActivity(new Intent(this, RadioPlayerActivity2.class));
+                startActivity(new Intent(this, RadioPlayerActivity.class));
                 break;
 
             case R.id.interactives:

@@ -4,10 +4,8 @@ import java.util.ArrayList;
 
 import android.content.Intent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -98,7 +96,7 @@ public class RadioReliveDetialActivity extends BaseActivity implements
     AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Intent intent = new Intent(RadioReliveDetialActivity.this, RadioPlayerActivity2.class);
+            Intent intent = new Intent(RadioReliveDetialActivity.this, RadioPlayerActivity.class);
             RadioBean bean = listData.get(position);
             bean.setRadioHost(detailBean.getRadioHost());
             intent.putExtra("RadioBean", bean);
