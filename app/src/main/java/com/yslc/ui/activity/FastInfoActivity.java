@@ -37,7 +37,7 @@ public class FastInfoActivity extends BaseActivity implements LoadView.OnTryList
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_radio_relive_detial;
+        return R.layout.toolbar_listview_load;
     }
 
     @Override
