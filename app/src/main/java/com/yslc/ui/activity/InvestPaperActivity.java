@@ -17,6 +17,7 @@ import com.yslc.ui.adapter.QuickAdapter;
 import com.yslc.ui.base.BaseActivity;
 import com.yslc.ui.fragment.CelebrityFragment;
 import com.yslc.util.HttpUtil;
+import com.yslc.util.ToastUtil;
 import com.yslc.view.CalendarView;
 import com.yslc.view.LoadView;
 
@@ -33,8 +34,10 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -68,7 +71,13 @@ public class InvestPaperActivity extends BaseActivity
      * 开启线程下载数据
      */
     private void getData(String time){
-        loadView.setStatus(LoadView.LOADING);
+        loadView.setStatus(LoadView.EMPTY_DATA);
+        if( !checkAuthority(time) ){
+            showNotVip();
+//            loadView.setStatus(LoadView.ERROR);
+            return;
+        }
+
         RequestParams params = new RequestParams();
         params.put("date", time);
         String[] strs = time.split("-");
@@ -94,6 +103,54 @@ public class InvestPaperActivity extends BaseActivity
                         loadView.setStatus(LoadView.ERROR);
                     }
                 });
+    }
+
+    /**
+     * 显示需要vip才可以查看，尝试查看其他日期，带有跳到支付的按钮
+     */
+    private void showNotVip() {
+        //TODO 显示需要vip才可以查看，尝试查看其他日期，带有跳到支付的按钮
+        ToastUtil.showMessage(this, "需要成为VIP");
+    }
+
+    /**
+     * 检查日期是否最新，如果是最新需要VIP才能看
+     * @param time
+     * @return
+     */
+    private boolean checkAuthority(String time) {
+        Calendar t = toCalendar(time);//选择时间
+        Calendar now = Calendar.getInstance();//当前时间
+//        int a = t.compareTo(now);//-1
+        Calendar fiveDayBefore = Calendar.getInstance();//5天前时间
+        fiveDayBefore.add(Calendar.DAY_OF_MONTH, -5);
+        //选择时间是5天前到今天的日期 且 不是vip,则没有权限查看
+        if(t.before(now) && t.after(fiveDayBefore) && !isVip()){
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isVip() {
+        //TODO 判断是否是VIP用户
+        return false;
+    }
+
+    /**
+     * 把String时间换成calendar
+     * @param time
+     * @return
+     */
+    private Calendar toCalendar(String time) {
+        SimpleDateFormat sdf =new SimpleDateFormat("yy-MM-dd");
+        Calendar t = Calendar.getInstance();
+        try {
+            Date date = sdf.parse(time);
+            t.setTime(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return t;
     }
 
     /**
@@ -219,7 +276,15 @@ public class InvestPaperActivity extends BaseActivity
         mViewPager.addOnPageChangeListener(viewPagerListener);
 
 //        getData("2016-04-01");
-        getData(new SimpleDateFormat("yy-MM-dd").format(new Date()));
+        getData(getToday());
+    }
+
+    /**
+     * 获取当天的字符串
+     * @return
+     */
+    private String getToday() {
+        return new SimpleDateFormat("yy-MM-dd").format(new Date());
     }
 
 
@@ -280,8 +345,10 @@ public class InvestPaperActivity extends BaseActivity
         }
     }
 
+    String currentDate = getToday();
     /**
      * 点击日期事件
+     * <p>初始化日历控件</p>
      */
     View.OnClickListener dateEvent = new View.OnClickListener(){
         @Override
@@ -301,6 +368,8 @@ public class InvestPaperActivity extends BaseActivity
                     public void onCalendarClick(View v, String dateFormat) {
                         dateView.dismiss();
                         getData(dateFormat);
+                        currentDate = dateFormat;
+                        //TODO 往后的日期不能点
 //                        calendarView.addMarker((RelativeLayout)v);
                     }
                 });
@@ -385,7 +454,7 @@ public class InvestPaperActivity extends BaseActivity
 
     @Override
     public void onTry() {
-        getData("2016-04-01");
+        getData(currentDate);
 //        if(loadView.setStatus(LoadView.LOADING)){
 //        }
     }

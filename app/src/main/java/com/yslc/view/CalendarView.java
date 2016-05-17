@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.yslc.R;
+import com.yslc.util.ToastUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -557,14 +558,26 @@ public class CalendarView extends LinearLayout implements
 //            dates[location[0]][location[1]]
             Date d = (Date)tv.getTag();
 //            Toast.makeText(getContext(),format(d),Toast.LENGTH_SHORT).show();
+            if(checkDate(d)){
+                ToastUtil.showMessage(getContext(),"选择的日期超过今天");
+                return;
+            }
             if (onCalendarClickListener != null) {
                 onCalendarClickListener.onCalendarClick
                         (v, format(d));
             }
         }
-
-
     };
+
+    /**
+     * 检查是否超过今天
+     * @return
+     */
+    private boolean checkDate(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        return c.after(today);
+    }
 
     private TextView prvSelect;
     /**

@@ -13,6 +13,7 @@ import com.yslc.ui.adapter.BaseAdapterHelper;
 import com.yslc.ui.adapter.QuickAdapter;
 import com.yslc.ui.base.BaseActivity;
 import com.yslc.util.HttpUtil;
+import com.yslc.util.ToastUtil;
 import com.yslc.view.BaseListView;
 import com.yslc.view.LoadView;
 
@@ -104,6 +105,14 @@ public class FastInfoActivity extends BaseActivity implements LoadView.OnTryList
      * 下载数据
      */
     private void getData(int pageIndex) {
+        loadView.setStatus(LoadView.LOADING);
+        //检查是否有权限
+        if( !isVip() ){
+            showNotVip();
+            loadView.setStatus(LoadView.EMPTY_DATA);
+            return;
+        }
+
         RequestParams params = new RequestParams();
         params.put("pageIndex",String.valueOf(pageIndex));
         //JsonHttpResponseHandler()
@@ -132,6 +141,23 @@ public class FastInfoActivity extends BaseActivity implements LoadView.OnTryList
                         listView.onFinishLoad();
                     }
                 });
+    }
+
+    /**
+     * 显示不是vip才能观看的view
+     */
+    private void showNotVip() {
+        //TODO 显示不是付费用户,跳转付费链接
+        ToastUtil.showMessage(this, "vip客户才可以看");
+    }
+
+    /**
+     * 判断是否是付费用户
+     * @return
+     */
+    private boolean isVip() {
+        //TODO 判断是否vip
+        return false;
     }
 
     /**
