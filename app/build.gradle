@@ -29,6 +29,7 @@ android {
 }
 
 dependencies {
+    compile files('libs/libammsdk.jar')
     compile files('libs/android-async-http-1.4.3.jar')
     compile files('libs/jpush-android-2.0.5.jar')
     compile files('libs/MobCommons.jar')

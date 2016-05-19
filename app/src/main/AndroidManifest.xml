@@ -90,12 +90,13 @@
         <activity
             android:name=".ui.activity.RadioPlayerActivity"
             android:screenOrientation="portrait" />
-        <!--闪电情报-->
+        <!-- 闪电情报 -->
         <activity
             android:name=".ui.activity.FastInfoActivity"
             android:screenOrientation="portrait" />
-        <!--名家评论-->
-        <activity android:name=".ui.activity.InvestPaperActivity"
+        <!-- 名家评论 -->
+        <activity
+            android:name=".ui.activity.InvestPaperActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.FastInfoDetailActivity"
@@ -118,10 +119,9 @@
         <activity
             android:name=".ui.activity.CropImageActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".ui.activity.StockMarketActivity"
-            android:launchMode="singleTask"
-            />
+        <activity
+            android:name=".ui.activity.StockMarketActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name=".ui.activity.SearchStockActivity"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" />
@@ -252,6 +252,11 @@
             android:value="42dc643f431de319f0a8e786" />
 
         <!-- *****************************极光推送配置结束************************* -->
+        <!--支付页面-->
+        <activity
+            android:name=".ui.activity.PayActivity"
+            android:label="@string/title_activity_pay"
+            android:theme="@style/AppBaseTheme"></activity>
     </application>
 
 </manifest>
