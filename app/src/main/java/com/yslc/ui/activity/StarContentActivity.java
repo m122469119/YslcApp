@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
+import android.text.Html;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -213,10 +215,15 @@ public class StarContentActivity extends BaseActivity implements
     private void setHeaderData(StarBean mode) {
         if (listView.getHeaderViewsCount() == 0) {
             View header = View.inflate(this, R.layout.header_star_content, null);
-            imageLoader.displayImage(mode.getSif_Img(),(ImageView) header.findViewById(R.id.img));
+            imageLoader.displayImage(mode.getSif_Img(), (ImageView) header.findViewById(R.id.img));
             ((TextView) header.findViewById(R.id.name)).setText(mode.getSif_Title());
             ((TextView) header.findViewById(R.id.time)).setText(mode.getSn_Time());
-            ((TextView) header.findViewById(R.id.content)).setText(mode.getContent());
+            TextView content =((TextView) header.findViewById(R.id.content));//设置文章内容
+//            content.setText(mode.getContent());
+//            String aaa = mode.getContent();
+//            String bbb = aaa.replace("<br/>", "\n");
+//            content.setText(bbb);
+            content.setText(Html.fromHtml(mode.getContent()));
 
             noComment = (TextView) header.findViewById(R.id.noComment);
             if (noData) {
