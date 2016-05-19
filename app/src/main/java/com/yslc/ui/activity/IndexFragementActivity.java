@@ -174,6 +174,7 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
 
             case R.id.radio:
                 // 支付模块，预留
+                startActivity(new Intent(this, PayActivity.class));
                 ToastUtil.showMessage(this, "支付");
                 break;
         }
