@@ -303,6 +303,7 @@ public class InvestPaperActivity extends BaseActivity
             //更改标题
             Fragment f =fragmentList.get(position);
             setTitle(data.get(position).getNo(),data.get(position).getTitle());
+            webViewGoBack();
         }
 
         @Override
