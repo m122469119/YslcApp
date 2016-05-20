@@ -86,6 +86,7 @@ public class FastInfoActivity extends BaseActivity implements LoadView.OnTryList
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent intent = new Intent(FastInfoActivity.this, FastInfoDetailActivity.class);
+            intent.putExtra("title", dataList.get(position).getTitle());
             intent.putExtra("date", dataList.get(position).getDate());
             intent.putExtra("content", dataList.get(position).getContent());
             startActivity(intent);
@@ -107,11 +108,11 @@ public class FastInfoActivity extends BaseActivity implements LoadView.OnTryList
     private void getData(int pageIndex) {
         loadView.setStatus(LoadView.LOADING);
         //检查是否有权限
-        if( !isVip() ){
-            showNotVip();
-            loadView.setStatus(LoadView.EMPTY_DATA);
-            return;
-        }
+//        if( !isVip() ){
+//            showNotVip();
+//            loadView.setStatus(LoadView.EMPTY_DATA);
+//            return;
+//        }
 
         RequestParams params = new RequestParams();
         params.put("pageIndex",String.valueOf(pageIndex));
@@ -173,7 +174,7 @@ public class FastInfoActivity extends BaseActivity implements LoadView.OnTryList
                 @Override
                 protected void convert(BaseAdapterHelper helper, FastInfoBean item) {
                     helper.setText(R.id.item_fast_info_time,item.getDate());
-                    helper.setText(R.id.item_fast_info_content,item.getContent());
+                    helper.setText(R.id.item_fast_info_content,"【"+item.getTitle()+"】"+item.getContent());
                 }
             };
             listView.setAdapter(adapter);
@@ -191,6 +192,7 @@ public class FastInfoActivity extends BaseActivity implements LoadView.OnTryList
         try{
             for(int i=0; i<array.length(); i++){
                 FastInfoBean data = new FastInfoBean();
+                data.setTitle(array.getJSONObject(i).optString("title"));
                 data.setContent(array.getJSONObject(i).optString("content"));
                 data.setDate(array.getJSONObject(i).optString("date"));
                 list.add(data);

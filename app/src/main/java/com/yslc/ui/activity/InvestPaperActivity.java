@@ -12,7 +12,7 @@ import com.loopj.android.http.RequestParams;
 import com.yslc.R;
 import com.yslc.bean.CelebrityComment;
 import com.yslc.ui.adapter.BaseAdapterHelper;
-import com.yslc.ui.adapter.MyFragmentAdapter;
+import com.yslc.ui.adapter.FragmentStateAdapter;
 import com.yslc.ui.adapter.QuickAdapter;
 import com.yslc.ui.base.BaseActivity;
 import com.yslc.ui.fragment.CelebrityFragment;
@@ -45,7 +45,7 @@ import java.util.Date;
  */
 public class InvestPaperActivity extends BaseActivity
         implements LoadView.OnTryListener,AdapterView.OnItemClickListener{
-    private MyFragmentAdapter mSectionsPagerAdapter;
+    private FragmentStateAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private ArrayList<Fragment> fragmentList;//fragment
     private TextView no, title, date;
@@ -197,7 +197,7 @@ public class InvestPaperActivity extends BaseActivity
         }
         //配置适配器
         if(mSectionsPagerAdapter == null){
-            mSectionsPagerAdapter = new MyFragmentAdapter(getSupportFragmentManager(), fragmentList);
+            mSectionsPagerAdapter = new FragmentStateAdapter(getSupportFragmentManager(), fragmentList);
             mViewPager.setAdapter(mSectionsPagerAdapter);
         }else {
             mSectionsPagerAdapter.notifyDataSetChanged();

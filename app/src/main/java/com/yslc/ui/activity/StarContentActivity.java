@@ -220,10 +220,11 @@ public class StarContentActivity extends BaseActivity implements
             ((TextView) header.findViewById(R.id.time)).setText(mode.getSn_Time());
             TextView content =((TextView) header.findViewById(R.id.content));//设置文章内容
 //            content.setText(mode.getContent());
-//            String aaa = mode.getContent();
-//            String bbb = aaa.replace("<br/>", "\n");
+            String aaa = mode.getContent();
+            //TODO 首行空两个，临时解决方案
+            String bbb = aaa.replace("<br/>", "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 //            content.setText(bbb);
-            content.setText(Html.fromHtml(mode.getContent()));
+            content.setText(Html.fromHtml(bbb));
 
             noComment = (TextView) header.findViewById(R.id.noComment);
             if (noData) {

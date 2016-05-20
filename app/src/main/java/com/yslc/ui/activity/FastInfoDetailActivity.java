@@ -28,8 +28,10 @@ public class FastInfoDetailActivity extends BaseActivity {
         date = (TextView) findViewById(R.id.date);
         date.setText(intent.getStringExtra("date"));
         title = (TextView)findViewById(R.id.title);
+        title.setText(intent.getStringExtra("title"));
         content = (TextView)findViewById(R.id.content);
-        parseContent(title,content,intent.getStringExtra("content"));
+        content.setText(intent.getStringExtra("content"));
+//        parseContent(title,content,intent.getStringExtra("content"));
     }
 
     /**
@@ -38,9 +40,9 @@ public class FastInfoDetailActivity extends BaseActivity {
      * @param content
      * @param data
      */
-    private void parseContent(TextView title, TextView content, String data) {
-        String[] temp = data.split("】");
-        title.setText(temp[0].substring(1));
-        content.setText(temp[1]);
-    }
+//    private void parseContent(TextView title, TextView content, String data) {
+//        String[] temp = data.split("】");
+//        title.setText(temp[0].substring(1));
+//        content.setText(temp[1]);
+//    }
 }
