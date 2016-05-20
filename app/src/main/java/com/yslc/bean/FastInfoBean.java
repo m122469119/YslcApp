@@ -6,6 +6,15 @@ package com.yslc.bean;
 public class FastInfoBean {
     private String date;//闪电情报日期
     private String content;//闪电情报内容
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getDate() {
         return date;
