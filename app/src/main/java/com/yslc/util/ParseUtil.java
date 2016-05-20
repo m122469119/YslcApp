@@ -3,6 +3,7 @@ package com.yslc.util;
 import com.yslc.bean.AdBean;
 import com.yslc.bean.ColumnBean;
 import com.yslc.bean.CommentBean;
+import com.yslc.bean.GoodBean;
 import com.yslc.bean.NewBean;
 import com.yslc.bean.RadioBean;
 import com.yslc.bean.StarBean;
@@ -364,5 +365,21 @@ public class ParseUtil {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public static GoodBean parseGoodBean(JSONObject jsonObject) {
+        GoodBean bean = new GoodBean();
+        try{
+            JSONArray good = jsonObject.getJSONArray("msg");
+            JSONObject o = good.getJSONObject(0);
+            //[{"ProductId": "YSLC0002","ProductName": "投资快报","Price": "360.0000"}]
+            bean.setPrice(o.getString("Price"));
+//            good.setPrice("360.0000");
+            bean.setProductId(o.getString("ProductId"));
+            bean.setProductName(o.getString("ProductName"));
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        return bean;
     }
 }
