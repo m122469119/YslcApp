@@ -13,6 +13,7 @@ import com.yslc.ui.adapter.BaseAdapterHelper;
 import com.yslc.ui.adapter.QuickAdapter;
 import com.yslc.ui.base.BaseActivity;
 import com.yslc.util.HttpUtil;
+import com.yslc.util.ParseUtil;
 import com.yslc.util.ToastUtil;
 import com.yslc.view.BaseListView;
 import com.yslc.view.LoadView;
@@ -108,28 +109,28 @@ public class FastInfoActivity extends BaseActivity implements LoadView.OnTryList
     private void getData(int pageIndex) {
         loadView.setStatus(LoadView.LOADING);
         //检查是否有权限
-//        if( !isVip() ){
-//            showNotVip();
-//            loadView.setStatus(LoadView.EMPTY_DATA);
-//            return;
-//        }
+        if( !isVip() ){
+            showNotVip();
+            loadView.setStatus(LoadView.EMPTY_DATA);
+            return;
+        }
 
         RequestParams params = new RequestParams();
-        params.put("pageIndex",String.valueOf(pageIndex));
+        params.put("pageIndex", String.valueOf(pageIndex));
         //JsonHttpResponseHandler()
-        HttpUtil.get( HttpUtil.GET_FAST_INFO,this,params,
-                new JsonHttpResponseHandler(){
+        HttpUtil.get(HttpUtil.GET_FAST_INFO, this, params,
+                new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(JSONObject jsonObject) {
                         super.onSuccess(jsonObject);
                         loadView.setStatus(LoadView.SUCCESS);
                         refreshLayout.setRefreshing(false);
                         listView.onFinishLoad();
-                        if(pageIndex!=1){//加载更多
-                            dataList.addAll(parseData(jsonObject));
-                        }else {//第一次进来和下拉刷新
+                        if (pageIndex != 1) {//加载更多
+                            dataList.addAll(ParseUtil.parseFastInfoBean(jsonObject));
+                        } else {//第一次进来和下拉刷新
                             dataList.clear();
-                            dataList.addAll(parseData(jsonObject));
+                            dataList.addAll(ParseUtil.parseFastInfoBean(jsonObject));
                         }
                         showView(dataList);//十条数据
                     }
@@ -148,8 +149,10 @@ public class FastInfoActivity extends BaseActivity implements LoadView.OnTryList
      * 显示不是vip才能观看的view
      */
     private void showNotVip() {
-        //TODO 显示不是付费用户,跳转付费链接
-        ToastUtil.showMessage(this, "vip客户才可以看");
+        finish();
+        Intent intent = new Intent(this, NeedVipActivity.class);
+        intent.putExtra("activity","FastInfoActivity");
+        startActivity(intent);
     }
 
     /**
@@ -157,7 +160,7 @@ public class FastInfoActivity extends BaseActivity implements LoadView.OnTryList
      * @return
      */
     private boolean isVip() {
-        //TODO 判断是否vip
+        //TODO 判断是否vip  /AppJson/pay/wx/verifyPower.ashx
         return false;
     }
 
@@ -181,27 +184,6 @@ public class FastInfoActivity extends BaseActivity implements LoadView.OnTryList
         }
     }
 
-    /**
-     * 解析数据
-     * @param jsonObject
-     * @return
-     */
-    private ArrayList<FastInfoBean> parseData(JSONObject jsonObject) {
-        JSONArray array = (JSONArray) jsonObject.opt("news");
-        ArrayList<FastInfoBean> list = new ArrayList<FastInfoBean>();
-        try{
-            for(int i=0; i<array.length(); i++){
-                FastInfoBean data = new FastInfoBean();
-                data.setTitle(array.getJSONObject(i).optString("title"));
-                data.setContent(array.getJSONObject(i).optString("content"));
-                data.setDate(array.getJSONObject(i).optString("date"));
-                list.add(data);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
 
     @Override
     public void onTry() {

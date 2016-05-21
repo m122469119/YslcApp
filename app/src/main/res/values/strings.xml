@@ -112,5 +112,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_pay">PayActivity</string>
+    <string name="you_need_vip">对不起，您没有权限查看，该功能只针对VIP客户开发</string>
+    <string name="you_need_vip2">对不起，您没有权限查看最新一期，该功能只针对VIP客户开发</string>
+    <string name="button_pay_vip">立即升级VIP</string>
+    <string name="button_history_paper">查看历史期刊</string>
 
 </resources>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.yslc.ui.activity.NeedVipActivity">
+
+    <include android:id = "@+id/toolbar"
+        layout="@layout/include_toolbar"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/you_need_vip"
+        android:layout_margin="20dp"
+        android:textSize="30sp"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id = "@+id/goto_pay"
+        android:background="@color/gotoVipButton"
+        android:layout_margin="20dp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/button_pay_vip"
+        android:textSize="20sp"
+        android:visibility="gone"
+        />
+
+    <LinearLayout
+        android:id="@+id/button_group"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_margin="20dp"
+        android:layout_height="wrap_content">
+        <Button
+            android:id = "@+id/goto_pay2"
+            android:layout_weight="1"
+            android:background="@color/gotoVipButton"
+            android:textSize="20sp"
+            android:text="@string/button_pay_vip"
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id = "@+id/see_history"
+            android:layout_weight="1"
+            android:background="@color/gotoVipButton"
+            android:textSize="20sp"
+            android:text="@string/button_history_paper"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

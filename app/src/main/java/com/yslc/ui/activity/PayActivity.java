@@ -23,15 +23,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class PayActivity extends AppCompatActivity {
-    GoodBean product;
+    private GoodBean product;
     private IWXAPI api;
+    private static final String APPID = "wx0955e887ac142b61";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //微信api
-        api = WXAPIFactory.createWXAPI(this, "wx0955e887ac142b61");
+        api = WXAPIFactory.createWXAPI(this, APPID);
 //        api.registerApp("wx0955e887ac142b61");//TODO 需要吗
 
         setContentView(R.layout.activity_pay);
@@ -58,7 +59,7 @@ public class PayActivity extends AppCompatActivity {
     private void payVip() {
         RequestParams params = new RequestParams();
         params.put("productId", product.getProductId());
-        params.put("phone", "15989143564");//TODO 判断登录
+        params.put("phone", "15989143564");//TODO 判断登录,获取手机号
 //        params.put("openid", "wx0955e887ac142b61");
         HttpUtil.post("/yslc/WxPay/apppay.ashx", this, params,
                 new AsyncHttpResponseHandler() {
@@ -109,7 +110,7 @@ public class PayActivity extends AppCompatActivity {
     private void getGoodInfo() {
         RequestParams params = new RequestParams();
         params.put("ProductId", "YSLC0001");
-        HttpUtil.originGet("http://pay.etz927.com/yslc/Get_Product.ashx", this, params,
+        HttpUtil.originGet(HttpUtil.GET_PRODUCT, this, params,
                 new JsonHttpResponseHandler(){
                     @Override
                     public void onSuccess(int i, JSONObject jsonObject) {
@@ -117,7 +118,6 @@ public class PayActivity extends AppCompatActivity {
                         if(jsonObject.optInt("status")== 0){//失败
                             ToastUtil.showMessage(PayActivity.this, jsonObject.optString("msg"));
                         }else if(jsonObject.optInt("status")== 1) { //成功
-//                            product = parseGoodBean(jsonObject);
                             product = ParseUtil.parseGoodBean(jsonObject);
                         }
                     }
@@ -129,25 +129,5 @@ public class PayActivity extends AppCompatActivity {
                 });
     }
 
-    /**
-     * 解析数据
-     * @param s
-     * @return
-     */
-//    private GoodBean parseGoodBean(String s) {
-//        GoodBean good = new GoodBean();
-//        try{
-//            JSONArray array = new JSONArray(s);
-//            JSONObject o = array.getJSONObject(0);
-//            //[{"ProductId": "YSLC0002","ProductName": "投资快报","Price": "360.0000"}]
-//            good.setPrice(o.getString("Price"));
-////            good.setPrice("360.0000");
-//            good.setProductId(o.getString("ProductId"));
-//            good.setProductName(o.getString("ProductName"));
-//        }catch (JSONException e){
-//            e.printStackTrace();
-//        }
-//        return good;
-//    }
 
 }

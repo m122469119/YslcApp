@@ -179,8 +179,8 @@
                 <category android:name="com.yslc" />
             </intent-filter>
         </service>
-        <!--播放广播的后台-->
-        <service android:name=".ui.service.PlayBroadcastService"/>
+        <!-- 播放广播的后台 -->
+        <service android:name=".ui.service.PlayBroadcastService" />
 
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
@@ -251,11 +251,13 @@
             android:value="42dc643f431de319f0a8e786" />
 
         <!-- *****************************极光推送配置结束************************* -->
-        <!--支付页面-->
+        <!-- 支付页面 -->
         <activity
             android:name=".ui.activity.PayActivity"
             android:label="@string/title_activity_pay"
-            android:theme="@style/AppBaseTheme"></activity>
+            android:theme="@style/AppBaseTheme" />
+        <!-- 提示用户需要支付页面 -->
+        <activity android:name=".ui.activity.NeedVipActivity"></activity>
     </application>
 
 </manifest>

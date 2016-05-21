@@ -1,8 +1,10 @@
 package com.yslc.util;
 
 import com.yslc.bean.AdBean;
+import com.yslc.bean.CelebrityComment;
 import com.yslc.bean.ColumnBean;
 import com.yslc.bean.CommentBean;
+import com.yslc.bean.FastInfoBean;
 import com.yslc.bean.GoodBean;
 import com.yslc.bean.NewBean;
 import com.yslc.bean.RadioBean;
@@ -15,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by Administrator on 2016/5/3.
@@ -381,5 +384,39 @@ public class ParseUtil {
             e.printStackTrace();
         }
         return bean;
+    }
+
+    public static ArrayList<FastInfoBean> parseFastInfoBean(JSONObject jsonObject) {
+        JSONArray array = (JSONArray) jsonObject.opt("news");
+        ArrayList<FastInfoBean> list = new ArrayList<FastInfoBean>();
+        try{
+            for(int i=0; i<array.length(); i++){
+                FastInfoBean data = new FastInfoBean();
+                data.setTitle(array.getJSONObject(i).optString("title"));
+                data.setContent(array.getJSONObject(i).optString("content"));
+                data.setDate(array.getJSONObject(i).optString("date"));
+                list.add(data);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static ArrayList<CelebrityComment> parseCelebrityComment(JSONObject jsonObject) {
+        ArrayList<CelebrityComment> data = new ArrayList<CelebrityComment>();
+        try{
+            JSONArray array = jsonObject.getJSONArray("section");
+            for(int i=0; i<array.length(); i++){
+                CelebrityComment comment = new CelebrityComment();
+                comment.setNo(array.getJSONObject(i).optString("Number"));
+                comment.setTitle(array.getJSONObject(i).optString("Title"));
+                comment.setUrl(array.getJSONObject(i).optString("url"));
+                data.add(comment);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return data;
     }
 }

@@ -1,6 +1,7 @@
 package com.yslc.ui.activity;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +18,7 @@ import com.yslc.ui.adapter.QuickAdapter;
 import com.yslc.ui.base.BaseActivity;
 import com.yslc.ui.fragment.CelebrityFragment;
 import com.yslc.util.HttpUtil;
+import com.yslc.util.ParseUtil;
 import com.yslc.util.ToastUtil;
 import com.yslc.view.CalendarView;
 import com.yslc.view.LoadView;
@@ -71,10 +73,10 @@ public class InvestPaperActivity extends BaseActivity
      * 开启线程下载数据
      */
     private void getData(String time){
-        loadView.setStatus(LoadView.EMPTY_DATA);
+        loadView.setStatus(LoadView.LOADING);
         if( !checkAuthority(time) ){
             showNotVip();
-//            loadView.setStatus(LoadView.ERROR);
+            loadView.setStatus(LoadView.EMPTY_DATA);
             return;
         }
 
@@ -88,14 +90,19 @@ public class InvestPaperActivity extends BaseActivity
                     public void onSuccess(JSONObject jsonObject) {
                         super.onSuccess(jsonObject);
                         loadView.setStatus(LoadView.SUCCESS);
-                        parseData(jsonObject);
+//                        ParseUtil.parseCelebrityComment(jsonObject);
+                        if(data==null){
+                            data =  ParseUtil.parseCelebrityComment(jsonObject);
+                        }else{
+                            data.clear();
+                            data.addAll( ParseUtil.parseCelebrityComment(jsonObject));
+                        }
                         if (data.size() == 0) {
                             loadView.setStatus(LoadView.EMPTY_DATA);
                         } else {
                             showData(data);
                         }
                     }
-
 
                     @Override
                     public void onFailure(Throwable throwable, JSONObject jsonObject) {
@@ -105,12 +112,25 @@ public class InvestPaperActivity extends BaseActivity
                 });
     }
 
+    private final int REQUEST_CODE = 00001;
     /**
      * 显示需要vip才可以查看，尝试查看其他日期，带有跳到支付的按钮
      */
     private void showNotVip() {
-        //TODO 显示需要vip才可以查看，尝试查看其他日期，带有跳到支付的按钮
-        ToastUtil.showMessage(this, "需要成为VIP");
+        Intent intent = new Intent(this, NeedVipActivity.class);
+        intent.putExtra("activity", "InvestPaperActivity");
+        startActivityForResult(intent, REQUEST_CODE);
+//        ToastUtil.showMessage(this, "需要成为VIP");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            dateEvent.onClick(date);
+        }else if(resultCode == RESULT_CANCELED){
+            finish();
+        }
     }
 
     /**
@@ -123,7 +143,7 @@ public class InvestPaperActivity extends BaseActivity
         Calendar now = Calendar.getInstance();//当前时间
 //        int a = t.compareTo(now);//-1
         Calendar fiveDayBefore = Calendar.getInstance();//5天前时间
-        fiveDayBefore.add(Calendar.DAY_OF_MONTH, -5);
+        fiveDayBefore.add(Calendar.DAY_OF_MONTH, -1);
         //选择时间是5天前到今天的日期 且 不是vip,则没有权限查看
         if(t.before(now) && t.after(fiveDayBefore) && !isVip()){
             return false;
@@ -230,34 +250,6 @@ public class InvestPaperActivity extends BaseActivity
         return list;
     }
 
-    /**
-     * 解析数据
-     * @param jsonObject 数据源
-     * @return 解析结果
-     */
-    private ArrayList<CelebrityComment> parseData(JSONObject jsonObject){
-        ArrayList<CelebrityComment> data = new ArrayList<CelebrityComment>();
-        try{
-            JSONArray array = jsonObject.getJSONArray("section");
-            for(int i=0; i<array.length(); i++){
-                CelebrityComment comment = new CelebrityComment();
-                comment.setNo(array.getJSONObject(i).optString("Number"));
-                comment.setTitle(array.getJSONObject(i).optString("Title"));
-                comment.setUrl(array.getJSONObject(i).optString("url"));
-                data.add(comment);
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        if(this.data==null){
-            this.data = data;
-        }else{
-            this.data.clear();
-            this.data.addAll(data);
-        }
-
-        return data;
-    }
 
     @Override
     protected void initView() {
@@ -370,7 +362,6 @@ public class InvestPaperActivity extends BaseActivity
                         dateView.dismiss();
                         getData(dateFormat);
                         currentDate = dateFormat;
-                        //TODO 往后的日期不能点
 //                        calendarView.addMarker((RelativeLayout)v);
                     }
                 });
@@ -456,7 +447,5 @@ public class InvestPaperActivity extends BaseActivity
     @Override
     public void onTry() {
         getData(currentDate);
-//        if(loadView.setStatus(LoadView.LOADING)){
-//        }
     }
 }

@@ -71,4 +71,6 @@
     <color name="refreshViewColor1">#62d0f9</color>
     <color name="refreshViewColor2">#FF00FF</color>
     <color name="refreshViewColor3">#FFC0CB</color>
+    <!--点击支付vip按钮-->
+    <color name="gotoVipButton">#01ACF1</color>
 </resources>
