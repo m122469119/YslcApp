@@ -257,7 +257,14 @@
             android:label="@string/title_activity_pay"
             android:theme="@style/AppBaseTheme" />
         <!-- 提示用户需要支付页面 -->
+
         <activity android:name=".ui.activity.NeedVipActivity"></activity>
+        <!--支付回调-->
+        <activity
+        android:name=".wxapi.WXPayEntryActivity"
+        android:exported="true"
+        android:launchMode="singleTop"/>
+
     </application>
 
 </manifest>

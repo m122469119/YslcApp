@@ -373,13 +373,12 @@ public class ParseUtil {
     public static GoodBean parseGoodBean(JSONObject jsonObject) {
         GoodBean bean = new GoodBean();
         try{
-            JSONArray good = jsonObject.getJSONArray("msg");
-            JSONObject o = good.getJSONObject(0);
+            String msg = jsonObject.getString("msg");
             //[{"ProductId": "YSLC0002","ProductName": "投资快报","Price": "360.0000"}]
-            bean.setPrice(o.getString("Price"));
+            bean.setPrice(jsonObject.getString("Price"));
 //            good.setPrice("360.0000");
-            bean.setProductId(o.getString("ProductId"));
-            bean.setProductName(o.getString("ProductName"));
+            bean.setProductId(jsonObject.getString("ProductId"));
+            bean.setProductName(jsonObject.getString("ProductName"));
         }catch (JSONException e){
             e.printStackTrace();
         }

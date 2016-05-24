@@ -92,6 +92,17 @@ public class HttpUtil {
         client.post(getHostUrl(url), params, responseHandler);
     }
 
+    public static void originPost(String url, Context context, RequestParams params,
+                            AsyncHttpResponseHandler responseHandler) {
+        // 判断是否连接网络
+        if (!CommonUtil.isNetworkAvalible(context)) {
+            ToastUtil.showMessage(context, HttpUtil.NO_INTERNET_INFO);
+            return;
+        }
+
+        client.post(url, params, responseHandler);
+    }
+
     /**
      * 发送get请求
      *

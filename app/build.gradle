@@ -5,7 +5,14 @@ android {
         config {
             keyAlias 'hh'
             keyPassword '123456'
-            storeFile file('D:/Android Development/key store/tey.txt')
+            storeFile file('C:/Users/Administrator/Desktop/tey.txt')
+            storePassword '123456'
+        }
+
+        release {
+            keyAlias 'hh'
+            keyPassword '123456'
+            storeFile file('C:/Users/Administrator/Desktop/tey.txt')
             storePassword '123456'
         }
     }
@@ -15,12 +22,19 @@ android {
         applicationId "com.yslc"
         minSdkVersion 8
         targetSdkVersion 23
+        signingConfig signingConfigs.release
     }
     buildTypes {
         release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable true
+            signingConfig signingConfigs.release
         }
+        debug {
+            signingConfig signingConfigs.release
+        }
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

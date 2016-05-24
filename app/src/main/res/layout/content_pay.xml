@@ -1,15 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#f4f4f4"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.yslc.ui.activity.PayActivity"
     tools:showIn="@layout/activity_pay">
 
-</RelativeLayout>
+    <TextView
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="请您尽快付款，以便订单尽快处理！"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+    <TextView
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:gravity="center_vertical"
+        android:text="订单详情"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+    <LinearLayout
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+        <TextView
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:text="支付金额："
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:text="￥10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+        <TextView
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:text="项目详情："
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:text="闪电情报+投资快报一年"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <TextView
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:gravity="center_vertical"
+        android:textSize="20sp"
+        android:text="情选择支付方式"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
+    <!--微信支付-->
+    <RelativeLayout
+        android:id="@+id/wechat_pay"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:layout_height="60dp">
+        <ImageView
+            android:layout_centerVertical="true"
+            android:id="@+id/img_wechat"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/wechat_pay_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textColor="@color/black"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/img_wechat"
+            android:textSize="20sp"
+            android:text="微信支付"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:id="@+id/rbt_wechat"
+            android:checked="true"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <!--支付宝-->
+    <RelativeLayout
+        android:id="@+id/alipay"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:layout_height="60dp">
+        <ImageView
+            android:layout_centerVertical="true"
+            android:id="@+id/img_alipay"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/alipay_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textColor="@color/black"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/img_alipay"
+            android:textSize="20sp"
+            android:text="支付宝"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:id="@+id/rbt_alipay"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/pay_now"
+        android:layout_gravity="center_horizontal"
+        android:text="立即支付"
+        android:textSize="20sp"
+        android:background="@color/gotoVipButton"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

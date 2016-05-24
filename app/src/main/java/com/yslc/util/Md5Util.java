@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
  * @author HH
  */
 public class Md5Util {
+
     static public String getMD5(byte[] source) {
         String s = null;
         //讲字符转换成16进制表示字符
