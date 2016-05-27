@@ -174,8 +174,10 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
 
             case R.id.radio:
                 // 支付模块，预留
+                SharedPreferencesUtil share = new SharedPreferencesUtil(
+                        getApplicationContext(),SharedPreferencesUtil.NAME_PAY_ACTIVITY);
+                share.setString(SharedPreferencesUtil.KEY_ACTIVITY,SharedPreferencesUtil.NONE);
                 startActivity(new Intent(this, PayActivity.class));
-                ToastUtil.showMessage(this, "支付");
                 break;
         }
     }

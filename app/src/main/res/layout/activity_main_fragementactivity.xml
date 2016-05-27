@@ -103,6 +103,7 @@
                 android:text="@string/celebrity_com" />
 
             <RadioButton
+                android:visibility="gone"
                 android:id="@+id/radio"
                 style="@style/slidingText.slidingLeftBtn"
                 android:drawableLeft="@drawable/sliding_pay"

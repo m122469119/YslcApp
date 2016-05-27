@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.yslc.R;
+import com.yslc.app.Constant;
+import com.yslc.util.SharedPreferencesUtil;
 
 public class NeedVipActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -34,12 +36,22 @@ public class NeedVipActivity extends AppCompatActivity {
         setNavigationIcon(toolbar);//设置返回键
 
         linearLayout = (LinearLayout)findViewById(R.id.button_group);
+
+
         if(getIntent().getStringExtra("activity").equals("FastInfoActivity")){
             initFastInfo();
+            saveActivity(SharedPreferencesUtil.FAST_INFO);
         }else if(getIntent().getStringExtra("activity").equals("InvestPaperActivity")){
             initInvestInfo();
+            saveActivity(SharedPreferencesUtil.INVEST_PAPER);
         }
 
+    }
+
+    private void saveActivity(String fastInfo) {
+        SharedPreferencesUtil share = new SharedPreferencesUtil(
+                getApplicationContext(),SharedPreferencesUtil.NAME_PAY_ACTIVITY);
+        share.setString(SharedPreferencesUtil.KEY_ACTIVITY, fastInfo);
     }
 
     /**
@@ -80,6 +92,7 @@ public class NeedVipActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             startActivity(new Intent(NeedVipActivity.this, PayActivity.class));
+            finish();
         }
     };
 

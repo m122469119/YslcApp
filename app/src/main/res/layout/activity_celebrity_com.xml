@@ -3,15 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--<include android:id="@+id/toolbar"-->
-        <!--layout="@layout/include_toolbar"/>-->
+   <!-- <include android:id="@+id/toolbar"
+        layout="@layout/include_toolbar"/>-->
     <!--白色标题-->
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        android:background="@color/white">
+        android:background="@color/titleBg">
 
         <!-- 中间Title -->
 
@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="@dimen/titleSize" />
 
     </android.support.v7.widget.Toolbar>

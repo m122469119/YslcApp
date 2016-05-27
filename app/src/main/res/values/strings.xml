@@ -116,5 +116,19 @@
     <string name="you_need_vip2">对不起，您没有权限查看最新一期，该功能只针对VIP客户开发</string>
     <string name="button_pay_vip">立即升级VIP</string>
     <string name="button_history_paper">查看历史期刊</string>
+    <!--支付回调界面-->
+    <string name="pay_success">下单成功</string>
+    <string name="order_pay_success">订单支付成功</string>
+    <string name="order_num">支付内容：</string>
+    <string name="order_success_price">你已成功支付订单金额：</string>
+    <!--支付界面-->
+    <string name="pay_title">请您尽快付款，以便订单尽快处理！</string>
+    <string name="pay_item1">订单详情</string>
+    <string name="pay_item2">支付金额：</string>
+    <string name="pay_item3">项目详情：</string>
+    <string name="we_chat_pay">微信支付</string>
+    <string name="ali_pay">支付宝</string>
+    <string name="btn_pay_now">立即支付</string>
+
 
 </resources>

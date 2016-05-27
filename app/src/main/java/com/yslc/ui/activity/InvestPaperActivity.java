@@ -8,9 +8,11 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.yslc.R;
+import com.yslc.app.Constant;
 import com.yslc.bean.CelebrityComment;
 import com.yslc.ui.adapter.BaseAdapterHelper;
 import com.yslc.ui.adapter.FragmentStateAdapter;
@@ -19,6 +21,7 @@ import com.yslc.ui.base.BaseActivity;
 import com.yslc.ui.fragment.CelebrityFragment;
 import com.yslc.util.HttpUtil;
 import com.yslc.util.ParseUtil;
+import com.yslc.util.SharedPreferencesUtil;
 import com.yslc.util.ToastUtil;
 import com.yslc.view.CalendarView;
 import com.yslc.view.LoadView;
@@ -34,6 +37,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
@@ -56,6 +60,7 @@ public class InvestPaperActivity extends BaseActivity
     private QuickAdapter<CelebrityComment> adapter;
     private LoadView loadView;
     private PopupWindow dateView;
+    private boolean isVip;
 
     @Override
     protected int getLayoutId() {
@@ -126,10 +131,12 @@ public class InvestPaperActivity extends BaseActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
+        if(resultCode == RESULT_OK && requestCode == REQUEST_CODE){//往期
             dateEvent.onClick(date);
-        }else if(resultCode == RESULT_CANCELED){
+        }else if(resultCode == RESULT_CANCELED && requestCode == REQUEST_CODE){//返回
             finish();
+        }else if(requestCode == LOGIN_REQUEST_CODE && resultCode == RESULT_OK){//登录成功
+            isVip();
         }
     }
 
@@ -145,14 +152,65 @@ public class InvestPaperActivity extends BaseActivity
         Calendar fiveDayBefore = Calendar.getInstance();//5天前时间
         fiveDayBefore.add(Calendar.DAY_OF_MONTH, -1);
         //选择时间是5天前到今天的日期 且 不是vip,则没有权限查看
-        if(t.before(now) && t.after(fiveDayBefore) && !isVip()){
+        if(t.before(now) && t.after(fiveDayBefore) && !isVip){
             return false;
         }
         return true;
     }
 
+    private static final int LOGIN_REQUEST_CODE = 00002;
+
+    /**
+     * 判断是否是VIP
+     * @return
+     */
     private boolean isVip() {
-        //TODO 判断是否是VIP用户
+        //判断用户是否登录
+        if (!SharedPreferencesUtil.isLogin(this)) {
+            ToastUtil.showMessage(this, "请先登录");
+            this.startActivityForResult(new Intent(this, LoginActivity.class), LOGIN_REQUEST_CODE);
+            return false;
+        }
+        //判读是否vip
+        SharedPreferencesUtil share = new SharedPreferencesUtil(this, Constant.SPF_USER_INFO_NAME);
+        RequestParams params = new RequestParams();
+        params.put("phone", share.getString(Constant.SPF_USER_PHONE_KEY));
+        params.put("belong", "YSLC");
+        params.put("function", "YSLC0001");
+        HttpUtil.get("/AppJson/pay/wx/verifyPower.ashx", this, params,
+                new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(String s) {
+                        super.onSuccess(s);
+                        try {
+                            JSONObject json = new JSONObject(s);
+                            switch (json.getInt("status")) {
+                                case 0://不是vip
+//                                    ToastUtil.showMessage(FastInfoActivity.this,
+//                                            "不是VIP" + json.getString("msg"));
+                                    isVip = false;
+//                                    showNotVip();
+//                                    loadView.setStatus(LoadView.EMPTY_DATA);
+                                    break;
+                                case 1://是vip
+//                                    ToastUtil.showMessage(FastInfoActivity.this,
+//                                            "你好，VIP" + json.getString("msg"));
+                                    isVip = true;
+//                                    getData(pagerIndex = 1);
+                                    break;
+                                //检查是否有权限
+                            }
+                            getData(getToday());//加载今天
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Throwable throwable, String s) {
+                        super.onFailure(throwable, s);
+                    }
+                });
         return false;
     }
 
@@ -267,8 +325,9 @@ public class InvestPaperActivity extends BaseActivity
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.addOnPageChangeListener(viewPagerListener);
 
+        isVip();
 //        getData("2016-04-01");
-        getData(getToday());
+//        getData(getToday());
     }
 
     /**

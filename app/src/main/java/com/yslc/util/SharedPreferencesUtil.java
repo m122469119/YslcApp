@@ -12,6 +12,12 @@ import com.yslc.app.Constant;
  */
 public class SharedPreferencesUtil {
 
+    public static final String NAME_PAY_ACTIVITY = "jume_activity";//share名字
+    public static final String KEY_ACTIVITY = "current_activity";//key
+    public static final String FAST_INFO = "fastInfoActivity";//参数1
+    public static final String INVEST_PAPER = "InvestPaperActivity";//参数2
+    public static final String NONE = "noneActivity";//参数3
+
     private SharedPreferences config;
 
     /**

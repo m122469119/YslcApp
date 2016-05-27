@@ -11,9 +11,10 @@
     tools:showIn="@layout/activity_pay">
 
     <TextView
+        android:id="@+id/title_pay"
         android:background="@color/white"
         android:gravity="center"
-        android:text="请您尽快付款，以便订单尽快处理！"
+        android:text="@string/pay_title"
         android:textSize="20sp"
         android:textColor="@color/black"
         android:layout_width="match_parent"
@@ -22,7 +23,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:gravity="center_vertical"
-        android:text="订单详情"
+        android:text="@string/pay_item1"
         android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="60dp" />
@@ -40,9 +41,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
+            android:id="@+id/pay_price"
             android:textColor="@color/black"
             android:textSize="20sp"
-            android:text="￥10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -57,13 +58,13 @@
         <TextView
             android:textColor="@color/black"
             android:textSize="20sp"
-            android:text="项目详情："
+            android:text="@string/pay_item3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
+            android:id="@+id/pay_item"
             android:textColor="@color/black"
             android:textSize="20sp"
-            android:text="闪电情报+投资快报一年"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -98,12 +99,13 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/img_wechat"
             android:textSize="20sp"
-            android:text="微信支付"
+            android:text="@string/we_chat_pay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <RadioButton
             android:id="@+id/rbt_wechat"
             android:checked="true"
+            android:button="@drawable/radio_check_img"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
@@ -132,7 +134,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/img_alipay"
             android:textSize="20sp"
-            android:text="支付宝"
+            android:text="@string/ali_pay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <RadioButton
@@ -140,13 +142,14 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
+            android:button="@drawable/radio_check_img"
             android:layout_height="wrap_content" />
     </RelativeLayout>
 
     <Button
         android:id="@+id/pay_now"
         android:layout_gravity="center_horizontal"
-        android:text="立即支付"
+        android:text="@string/btn_pay_now"
         android:textSize="20sp"
         android:background="@color/gotoVipButton"
         android:layout_width="330dp"
