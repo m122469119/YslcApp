@@ -20,7 +20,7 @@ android {
     buildToolsVersion "23.0.1"
     defaultConfig {
         applicationId "com.yslc"
-        minSdkVersion 8
+        minSdkVersion 11
         targetSdkVersion 23
         signingConfig signingConfigs.release
     }
@@ -57,6 +57,7 @@ dependencies {
     compile files('libs/ShareSDK-Wechat-Core-2.6.4.jar')
     compile files('libs/ShareSDK-Wechat-Moments-2.6.4.jar')
     compile files('libs/universal-image-loader-1.9.3.jar')
+    compile files('libs/alipaySdk-20160516.jar')
     compile 'com.android.support:support-v4:23.0.1'
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:design:23.0.1'

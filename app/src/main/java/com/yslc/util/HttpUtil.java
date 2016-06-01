@@ -34,6 +34,7 @@ public class HttpUtil {
     /**
      * ---------------所有接口配置-------------- *
      */
+    public static final String CHECK_UPDATE = "/AppJson/update/up.html";//检查最新版本
     public static final String GET_COLNUM = "/AppJson/Get_SmallType.ashx"; // 获取栏目
     public static final String GET_MAIN = "/AppJson/index/GetHomePage.ashx"; // 获取主页信息
     public static final String GET_MAIN_FAST = "/AppJson/news/GetLive.ashx"; // 获取主页快讯信息

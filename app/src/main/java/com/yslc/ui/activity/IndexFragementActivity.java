@@ -23,6 +23,7 @@ import com.yslc.ui.fragment.StarFragmentActivity;
 import com.yslc.ui.fragment.VideoFragmentActivity;
 import com.yslc.util.SharedPreferencesUtil;
 import com.yslc.util.ToastUtil;
+import com.yslc.util.UpdateManager;
 
 /**
  * 首页FragmentActivity,包含咨讯、视频、明星、我，四大Fragment
@@ -74,6 +75,7 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
      * <p>初始化fragment</p>
      * <p>初始化RadioGroup</p>
      * <p>初始化侧边栏（DrawerLayout）</p>
+     * <p>检查版本更新</p>
      */
     @Override
     protected void initView() {
@@ -83,6 +85,10 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
         //监听RadioButton
         setmRadioGroup((RadioGroup) findViewById(R.id.radioGroup));
         setDrawerLayout();
+        //检查版本更新
+        UpdateManager manager = new UpdateManager(IndexFragementActivity.this);
+        manager.checkUpdate();
+        getFragmentManager();
     }
 
     /**
