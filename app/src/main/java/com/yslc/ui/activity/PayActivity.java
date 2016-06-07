@@ -31,6 +31,7 @@ import com.yslc.util.ToastUtil;
 
 
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,6 +39,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -57,7 +59,7 @@ public class PayActivity extends AppCompatActivity {
     private static final String PARTNER_KEY = "44934854899E40719F17DA83BE8FEE00";
 
     private static final String PARTNET_ID = "1336494601";
-    //------微信支付----------
+    //------微信支付------------
     //------支付宝支付--------
     private static final String PARTNER = "";//商户 ID
     private static final String SELLER = "";//商户收款账号
@@ -457,7 +459,7 @@ public class PayActivity extends AppCompatActivity {
                 params.put("partnerid", req.partnerId);
                 params.put("prepayid", req.prepayId);
                 params.put("timestamp", req.timeStamp);
-                req.sign = genAppSign2(params);
+                req.sign = genAppSign(params);
 
 //                req.extData = "app data";//optional
                 api.sendReq(req);
@@ -468,7 +470,13 @@ public class PayActivity extends AppCompatActivity {
         }
     }
 
-    private String genAppSign2(LinkedHashMap<String, String> params) {
+    /**
+     * 使用MD5生成sign参数
+     *
+     * @param params
+     * @return
+     */
+    private String genAppSign(LinkedHashMap<String, String> params) {
         StringBuilder sb = new StringBuilder();
 
         Iterator itrt =params.entrySet().iterator();
@@ -487,28 +495,6 @@ public class PayActivity extends AppCompatActivity {
         return appSign;
     }
 
-    /**
-     * 使用MD5生成sign参数
-     *
-     * @param params
-     * @return
-     */
-    private String genAppSign(List<NameValuePair> params) {
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < params.size(); i++) {
-            sb.append(params.get(i).getName());
-            sb.append('=');
-            sb.append(params.get(i).getValue());
-            sb.append('&');
-        }
-        sb.append("key=");
-        sb.append(PARTNER_KEY);
-
-        String appSign = Md5Util.getMD5(sb.toString().getBytes()).toUpperCase();
-        return appSign;
-//        return URLEncodedUtils.format(params,"utf_8") + "&sign="+appSign;
-    }
 
     /**
      * 获取商品信息
