@@ -196,6 +196,7 @@ public class PayActivity extends AppCompatActivity {
 
         //支付按钮
         btn_pay = (Button) findViewById(R.id.pay_now);
+        btn_pay.setEnabled(false);
         btn_pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -204,7 +205,7 @@ public class PayActivity extends AppCompatActivity {
                 if (btn_pay.getText().equals("返回")) {
                     finish();
                 } else if (wechat_radio.isChecked()) {
-                    if (isHaveWeChat()) {
+                    if (isInstallWeChat()) {
                         payVip();
                     }
                 } else if (alipay_radio.isChecked()) {
@@ -381,7 +382,7 @@ public class PayActivity extends AppCompatActivity {
      *
      * @return
      */
-    private boolean isHaveWeChat() {
+    private boolean isInstallWeChat() {
         if (!api.isWXAppInstalled()) {
             ToastUtil.showMessage(PayActivity.this, "您未安装微信，请先下载微信客户端");
             return false;
@@ -461,6 +462,14 @@ public class PayActivity extends AppCompatActivity {
                 params.put("timestamp", req.timeStamp);
                 req.sign = genAppSign(params);
 
+//                List<NameValuePair> signParams = new LinkedList<NameValuePair>();
+//                signParams.add(new BasicNameValuePair("appid", req.appId));
+//                signParams.add(new BasicNameValuePair("noncestr", req.nonceStr));
+//                signParams.add(new BasicNameValuePair("package", req.packageValue));
+//                signParams.add(new BasicNameValuePair("partnerid", req.partnerId));
+//                signParams.add(new BasicNameValuePair("prepayid", req.prepayId));
+//                signParams.add(new BasicNameValuePair("timestamp", req.timeStamp));
+//                req.sign = genAppSign(signParams);
 //                req.extData = "app data";//optional
                 api.sendReq(req);
                 finish();
@@ -468,6 +477,30 @@ public class PayActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+      * 使用MD5生成sign参数
+      * @param params
+      * @see PayActivity#genAppSign(LinkedHashMap) 有时候使用这个方便签名会有问题导致支付不成功，
+      * 本方法是后备方法，因为NamValuePaie过时
+      * @return
+      */
+    private String genAppSign(List<NameValuePair> params) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < params.size(); i++) {
+            sb.append(params.get(i).getName());
+            sb.append('=');
+            sb.append(params.get(i).getValue());
+            sb.append('&');
+        }
+        sb.append("key=");
+        sb.append(PARTNER_KEY);
+
+        String appSign = Md5Util.getMD5(sb.toString().getBytes()).toUpperCase();
+        return  appSign;
+//        return URLEncodedUtils.format(params,"utf_8") + "&sign="+appSign;
     }
 
     /**
@@ -511,6 +544,7 @@ public class PayActivity extends AppCompatActivity {
                             ToastUtil.showMessage(PayActivity.this, jsonObject.optString("msg"));
                         } else if (jsonObject.optInt("status") == 1) { //成功
                             product = ParseUtil.parseGoodBean(jsonObject);
+                            btn_pay.setEnabled(true);//获取商品信息成功后才能点击支付
                             showData();
                         }
                     }
