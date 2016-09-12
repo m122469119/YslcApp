@@ -16,7 +16,7 @@ import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
-import cn.sharesdk.tencent.qzone.QZone;
+//import cn.sharesdk.tencent.qzone.QZone;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 
@@ -28,7 +28,7 @@ import com.yslc.util.ToastUtil;
 
 /**
  * 分享Dialog ---> 指定分享到微信，微博，QQ，微信好友，QQ好友，腾讯微博
- *
+ * 没用了
  * @author HH
  */
 public class ShareDialog extends BaseDialog implements OnClickListener {
@@ -61,6 +61,7 @@ public class ShareDialog extends BaseDialog implements OnClickListener {
 
     /**
      * Save logo to sdcard
+     * 分享图片
      */
     private void saveLogoToSD() {
         logoPath = FileUtil.getSdCardPath() + Constant.FILES_LOGO;
@@ -146,17 +147,17 @@ public class ShareDialog extends BaseDialog implements OnClickListener {
                 break;
 
             case R.id.shareZone:
-                Platform qzone = ShareSDK.getPlatform(QZone.NAME);
+//                Platform qzone = ShareSDK.getPlatform(QZone.NAME);
 
-                // 设置分享事件回调
-                qzone.setPlatformActionListener(new MyPlatformActionListener());
-                // 执行图文分享
-                sp.setTitle(share.title);
-                sp.setTitleUrl(share.titleUrl);
-                sp.setSite(share.site);
-                sp.setSiteUrl(share.siteUrl);
-                qzone.authorize();
-                qzone.share(sp);
+//                // 设置分享事件回调
+//                qzone.setPlatformActionListener(new MyPlatformActionListener());
+//                // 执行图文分享
+//                sp.setTitle(share.title);
+//                sp.setTitleUrl(share.titleUrl);
+//                sp.setSite(share.site);
+//                sp.setSiteUrl(share.siteUrl);
+//                qzone.authorize();
+//                qzone.share(sp);
                 break;
 
             case R.id.shareWx:
@@ -218,6 +219,9 @@ public class ShareDialog extends BaseDialog implements OnClickListener {
         }
     }
 
+    /**
+     * 分享内容
+     */
     public class Share {
         private String shareUrl;
         private String shareText;

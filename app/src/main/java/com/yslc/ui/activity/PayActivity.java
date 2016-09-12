@@ -1,5 +1,6 @@
 package com.yslc.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -71,6 +72,7 @@ public class PayActivity extends AppCompatActivity {
     private RadioButton wechat_radio, alipay_radio;
     private TextView tvPayPrice, tvPayItem, tvTitle;
     private RelativeLayout r_wechat, r_alipay;
+    private ProgressDialog dialog;
 
     /**
      * 获取订单号
@@ -113,6 +115,7 @@ public class PayActivity extends AppCompatActivity {
 
     private static final int LOGIN_REQUEST_CODE = 1;
 
+
     private void isVip() {
         //判断用户是否登录
         if (!SharedPreferencesUtil.isLogin(this)) {
@@ -135,6 +138,11 @@ public class PayActivity extends AppCompatActivity {
                             JSONObject json = new JSONObject(s);
                             switch (json.getInt("status")) {
                                 case 0://不是vip
+                                    dialog = new ProgressDialog(PayActivity.this);
+                                    dialog.setIndeterminate(true);
+                                    dialog.setMessage("正在加载商品信息，请稍候…");
+                                    dialog.setCancelable(false);
+                                    dialog.show();
                                     getGoodInfo();
 //                                    btn_pay.setClickable(true);
                                     break;
@@ -546,6 +554,7 @@ public class PayActivity extends AppCompatActivity {
                             product = ParseUtil.parseGoodBean(jsonObject);
                             btn_pay.setEnabled(true);//获取商品信息成功后才能点击支付
                             showData();
+                            dialog.cancel();
                         }
                     }
 

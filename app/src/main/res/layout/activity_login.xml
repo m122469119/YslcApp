@@ -105,5 +105,12 @@
                 android:textColor="@color/gray_to_blue" />
         </RelativeLayout>
 
+        <Button
+            style="@style/btnStyle"
+            android:text="@string/we_chat_login"
+            android:id="@+id/we_chat_login"
+            android:onClick="weChatLogin"
+            />
+
     </LinearLayout>
 </ScrollView>

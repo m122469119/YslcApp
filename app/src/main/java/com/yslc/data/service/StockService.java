@@ -70,6 +70,11 @@ public class StockService {
                 super.onSuccess(s);
                 if (null != s && s.length() > 0) {
                     StocksDetail d = parseDetail(s);
+                    //解析数据出错返回空
+                    if(d == null){
+                        callBack.failer(null);
+                        return;
+                    }
                     callBack.success(parseHourJson(s, d.getClose()), d.getClose());
                     callBack.successDetail(d);
 
@@ -164,6 +169,7 @@ public class StockService {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            return null;
         }
 
         return bean;

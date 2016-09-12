@@ -109,9 +109,9 @@ public class StockMarketActivity extends BaseActivity implements ViewPager.OnPag
         stockMinFragment.setArguments(bundle);
         listFragment.add(stockMinFragment);
         //k线fragment
-        StockKFragment stockKFragment = new StockKFragment();
-        stockKFragment.setArguments(bundle);
-        listFragment.add(stockKFragment);
+//        StockKFragment stockKFragment = new StockKFragment();
+//        stockKFragment.setArguments(bundle);
+//        listFragment.add(stockKFragment);
 
         MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager(), listFragment);
         mViewPager.setOffscreenPageLimit(0);

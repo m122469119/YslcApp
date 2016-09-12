@@ -231,6 +231,9 @@ public class StockMinFragment extends BaseFragment implements OnTryListener, IGe
     public <T> void successDetail(T t) {
         detail = (StocksDetail) t;
         String type = ((StocksDetail) t).getKind();
+        if(type == null){
+            return;
+        }
         isShow(type);
         if (null != t && type.equals("0") && list.size() > 0) {//股票
             //显示个股详情
