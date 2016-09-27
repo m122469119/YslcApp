@@ -92,6 +92,9 @@ public class FileUtil {
     public static void deleteAllFile(String filePath) {
         File file = new File(getSdCardPath() + File.separator + filePath);
         File[] fileArr = file.listFiles();
+        if(fileArr == null){
+            return;
+        }
         for (File files : fileArr) {
             files.delete();
         }

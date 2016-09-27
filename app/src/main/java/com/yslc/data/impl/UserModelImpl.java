@@ -12,10 +12,17 @@ import com.yslc.data.inf.IUserModel;
 import com.yslc.inf.GetDataCallback;
 import com.yslc.util.FileUtil;
 import com.yslc.util.HttpUtil;
+import com.yslc.util.SharedPreferencesUtil;
 import com.yslc.util.ToastUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 /**
  * 用户模块网络请求数据层
@@ -60,6 +67,7 @@ public class UserModelImpl implements IUserModel {
                                 UserBean user = new UserBean();
                                 user.setUserId(jo.optString("Ui_Id"));
                                 user.setUserImageUrl(jo.optString("Ui_Img"));
+                                UpDateJpushTagAndAlias(jo.optString("Ut_Id"),jo.optString("Ui_Id"));//设置极光标签和别名
                                 callback.success(user);
                             }
                         } catch (JSONException e) {
@@ -69,6 +77,30 @@ public class UserModelImpl implements IUserModel {
 
                     }
                 });
+    }
+
+    /**
+     * 登录成功设置极光标签和别名
+     * @param userId 用户id
+     * @param tag 标签
+     */
+    private void UpDateJpushTagAndAlias(String tag, String userId) {
+        //处理别名
+        String alias = userId.replace("-","_");
+        HashSet set = new HashSet<String>();
+        set.add(tag);
+        JPushInterface.setAliasAndTags(context, alias, set, new TagAliasCallback() {
+            @Override
+            public void gotResult(int i, String s, Set<String> set) {
+                if(i == 0){//成功,保存别名和标签在本地
+                    SharedPreferencesUtil spf =
+                            new SharedPreferencesUtil(context,Constant.SPF_USER_INFO_NAME);
+//                    String tag = set.iterator().next();
+                    spf.setString(Constant.SPF_USER_JPUSH_TAG, set.iterator().next());
+                    spf.setString(Constant.SPF_USER_JPUSH_ALIAS, s);
+                }
+            }
+        });
     }
 
     /**

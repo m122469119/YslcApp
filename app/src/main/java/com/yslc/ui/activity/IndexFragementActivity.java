@@ -85,9 +85,9 @@ public class IndexFragementActivity extends BaseFragmentActivity implements
         //监听RadioButton
         setmRadioGroup((RadioGroup) findViewById(R.id.radioGroup));
         setDrawerLayout();
-        //检查版本更新
-        UpdateManager manager = new UpdateManager(IndexFragementActivity.this);
-        manager.checkUpdate();
+        //TODO 检查版本更新
+//        UpdateManager manager = new UpdateManager(IndexFragementActivity.this);
+//        manager.checkUpdate();
         getFragmentManager();
     }
 

@@ -52,6 +52,7 @@ public class HttpUtil {
     public static final String POST_UPDATE_PASSWORDS = "/AppJson/Users_AppJson/Post_Users_Info_Edit.ashx"; // 用户修改密码
     public static final String GET_CODE = "/AppJson/Users_AppJson/SendCheckNumber.ashx"; // 获取手机验证码
     public static final String UPLOAD_USER_IMAGE = "/AppJson/Users_AppJson/PostUsers_Info_Img.ashx"; // 上传用户头像地址
+    public static final String POST_JPUSH_TAG = "/AppJson/Users_AppJson/getusertype.ashx";//获取极光推送的标签
 
     public static final String GET_STAR_TYPE = "/AppJson/Star/Get_Star_Type.ashx"; //获取明星类型
     public static final String GET_STAR_LIST = "/AppJson/Star/Get_Star.ashx"; // 获取明星资料列表

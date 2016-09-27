@@ -38,8 +38,11 @@ public class Constant {
     public static final String SPF_USER_INFO_NAME = "user";  //文件名称
     public static final String SPF_USER_ID_KEY = "userId";   //用户ID
     public static final String SPF_USER_ISLOGIN_KEY = "isLogin";  //是否登录
-    public static final String SPF_USER_PHONE_KEY = "userPhone";  //用户电话
+    public static final String SPF_USER_PHONE_KEY = "userPhone";  //用户电话(有户名）
     public static final String SPF_USER_IMGURL_KEY = "userImg";   //用户电话
+    //极光推送
+    public static final String SPF_USER_JPUSH_TAG = "jpush_tag"; //极光推送标签
+    public static final String SPF_USER_JPUSH_ALIAS = "jpush_alias"; //极光推送别名
 
     /**
      * .................设置SharePerferences配置..................*

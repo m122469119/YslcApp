@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.yslc.app.MyApp;
 import com.yslc.ui.base.BaseFragment;
 import com.yslc.R;
 import com.yslc.ui.activity.LoginActivity;
@@ -250,6 +251,9 @@ public class MyFragment extends BaseFragment implements OnClickListener {
 
         // 清除登录数据
         spfUtil.clearAll();
+        // 清除极光推送的别名和重新设置标签
+        ((MyApp)getActivity().getApplicationContext()).JpushSetting();
+
     }
 
     @Override
